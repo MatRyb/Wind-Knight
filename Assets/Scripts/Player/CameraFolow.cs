@@ -21,7 +21,7 @@ public class CameraFolow : MonoBehaviour
         cam = GetComponent<Camera>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (target == null)
             return;
@@ -32,7 +32,7 @@ public class CameraFolow : MonoBehaviour
     void Follow()
     {
         Vector2 targetPosition = target.position + offset;
-        Vector2 smoothPosition = Vector2.Lerp(cam.transform.position, targetPosition, smoothFactor * Time.deltaTime);
+        Vector2 smoothPosition = Vector2.Lerp(cam.transform.position, targetPosition, smoothFactor * Time.fixedDeltaTime);
         cam.transform.position = new Vector3(smoothPosition.x, smoothPosition.y, cam.transform.position.z);
     }
 }
