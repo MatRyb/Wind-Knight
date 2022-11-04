@@ -17,6 +17,7 @@ public class PlayerControler : MonoBehaviour
     [Header("Rigidbody: ")]
     [SerializeField] public Rigidbody2D playerRigidbody = null;
     [SerializeField] private float gravityScale = 1f;
+    [SerializeField] private float mass = .1f;
 
     [Header("Mouse: ")]
     [SerializeField] private GameObject mouseObject;
@@ -63,6 +64,7 @@ public class PlayerControler : MonoBehaviour
         {
             playerRigidbody.velocity = velocity;
             playerRigidbody.gravityScale = gravityScale;
+            playerRigidbody.mass = mass;
         }
     }
 
@@ -88,6 +90,9 @@ public class PlayerControler : MonoBehaviour
         MouseVisualisation(playerBodyTransform.position);
 
         MovementBasis(playerBodyTransform.position);
+
+        //to test feather falling
+        //playerRigidbody.mass = mass;
     }
 
     void VirtualMousePositionCalculations()
