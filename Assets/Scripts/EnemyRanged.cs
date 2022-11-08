@@ -29,7 +29,7 @@ public class EnemyRanged : EnemyController
 
         if(distanceToPlayer <= range)
         {
-            if (canShoot == true)
+            if (canShoot)
             {
                 Attack();
             }
