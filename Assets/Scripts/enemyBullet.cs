@@ -7,10 +7,9 @@ public class enemyBullet : MonoBehaviour
     public float dieTime;
     public float damage;
     public Transform player;
-    public float bulletSpeed;
     void Start()
     {
-        Destroyer();
+        Destroy(gameObject, dieTime);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -18,9 +17,9 @@ public class enemyBullet : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void Destroyer()
+    /* void Destroyer()
     {
         //"I am become Death, the destroyer of worlds"
         Destroy(gameObject, dieTime);
-    }
+    }*/
 }
