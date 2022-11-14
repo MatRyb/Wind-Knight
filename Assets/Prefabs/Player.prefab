@@ -96,8 +96,8 @@ GameObject:
   - component: {fileID: 787269825349021896}
   - component: {fileID: 1307766254}
   - component: {fileID: 1307766252}
-  - component: {fileID: 6865609950302418500}
-  - component: {fileID: 7547788423060830021}
+  - component: {fileID: 2919236101988622105}
+  - component: {fileID: 6460438859835086001}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -210,7 +210,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &6865609950302418500
+--- !u!114 &2919236101988622105
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 787269825349021895}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62a9322240e92e64e9d0bd1e4d36c7c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 427ea8b2b4ca1c54194ae0851ea3a05a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerBodyTransform: {fileID: 787269825349021897}
@@ -233,7 +233,7 @@ MonoBehaviour:
   mouseSensitivity: 1
   virtualMousePosition: {x: 0, y: 0}
   velocity: {x: 0, y: 0}
---- !u!114 &7547788423060830021
+--- !u!114 &6460438859835086001
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -242,10 +242,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 787269825349021895}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b505de4efa3544744ae501f1640b42f0, type: 3}
+  m_Script: {fileID: 11500000, guid: b1e7ce45ba1e39f43a19e4630bf7633c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerControler: {fileID: 6865609950302418500}
+  playerControler: {fileID: 2919236101988622105}
   windBubbleRange: 4.5
   objectsInRange: []
 --- !u!1 &6297462287964603809
