@@ -10,6 +10,7 @@ public class ObjectScript : MonoBehaviour, IDamageTaker
     [Header("Rigidbody:")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float mass = 0f;
+    [SerializeField] private float linearDrag = 0f;
 
     [Header("Damage:")]
     [SerializeField] private float factor = .2f;
@@ -31,6 +32,7 @@ public class ObjectScript : MonoBehaviour, IDamageTaker
 
         rb = this.GetComponent<Rigidbody2D>();
         rb.mass = mass;
+        rb.drag = linearDrag;
 
         health = maxHealth;
     }
@@ -54,14 +56,14 @@ public class ObjectScript : MonoBehaviour, IDamageTaker
 
         float speed = Mathf.Sqrt(Mathf.Pow(vel.x, 2) + Mathf.Pow(vel.y, 2));
 
-        float damage = speed * factor;
+        float damage = speed * (mass/10) * factor;
 
         health -= damage;
 
         IDamageTaker damageTaker;
         if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
         {
-            Debug.Log(this.gameObject.name + "   " + collision.collider.gameObject.name + "   " + damage);
+            // Debug.Log(this.gameObject.name + "   " + collision.collider.gameObject.name + "   " + damage);
             damageTaker.TakeDamage(damage);
         }
     }
