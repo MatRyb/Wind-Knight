@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
@@ -11,18 +9,19 @@ public class PlayerControler : MonoBehaviour
 
     [SerializeField] public Transform playerBodyTransform = null;
     [SerializeField] private float minForceRadius = 1f;
-    [SerializeField] private float maxForceRadius = 20f;
+    [SerializeField] private float maxForceRadius = 10f;
     [SerializeField] private float basePower = 2f;
 
     [Header("Rigidbody: ")]
     [SerializeField] public Rigidbody2D playerRigidbody = null;
-    [SerializeField] private float gravityScale = 1f;
-    [SerializeField] private float mass = .1f;
+    [SerializeField] private float gravityScale = .2f;
+    [SerializeField] private float mass = 10f;
 
     [Header("Mouse: ")]
     [SerializeField] private GameObject mouseObject;
     [SerializeField] private float mouseSensitivity = 1f;
-       
+
+
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 virtualMousePosition;
     [Foldout("info")]
