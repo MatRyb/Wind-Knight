@@ -63,7 +63,6 @@ public class ObjectScript : MonoBehaviour, IDamageTaker
         IDamageTaker damageTaker;
         if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
         {
-            // Debug.Log(this.gameObject.name + "   " + collision.collider.gameObject.name + "   " + damage);
             damageTaker.TakeDamage(damage);
         }
     }
@@ -81,18 +80,10 @@ public class ObjectScript : MonoBehaviour, IDamageTaker
         }
         return impulse;
     }
-    static Vector2 ComputeIncidentVelocity(Collision2D collision) // out Vector2 otherVelocity
+    static Vector2 ComputeIncidentVelocity(Collision2D collision)
     {
         Vector2 impulse = ComputeTotalImpulse(collision);
         var myBody = collision.otherRigidbody;
-        /*otherVelocity = Vector2.zero;
-        var otherBody = collision.rigidbody;
-        if (otherBody != null)
-        {
-            otherVelocity = otherBody.velocity;
-            if (otherBody.isKinematic == false)
-                otherVelocity += impulse / otherBody.mass;
-        }*/
         return myBody.velocity - impulse / myBody.mass;
     }
 }
