@@ -84,11 +84,6 @@ public class PlayerControler : MonoBehaviour
 
     void Update()
     {
-        if (hitPoints <= 0.0f)
-        {
-            Debug.Log("You ded");
-        }
-
         if (playerBodyTransform == null || mouseObject == null || playerRigidbody == null)
             return;
 

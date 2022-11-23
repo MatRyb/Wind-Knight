@@ -20,6 +20,10 @@ public class enemyBullet : MonoBehaviour
         {
             PlayerControler playerC = collider.gameObject.GetComponent(typeof(PlayerControler)) as PlayerControler;
             playerC.hitPoints -= damage;
+            if (playerC.hitPoints <= 0.0f)
+            {
+                Debug.Log("You ded");
+            }
         }
         Destroy(gameObject);
     }

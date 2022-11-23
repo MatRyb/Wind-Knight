@@ -7,7 +7,7 @@ public class AiPatrol : MonoBehaviour
 {
     public float walkSpead;
     [HideInInspector]
-    public bool mustPetrol;
+    public bool mustPatrol;
     private bool mustFlip;
     private float distanceToPlayer;
 
@@ -21,23 +21,19 @@ public class AiPatrol : MonoBehaviour
     public new BoxCollider2D collider;
     void Start()
     {
-        mustPetrol = true;
-    }
-
-    void Update()
-    {
-        if(mustPetrol)
-        {
-            Petrol();
-        }
+        mustPatrol = true;
     }
 
     private void FixedUpdate()
     {
+        if (mustPatrol)
+        {
+            Patrol();
+        }
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
         if (distanceToPlayer <= enemyRange.range) 
         {
-            mustPetrol = false;
+            mustPatrol = false;
             if (player.position.x > transform.position.x && transform.localScale.x < 0 ||
             player.position.x < transform.position.x && transform.localScale.x > 0)
             {
@@ -46,10 +42,10 @@ public class AiPatrol : MonoBehaviour
         }
         else
         {
-            mustPetrol = true;
+            mustPatrol = true;
         }
 
-        if (mustPetrol)
+        if (mustPatrol)
         {
             mustFlip = !Physics2D.OverlapCircle(groundCheckerPosition.position, 0.15f, groundLayer);
         }
@@ -57,7 +53,7 @@ public class AiPatrol : MonoBehaviour
 
     }
 
-    private void Petrol()
+    private void Patrol()
     {
         if (mustFlip || collider.IsTouchingLayers(wallLayer)) 
         {
@@ -68,9 +64,9 @@ public class AiPatrol : MonoBehaviour
 
     public void Flip()
     {
-        mustPetrol = false;
+        mustPatrol = false;
         transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
         walkSpead *= -1;
-        mustPetrol = true;
+        mustPatrol = true;
     }
 }
