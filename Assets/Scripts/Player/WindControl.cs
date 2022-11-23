@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
@@ -7,10 +6,9 @@ public class WindControl : MonoBehaviour
 {
     [SerializeField] private PlayerControler playerControler;
     [SerializeField] private float windBubbleRange = 4.5f;
+    [SerializeField] private float windPower = 2f;
 
     [DisableIf("true")] [SerializeField] private List<ObjectInRange> objectsInRange;
-
-    //private Vector2 lastMoveDirectionNormal = Vector2.right;
 
     [System.Serializable]
     private class ObjectInRange
@@ -47,8 +45,6 @@ public class WindControl : MonoBehaviour
     {
         if (playerControler == null)
             return;
-
-        //lastMoveDirectionNormal = playerControler.velocity.normalized;
     }
 
     void Update()
@@ -56,17 +52,9 @@ public class WindControl : MonoBehaviour
         if (playerControler == null)
             return;
 
-        /*float angle = AdvancedMath.GetAngleBetweenPoints(Vector2.zero, -lastMoveDirectionNormal, playerControler.velocity.normalized);
-        if (angle <= 30f && angle >= -30f)
-        {
-
-        }*/
-
         UpdateObjectsList();
 
         MoveObjects();
-
-        //lastMoveDirectionNormal = playerControler.velocity.normalized;
     }
 
     private void UpdateObjectsList()
@@ -123,9 +111,11 @@ public class WindControl : MonoBehaviour
                 obj.rigidbody.gravityScale = 0f;
 
                 float percent = (Mathf.Abs(Vector2.Distance(obj.gameObject.transform.position, playerControler.playerBodyTransform.position)) - (windBubbleRange / 2f)) / (windBubbleRange / 2f);
-                Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent;
+                Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent * Time.deltaTime * windPower;
 
-                obj.rigidbody.velocity = playerControler.velocity + additionForce;
+                Vector2 newVelocityDirection = ((playerControler.velocity - obj.rigidbody.velocity) / obj.rigidbody.mass) * Time.deltaTime * windPower;
+
+                obj.rigidbody.velocity += newVelocityDirection + additionForce;
             }
             else
             {
@@ -140,23 +130,5 @@ public class WindControl : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(playerPos, windBubbleRange);
-
-        /*Gizmos.color = Color.red;
-        Gizmos.DrawLine(playerPos, playerPos + playerControler.velocity.normalized * 5);
-
-        Gizmos.color = Color.white;
-        Gizmos.DrawLine(playerPos, playerPos - playerControler.velocity.normalized * 5);
-
-        Gizmos.color = Color.blue;
-        float r = Mathf.Abs(Vector2.Distance(playerPos - playerControler.velocity.normalized * 5, playerPos));
-        float angle = AdvancedMath.GetAngleBetweenPoints(Vector2.zero, -playerControler.velocity.normalized, Vector2.right);
-        float radian = (angle + 30f) * Mathf.PI / 180f;
-        float x = Mathf.Cos(radian) * r;
-        float y = Mathf.Sin(radian) * r;
-        Gizmos.DrawLine(playerPos, playerPos + new Vector2(x, y));
-        radian = (angle - 30f) * Mathf.PI / 180f;
-        x = Mathf.Cos(radian) * r;
-        y = Mathf.Sin(radian) * r;
-        Gizmos.DrawLine(playerPos, playerPos + new Vector2(x, y));*/
     }
 }
