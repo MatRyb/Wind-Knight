@@ -6,14 +6,25 @@ public class enemyBullet : MonoBehaviour
 {
     public float dieTime;
     public float damage;
-    public Transform player;
+
     void Start()
     {
+         
+
         Destroy(gameObject, dieTime);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collider)
     {
+        if(collider.gameObject.tag == "Player")
+        {
+            PlayerControler playerC = collider.gameObject.GetComponent(typeof(PlayerControler)) as PlayerControler;
+            playerC.hitPoints -= damage;
+            if (playerC.hitPoints <= 0.0f)
+            {
+                Debug.Log("You ded");
+            }
+        }
         Destroy(gameObject);
     }
 
