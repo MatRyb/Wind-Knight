@@ -6,7 +6,6 @@ using UnityEngine;
 public class EnemyRanged : EnemyController
 {
     [SerializeField]
-    public float range;
     public float shootSpeed;
     public float aim;
     private bool canShoot = true;
@@ -25,12 +24,17 @@ public class EnemyRanged : EnemyController
     // Update is called once per frame
     void Update()
     {
+        if(enemyHealth < 0)
+        {
+            Destroy(gameObject);
+        }
+
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
         if(distanceToPlayer <= range)
         {
             if (canShoot)
-            {
+            {    
                 Attack();
             }
         }
@@ -48,6 +52,7 @@ public class EnemyRanged : EnemyController
         Vector2 direction = (player.position - transform.position).normalized;
         GameObject newBullet = Instantiate(bullet, shootPosition.position, Quaternion.identity, bulletStorage);
         newBullet.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x, direction.y - UnityEngine.Random.Range(-0.2f, 0.15f) * aim) * shootSpeed;
+        yield return new WaitForSeconds(attackRecharge);
         canShoot = true;
     }
 }
