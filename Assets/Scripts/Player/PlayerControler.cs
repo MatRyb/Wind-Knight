@@ -9,6 +9,8 @@ public class PlayerControler : MonoBehaviour
 {
     public PlayerState playerState { get; private set; }
 
+    [SerializeField] public float hitPoints;
+
     [SerializeField] public Transform playerBodyTransform = null;
     [SerializeField] private float minForceRadius = 1f;
     [SerializeField] private float maxForceRadius = 20f;
