@@ -1,40 +1,40 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-public class ObjectScript : MonoBehaviour, IDamageTaker
+public class ObjectScript : ObjectHealth
 {
-    [Header("Health:")]
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float health = 0f;
-
     [Header("Rigidbody:")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float mass = 0f;
     [SerializeField] private float linearDrag = 0f;
 
     [Header("Damage:")]
-    [SerializeField] private float factor = .2f;
+    [SerializeField] private float factor = 1.0f;
 
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private Vector2 velocity;
 
-    void Start()
+    void OnValidate()
     {
-        if(this.gameObject.GetComponent<Rigidbody2D>() == null)
+        if(GetComponent<Rigidbody2D>() != null && rb == null)
         {
-            this.gameObject.AddComponent<Rigidbody2D>();
+            rb = GetComponent<Rigidbody2D>();
+        }
+        else if (rb == null)
+        {
+            rb = this.gameObject.AddComponent<Rigidbody2D>();
         }
 
         if (this.gameObject.GetComponent<Collider2D>() == null)
         {
             Debug.LogError("ObjectScript -> NO COLLIDER ATTACHED");
         }
+    }
 
-        rb = this.GetComponent<Rigidbody2D>();
+    void Awake()
+    {
         rb.mass = mass;
         rb.drag = linearDrag;
-
-        health = maxHealth;
     }
 
     void Update()
@@ -45,9 +45,9 @@ public class ObjectScript : MonoBehaviour, IDamageTaker
         }
     }
 
-    public void TakeDamage(float value)
+    public override void OnDead()
     {
-        health -= value;
+        Debug.Log("Object Dead");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -58,7 +58,7 @@ public class ObjectScript : MonoBehaviour, IDamageTaker
 
         float damage = speed * (mass/10) * factor;
 
-        health -= damage;
+        this.TakeDamage(damage);
 
         IDamageTaker damageTaker;
         if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))

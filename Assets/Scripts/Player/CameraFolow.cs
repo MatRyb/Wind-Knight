@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
@@ -8,7 +6,7 @@ public class CameraFolow : MonoBehaviour
     public Camera cam;
     public Transform target;
     public Vector3 offset;
-    [Range(0, 10)] public float smoothFactor = 0.03f;
+    [Range(0, 10)] public float smoothFactor = 1.8f;
 
     private void OnValidate()
     {

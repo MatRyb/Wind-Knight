@@ -3,19 +3,17 @@ using NaughtyAttributes;
 
 public enum PlayerState { FALLING, MOVING }
 
-public class PlayerControler : MonoBehaviour
+public class PlayerControler : ObjectHealth
 {
     public PlayerState playerState { get; private set; }
 
-    [SerializeField] public float hitPoints;
-
-    [SerializeField] public Transform playerBodyTransform = null;
+    public Transform playerBodyTransform = null;
     [SerializeField] private float minForceRadius = 1f;
     [SerializeField] private float maxForceRadius = 10f;
     [SerializeField] private float basePower = 2f;
 
     [Header("Rigidbody: ")]
-    [SerializeField] public Rigidbody2D playerRigidbody = null;
+    public Rigidbody2D playerRigidbody = null;
     [SerializeField] private float gravityScale = .2f;
     [SerializeField] private float mass = 10f;
 
@@ -27,13 +25,13 @@ public class PlayerControler : MonoBehaviour
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 virtualMousePosition;
     [Foldout("info")]
-    [DisableIf("true")] [SerializeField] public Vector2 velocity = Vector2.zero;
+    [DisableIf("true")] public Vector2 velocity = Vector2.zero;
 
     private void OnValidate()
     {
         if (playerBodyTransform == null)
         {
-            Debug.LogError("Player body can't be null. Please provide one. :)");
+            playerBodyTransform = this.transform;
         }
 
         if (mouseObject == null)
@@ -94,6 +92,11 @@ public class PlayerControler : MonoBehaviour
 
         //to test feather falling
         //playerRigidbody.mass = mass;
+    }
+
+    public override void OnDead()
+    {
+        Debug.Log("Player Dead");
     }
 
     void VirtualMousePositionCalculations()

@@ -1,27 +1,40 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AiPatrol : MonoBehaviour
 {
-    public float walkSpead;
-    [HideInInspector]
-    public bool mustPatrol;
+    [SerializeField] private float walkSpead;
+    private bool mustPatrol = true;
     private bool mustFlip;
     private float distanceToPlayer;
 
-    public EnemyController enemyRange;
-    public Transform player;
-    public Transform groundCheckerPosition;
-    public Rigidbody2D rb;
-    public LayerMask groundLayer;
-    public LayerMask wallLayer;
-    [SerializeField]
-    public new BoxCollider2D collider;
-    void Start()
+    [SerializeField] private EnemyController enemyRange;
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform groundCheckerPosition;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
+
+    [SerializeField] public new BoxCollider2D collider;
+
+    private void OnValidate()
     {
-        mustPatrol = true;
+        if (GetComponent<EnemyController>() != null && enemyRange == null)
+        {
+            enemyRange = GetComponent<EnemyController>();
+        }
+        else if (enemyRange == null)
+        {
+            Debug.LogError("AiPatrol -> No Enemy Range");
+        }
+
+        if (GetComponent<Rigidbody2D>() != null && rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+        else if (enemyRange == null)
+        {
+            Debug.LogError("AiPatrol -> No RigidBody2D");
+        }
     }
 
     private void FixedUpdate()
@@ -49,8 +62,6 @@ public class AiPatrol : MonoBehaviour
         {
             mustFlip = !Physics2D.OverlapCircle(groundCheckerPosition.position, 0.15f, groundLayer);
         }
-
-
     }
 
     private void Patrol()

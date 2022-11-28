@@ -1,34 +1,26 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyRanged : EnemyController
 {
-    [SerializeField]
-    public float shootSpeed;
-    public float aim;
+    [SerializeField] private float shootSpeed = 2f;
+    [Range(-100f,100f)][SerializeField] private float aim = 50.0f;
     private bool canShoot = true;
 
-    public GameObject bullet;
-    public Transform shootPosition;
-    public Transform bulletStorage;
+    [SerializeField] private GameObject bullet;
+    [SerializeField] private Transform shootPosition;
+    [SerializeField] private Transform bulletStorage;
 
     private float distanceToPlayer;
-    // Start is called before the first frame update
+
     void Start()
     {
         aim = (100 - aim) / 100;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(enemyHealth < 0)
-        {
-            Destroy(gameObject);
-        }
-
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
         if(distanceToPlayer <= range)

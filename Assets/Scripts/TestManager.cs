@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TestManager : MonoBehaviour
@@ -7,7 +5,6 @@ public class TestManager : MonoBehaviour
     public MonoBehaviour[] monoBehaviours;
     bool turnOn = true;
 
-    // Start is called before the first frame update
     void Awake()
     {
         foreach (var obj in monoBehaviours)
@@ -19,7 +16,6 @@ public class TestManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
