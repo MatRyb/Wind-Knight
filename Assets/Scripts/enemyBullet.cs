@@ -7,6 +7,8 @@ public class enemyBullet : MonoBehaviour
     public float dieTime;
     public float damage;
     public Transform player;
+
+
     void Start()
     {
         Destroy(gameObject, dieTime);
