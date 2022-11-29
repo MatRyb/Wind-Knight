@@ -5,10 +5,19 @@ public class EnemyBullet : MonoBehaviour
     public float dieTime;
     public float damage;
 
+    private LocalTimer dieTimer;
+    private Vector2 velocity;
+
     void Start()
     {
         //"Now I am become Death, the destroyer of worlds"
-        Destroy(gameObject, dieTime);
+        dieTimer = new LocalTimer(dieTime).DoAfter(() => Destroy(gameObject)).Start();
+        velocity = GetComponent<Rigidbody2D>().velocity;
+    }
+
+    private void FixedUpdate()
+    {
+        GetComponent<Rigidbody2D>().velocity = velocity * GameTimer.timeMultiplayer;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

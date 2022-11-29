@@ -3,8 +3,8 @@ using UnityEngine;
 public abstract class EnemyController : ObjectHealth
 {
     public Transform player;
-    public float attackRecharge;
-    public float range;
+    public float attackRecharge = 1f;
+    public float range = 15f;
 
     private void OnValidate()
     {

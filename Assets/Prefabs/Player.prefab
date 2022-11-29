@@ -96,8 +96,8 @@ GameObject:
   - component: {fileID: 787269825349021896}
   - component: {fileID: 1307766254}
   - component: {fileID: 1307766252}
-  - component: {fileID: 42103690850684106}
-  - component: {fileID: 7569049613769108348}
+  - component: {fileID: 8169367737029908815}
+  - component: {fileID: 715271559197590787}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -210,7 +210,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &42103690850684106
+--- !u!114 &8169367737029908815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,7 +222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427ea8b2b4ca1c54194ae0851ea3a05a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPoints: 100
+  maxHealth: 100
+  health: 0
   playerBodyTransform: {fileID: 787269825349021897}
   minForceRadius: 1
   maxForceRadius: 10
@@ -230,11 +231,13 @@ MonoBehaviour:
   playerRigidbody: {fileID: 1307766254}
   gravityScale: 0.2
   mass: 10
+  staticMousePos: 0
   mouseObject: {fileID: 6297462287964603809}
   mouseSensitivity: 1
   virtualMousePosition: {x: 0, y: 0}
   velocity: {x: 0, y: 0}
---- !u!114 &7569049613769108348
+  positionChange: {x: 0, y: 0}
+--- !u!114 &715271559197590787
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -246,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1e7ce45ba1e39f43a19e4630bf7633c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerControler: {fileID: 42103690850684106}
+  playerControler: {fileID: 8169367737029908815}
   windBubbleRange: 4.5
   windPower: 2
   objectsInRange: []
