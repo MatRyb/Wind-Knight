@@ -69,6 +69,8 @@ public class PlayerControler : ObjectHealth
             playerRigidbody.gravityScale = gravityScale;
             playerRigidbody.mass = mass;
         }
+
+        this.StartHealth();
     }
 
     void Update()

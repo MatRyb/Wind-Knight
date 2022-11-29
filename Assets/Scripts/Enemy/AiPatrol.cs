@@ -35,6 +35,11 @@ public class AiPatrol : MonoBehaviour
         {
             Debug.LogError("AiPatrol -> No RigidBody2D");
         }
+
+        if (player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+        }
     }
 
     private void FixedUpdate()
@@ -64,6 +69,14 @@ public class AiPatrol : MonoBehaviour
         }
 
         rb.velocity = rb.velocity * GameTimer.timeMultiplayer;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Object") || collision.gameObject.CompareTag("Enemy"))
+        {
+            Flip();
+        }
     }
 
     private void Patrol()

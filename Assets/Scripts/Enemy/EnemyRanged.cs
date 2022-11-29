@@ -16,6 +16,7 @@ public class EnemyRanged : EnemyController
     void Start()
     {
         aim = (100 - aim) / 100;
+        this.StartHealth();
     }
 
     void Update()
@@ -45,5 +46,22 @@ public class EnemyRanged : EnemyController
         newBullet.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x, direction.y - UnityEngine.Random.Range(-0.2f, 0.15f) * aim) * shootSpeed;
         yield return new WaitForSeconds(attackRecharge);
         canShoot = true;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Vector2 vel = ComputeIncidentVelocity(collision);
+
+        float speed = Mathf.Sqrt(Mathf.Pow(vel.x, 2) + Mathf.Pow(vel.y, 2));
+
+        float damage = speed * (this.GetComponent<Rigidbody2D>().mass / 10);
+
+        this.TakeDamage(damage);
+
+        IDamageTaker damageTaker;
+        if (collision.collider.gameObject.TryGetComponent(out damageTaker))
+        {
+            damageTaker.TakeDamage(damage);
+        }
     }
 }

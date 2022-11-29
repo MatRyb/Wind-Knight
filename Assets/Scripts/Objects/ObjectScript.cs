@@ -35,6 +35,7 @@ public class ObjectScript : ObjectHealth
     {
         rb.mass = mass;
         rb.drag = linearDrag;
+        this.StartHealth();
     }
 
     void Update()
@@ -49,7 +50,33 @@ public class ObjectScript : ObjectHealth
 
     public override void OnDead()
     {
+        Destroy(gameObject);
         Debug.Log("Object Dead");
+    }
+
+    public float getMass()
+    {
+        return mass;
+    }
+
+    public void setMass(float value)
+    {
+        if (value < 0f)
+        {
+            return;
+        }
+
+        mass = value;
+    }
+
+    public void setFactor(float value)
+    {
+        if (value < 0f)
+        {
+            return;
+        }
+
+        factor = value;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -67,25 +94,5 @@ public class ObjectScript : ObjectHealth
         {
             damageTaker.TakeDamage(damage);
         }
-    }
-
-    static Vector2 ComputeTotalImpulse(Collision2D collision)
-    {
-        Vector2 impulse = Vector2.zero;
-        int contactCount = collision.contactCount;
-        for (int i = 0; i < contactCount; i++)
-        {
-            var contact = collision.GetContact(i);
-            impulse += contact.normal * contact.normalImpulse;
-            impulse.x += contact.tangentImpulse * contact.normal.y;
-            impulse.y -= contact.tangentImpulse * contact.normal.x;
-        }
-        return impulse;
-    }
-    static Vector2 ComputeIncidentVelocity(Collision2D collision)
-    {
-        Vector2 impulse = ComputeTotalImpulse(collision);
-        var myBody = collision.otherRigidbody;
-        return myBody.velocity - impulse / myBody.mass;
     }
 }

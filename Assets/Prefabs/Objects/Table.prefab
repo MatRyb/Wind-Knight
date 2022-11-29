@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 877054572}
   m_Layer: 0
   m_Name: Table
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 0
-  rb: {fileID: 0}
+  rb: {fileID: 8776821380493041886}
   mass: 82
   linearDrag: 0.83
   factor: 1
