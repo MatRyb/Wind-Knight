@@ -33,7 +33,7 @@ public class LevelManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         waitingForStart = true;
-        startText = GUIManager.ShowText("Press 'Space' to start", Color.black, Vector2.zero, UIRelativity.middleCenter);
+        startText = GUIManager.ShowText("Press 'Space' to start");
     }
 
     // Update is called once per frame
@@ -85,7 +85,7 @@ public class LevelManager : MonoBehaviour
     public static void InitRespawn()
     {
         GameTimer.StopTime();
-        GUIManager.ShowText("You Died\nPress 'R' to Respawn", Color.black, Vector2.zero, UIRelativity.middleCenter);
+        GUIManager.ShowText("You Died\nPress 'R' to Respawn");
         instance.waitForRespawn = true;
     }
 
@@ -100,7 +100,7 @@ public class LevelManager : MonoBehaviour
     public static void InitWinGame()
     {
         GameTimer.StopTime();
-        GUIManager.ShowText("You Won\nPress 'R' to Restart\nor Press 'Esc' to Exit", Color.black, Vector2.zero, UIRelativity.middleCenter);
+        GUIManager.ShowText("You Won\nPress 'R' to Restart\nor Press 'Esc' to Exit");
         instance.waitAfterWin = true;
     }
 

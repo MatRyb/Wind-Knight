@@ -7,6 +7,7 @@ public class WindControl : MonoBehaviour
     [SerializeField] private PlayerControler playerControler;
     [SerializeField] private float windBubbleRange = 4.5f;
     [SerializeField] private float windPower = 2f;
+    [SerializeField] private float maxMovePower = 20f;
 
     [DisableIf("true")] [SerializeField] private List<ObjectInRange> objectsInRange;
 
@@ -18,7 +19,7 @@ public class WindControl : MonoBehaviour
             get {
                 Rigidbody2D rigid = null;
                 if (gameObject != null)
-                    gameObject.TryGetComponent<Rigidbody2D>(out rigid);
+                    gameObject.TryGetComponent(out rigid);
                 return rigid;
             } 
         }
@@ -112,23 +113,31 @@ public class WindControl : MonoBehaviour
     {
         foreach (var obj in objectsInRange)
         {
-            if (playerControler.playerState == PlayerState.MOVING)
+            if (obj.rigidbody != null)
             {
-                obj.rigidbody.gravityScale = 0f;
+                if (playerControler.playerState == PlayerState.MOVING)
+                {
+                    obj.rigidbody.gravityScale = 0f;
 
-                float percent = (Mathf.Abs(Vector2.Distance(obj.gameObject.transform.position, playerControler.playerBodyTransform.position)) - (windBubbleRange / 2f)) / (windBubbleRange / 2f);
-                Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent * Time.fixedDeltaTime * windPower;
+                    float percent = (Mathf.Abs(Vector2.Distance(obj.gameObject.transform.position, playerControler.playerBodyTransform.position)) - (windBubbleRange / 2f)) / (windBubbleRange / 2f);
+                    Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent * Time.fixedDeltaTime * windPower;
 
-                Vector2 newVelocityDirection = ((playerControler.velocity - obj.rigidbody.velocity) / obj.rigidbody.mass) * Time.fixedDeltaTime * windPower;
+                    Vector2 newVelocityDirection = ((playerControler.velocity - obj.rigidbody.velocity) / obj.rigidbody.mass) * Time.fixedDeltaTime * windPower;
 
-                obj.rigidbody.velocity += (newVelocityDirection + additionForce);
+                    if (Vector2.Distance(Vector2.zero, newVelocityDirection) >= maxMovePower)
+                    {
+                        newVelocityDirection = newVelocityDirection.normalized * maxMovePower;
+                    }
+
+                    obj.rigidbody.velocity += (newVelocityDirection + additionForce);
+                }
+                else
+                {
+                    obj.rigidbody.gravityScale = obj.gravityScale;
+                }
+
+                obj.rigidbody.velocity = obj.rigidbody.velocity * GameTimer.timeMultiplayer;
             }
-            else
-            {
-                obj.rigidbody.gravityScale = obj.gravityScale;
-            }
-
-            obj.rigidbody.velocity = obj.rigidbody.velocity * GameTimer.timeMultiplayer;
         }
     }
 

@@ -37,8 +37,9 @@ public class AiPatrol : MonoBehaviour
         }
 
         if (player == null)
-        {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+        {   
+            if (GameObject.FindGameObjectWithTag("Player") != null)
+                player = GameObject.FindGameObjectWithTag("Player").transform;
         }
     }
 

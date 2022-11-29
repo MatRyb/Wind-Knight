@@ -8,6 +8,7 @@ public class InfoGUIObject : MonoBehaviour
 
     public void SetInfoText(string text)
     {
+        infoText.color = Color.black;
         infoText.text = text;
         infoText.ForceMeshUpdate();
         Vector2 textSize = infoText.GetRenderedValues(false);

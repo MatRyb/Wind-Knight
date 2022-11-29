@@ -8,7 +8,8 @@ public abstract class EnemyController : ObjectHealth
 
     private void OnValidate()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        if (GameObject.FindGameObjectWithTag("Player") != null)
+            player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     public abstract void Attack();

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShowInfoOnTrigger : MonoBehaviour
 {
-    [SerializeField] private string info;
+    [SerializeField] [TextArea] private string info;
     private GameObject infoObj = null;
     private bool isShowing = false;
 
