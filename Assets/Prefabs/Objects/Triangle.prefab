@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1435128226653193021}
   m_Layer: 0
   m_Name: Triangle
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 0
-  rb: {fileID: 0}
+  rb: {fileID: 1435128226653193011}
   mass: 5
   linearDrag: 0.5
   factor: 3.5

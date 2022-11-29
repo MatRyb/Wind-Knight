@@ -6,6 +6,10 @@ public abstract class EnemyController : ObjectHealth
     public float attackRecharge;
     public float range;
 
+    private void OnValidate()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
 
     public abstract void Attack();
 
