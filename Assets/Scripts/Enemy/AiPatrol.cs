@@ -62,6 +62,8 @@ public class AiPatrol : MonoBehaviour
         {
             mustFlip = !Physics2D.OverlapCircle(groundCheckerPosition.position, 0.15f, groundLayer);
         }
+
+        rb.velocity = rb.velocity * GameTimer.timeMultiplayer;
     }
 
     private void Patrol()
@@ -70,7 +72,7 @@ public class AiPatrol : MonoBehaviour
         {
             Flip();
         }
-        rb.velocity = new Vector3(walkSpead * Time.fixedDeltaTime, rb.velocity.y);
+        rb.velocity = new Vector2(walkSpead, rb.velocity.y);
     }
 
     public void Flip()

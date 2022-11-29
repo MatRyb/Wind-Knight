@@ -43,6 +43,8 @@ public class ObjectScript : ObjectHealth
         {
             velocity = rb.velocity;
         }
+
+        rb.velocity = rb.velocity * GameTimer.timeMultiplayer;
     }
 
     public override void OnDead()

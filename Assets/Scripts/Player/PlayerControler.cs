@@ -18,6 +18,7 @@ public class PlayerControler : ObjectHealth
     [SerializeField] private float mass = 10f;
 
     [Header("Mouse: ")]
+    [SerializeField] private bool staticMousePos = false;
     [SerializeField] private GameObject mouseObject;
     [SerializeField] private float mouseSensitivity = 1f;
 
@@ -26,6 +27,9 @@ public class PlayerControler : ObjectHealth
     [DisableIf("true")] [SerializeField] private Vector2 virtualMousePosition;
     [Foldout("info")]
     [DisableIf("true")] public Vector2 velocity = Vector2.zero;
+    [Foldout("info")]
+    [DisableIf("true")] [SerializeField] private Vector2 positionChange = Vector2.zero;
+    private Vector2 lastPosition;
 
     private void OnValidate()
     {
@@ -67,22 +71,12 @@ public class PlayerControler : ObjectHealth
         }
     }
 
-    private void OnEnable()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
-    private void OnDisable()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-    }
-
     void Update()
     {
         if (playerBodyTransform == null || mouseObject == null || playerRigidbody == null)
             return;
+
+        positionChange = (new Vector2(transform.position.x, transform.position.y) - lastPosition);
 
         VirtualMousePositionCalculations();
 
@@ -90,22 +84,38 @@ public class PlayerControler : ObjectHealth
 
         MovementBasis(playerBodyTransform.position);
 
+        lastPosition = transform.position;
+
         //to test feather falling
         //playerRigidbody.mass = mass;
     }
 
     public override void OnDead()
     {
+        LevelManager.InitRespawn();
         Debug.Log("Player Dead");
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Wall") || collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            OnDead();
+        }
     }
 
     void VirtualMousePositionCalculations()
     {
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
+        if (staticMousePos)
+            virtualMousePosition += positionChange;
+
         if (!(mouseDelta == Vector2.zero && velocity == Vector2.zero))
         {
-            virtualMousePosition += mouseDelta * mouseSensitivity;
+            virtualMousePosition += mouseDelta * mouseSensitivity * GameTimer.timeMultiplayer;
             mouseObject.transform.position = virtualMousePosition;
 
             playerState = PlayerState.MOVING;
@@ -137,6 +147,8 @@ public class PlayerControler : ObjectHealth
         {
             playerRigidbody.gravityScale = gravityScale;
         }
+
+        playerRigidbody.velocity = playerRigidbody.velocity * GameTimer.timeMultiplayer;
     }
 
     void MouseVisualisation(Vector2 playerPos)

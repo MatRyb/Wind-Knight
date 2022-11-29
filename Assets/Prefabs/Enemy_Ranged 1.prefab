@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &84106153677338942
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4221354793476225725}
-  m_Layer: 0
-  m_Name: BulletHell
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4221354793476225725
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 84106153677338942}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6311761400956564482}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1244794210149225916
 GameObject:
   m_ObjectHideFlags: 0
@@ -41,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6311761400956564482}
   - component: {fileID: 2483836690461684215}
-  - component: {fileID: 7988695923255992447}
-  - component: {fileID: 7333816189436733743}
   - component: {fileID: 7181881400874241296}
   - component: {fileID: 2004892085494908960}
+  - component: {fileID: 7733115897562188547}
+  - component: {fileID: 9124597152598070831}
   m_Layer: 0
   m_Name: Enemy_Ranged 1
   m_TagString: Untagged
@@ -66,7 +35,6 @@ Transform:
   m_Children:
   - {fileID: 430495104177919136}
   - {fileID: 1163239386256955690}
-  - {fileID: 4221354793476225725}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -122,52 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7988695923255992447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1244794210149225916}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfae1005304789944857a61fbe27dc51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyHealth: 0
-  player: {fileID: 0}
-  attackRecharge: 0
-  range: 0
-  shootSpeed: 0
-  aim: 0
-  bullet: {fileID: 6574801120051804515, guid: 078df0fec1a65a24a899a5a33b0a3d23, type: 3}
-  shootPosition: {fileID: 430495104177919136}
-  bulletStorage: {fileID: 4221354793476225725}
---- !u!114 &7333816189436733743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1244794210149225916}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecc01409b05317d48ada5254346a6453, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpead: 0
-  mustPatrol: 0
-  enemyRange: {fileID: 7988695923255992447}
-  player: {fileID: 0}
-  groundCheckerPosition: {fileID: 1163239386256955690}
-  rb: {fileID: 7181881400874241296}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  collider: {fileID: 2004892085494908960}
 --- !u!50 &7181881400874241296
 Rigidbody2D:
   serializedVersion: 4
@@ -215,6 +137,51 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.0704473, y: 1.0421923}
   m_EdgeRadius: 0
+--- !u!114 &7733115897562188547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244794210149225916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfae1005304789944857a61fbe27dc51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  health: 0
+  player: {fileID: 0}
+  attackRecharge: 1
+  range: 10
+  shootSpeed: 2
+  aim: 50
+  bullet: {fileID: 6574801120051804515, guid: 078df0fec1a65a24a899a5a33b0a3d23, type: 3}
+  shootPosition: {fileID: 430495104177919136}
+--- !u!114 &9124597152598070831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244794210149225916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecc01409b05317d48ada5254346a6453, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpead: 4
+  enemyRange: {fileID: 7733115897562188547}
+  player: {fileID: 0}
+  groundCheckerPosition: {fileID: 1163239386256955690}
+  rb: {fileID: 7181881400874241296}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  collider: {fileID: 2004892085494908960}
 --- !u!1 &6338012579313906981
 GameObject:
   m_ObjectHideFlags: 0

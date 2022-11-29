@@ -10,7 +10,6 @@ public class EnemyRanged : EnemyController
 
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform shootPosition;
-    [SerializeField] private Transform bulletStorage;
 
     private float distanceToPlayer;
 
@@ -23,7 +22,7 @@ public class EnemyRanged : EnemyController
     {
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        if(distanceToPlayer <= range)
+        if(distanceToPlayer <= range && GameTimer.timeMultiplayer != 0f)
         {
             if (canShoot)
             {    
@@ -42,7 +41,7 @@ public class EnemyRanged : EnemyController
         canShoot = false;
         yield return new WaitForSeconds(attackRecharge);
         Vector2 direction = (player.position - transform.position).normalized;
-        GameObject newBullet = Instantiate(bullet, shootPosition.position, Quaternion.identity, bulletStorage);
+        GameObject newBullet = Instantiate(bullet, shootPosition.position, Quaternion.identity);
         newBullet.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x, direction.y - UnityEngine.Random.Range(-0.2f, 0.15f) * aim) * shootSpeed;
         yield return new WaitForSeconds(attackRecharge);
         canShoot = true;

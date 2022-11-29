@@ -16,7 +16,10 @@ public class WindControl : MonoBehaviour
         public GameObject gameObject;
         public Rigidbody2D rigidbody {
             get {
-                return gameObject.GetComponent<Rigidbody2D>();
+                Rigidbody2D rigid = null;
+                if (gameObject != null)
+                    gameObject.TryGetComponent<Rigidbody2D>(out rigid);
+                return rigid;
             } 
         }
         public float gravityScale;
@@ -47,7 +50,7 @@ public class WindControl : MonoBehaviour
             return;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (playerControler == null)
             return;
@@ -71,7 +74,10 @@ public class WindControl : MonoBehaviour
         {
             if (!objectsInRange[i - removed].stillValid)
             {
-                objectsInRange[i - removed].rigidbody.gravityScale = objectsInRange[i - removed].gravityScale;
+                if (objectsInRange[i - removed].rigidbody != null)
+                {
+                    objectsInRange[i - removed].rigidbody.gravityScale = objectsInRange[i - removed].gravityScale;
+                }
                 objectsInRange.Remove(objectsInRange[i - removed]);
                 ++removed;
             }
@@ -111,16 +117,18 @@ public class WindControl : MonoBehaviour
                 obj.rigidbody.gravityScale = 0f;
 
                 float percent = (Mathf.Abs(Vector2.Distance(obj.gameObject.transform.position, playerControler.playerBodyTransform.position)) - (windBubbleRange / 2f)) / (windBubbleRange / 2f);
-                Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent * Time.deltaTime * windPower;
+                Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent * Time.fixedDeltaTime * windPower;
 
-                Vector2 newVelocityDirection = ((playerControler.velocity - obj.rigidbody.velocity) / obj.rigidbody.mass) * Time.deltaTime * windPower;
+                Vector2 newVelocityDirection = ((playerControler.velocity - obj.rigidbody.velocity) / obj.rigidbody.mass) * Time.fixedDeltaTime * windPower;
 
-                obj.rigidbody.velocity += newVelocityDirection + additionForce;
+                obj.rigidbody.velocity += (newVelocityDirection + additionForce);
             }
             else
             {
                 obj.rigidbody.gravityScale = obj.gravityScale;
             }
+
+            obj.rigidbody.velocity = obj.rigidbody.velocity * GameTimer.timeMultiplayer;
         }
     }
 

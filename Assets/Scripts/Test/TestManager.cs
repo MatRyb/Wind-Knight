@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TestManager : MonoBehaviour
 {
     public MonoBehaviour[] monoBehaviours;
     bool turnOn = true;
+
+    public List<EnemyController> enemys = new List<EnemyController>();
 
     void Awake()
     {
@@ -29,6 +32,16 @@ public class TestManager : MonoBehaviour
             }
 
             turnOn = !turnOn;
+        }
+
+        enemys.Clear();
+        enemys.AddRange(GameObject.FindObjectsOfType<EnemyController>());
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            foreach (var obj in enemys)
+            {
+                obj.TakeDamage(1000f);
+            }
         }
     }
 }
