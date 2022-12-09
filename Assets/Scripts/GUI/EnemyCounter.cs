@@ -1,13 +1,13 @@
 using UnityEngine;
+using System.Collections.Generic;
 using TMPro;
 
 public class EnemyCounter : MonoBehaviour
 {
     public TextMeshProUGUI textUI;
+    private List<EnemyController> enemys = new List<EnemyController>();
 
-    private void Update()
-    {
-        EnemyController[] enemys = GameObject.FindObjectsOfType<EnemyController>();
-        textUI.text = "Enemys Left: " + enemys.Length;
-    }
+    
+
+    
 }

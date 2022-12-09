@@ -8,8 +8,9 @@ public class GUIManager : MonoBehaviour
     private static GUIManager instance = null;
 
     [SerializeField] private Canvas canvas;
-    [SerializeField] private GameObject infoObject;
     [SerializeField] private GameObject textObject;
+    [SerializeField] private GameObject deathScreenObject;
+    [SerializeField] private GameObject winScreenObject;
 
     private void OnEnable()
     {
@@ -47,15 +48,23 @@ public class GUIManager : MonoBehaviour
         return gameObject;
     }
 
-    public static GameObject ShowInfo(string text)
+    public static GameObject ShowDeathScreen()
     {
-        return instance.ShowInfoJob(text);
+        return instance.ShowDeathScreenJob();
     }
 
-    private GameObject ShowInfoJob(string text)
+    private GameObject ShowDeathScreenJob()
     {
-        GameObject gameObject = Instantiate(infoObject, canvas.transform, false);
-        gameObject.GetComponent<InfoGUIObject>().SetInfoText(text);
-        return gameObject;
+        return Instantiate(deathScreenObject, canvas.transform, false);
+    }
+
+    public static GameObject ShowWinScreen()
+    {
+        return instance.ShowWinScreenJob();
+    }
+
+    private GameObject ShowWinScreenJob()
+    {
+        return Instantiate(winScreenObject, canvas.transform, false);
     }
 }

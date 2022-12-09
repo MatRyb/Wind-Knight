@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -33,13 +34,13 @@ public class LevelManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         waitingForStart = true;
-        startText = GUIManager.ShowText("Press 'Space' to start");
+        startText = GUIManager.ShowText("Press 'Left Mouse Button' to start");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (waitingForStart && Input.GetKeyDown(KeyCode.Space))
+        if (waitingForStart && Input.GetMouseButtonDown(0))
         {
             StartGame();
         }
@@ -47,29 +48,13 @@ public class LevelManager : MonoBehaviour
         if (waitingForStart)
             return;
 
-        if (waitForRespawn && Input.GetKeyDown(KeyCode.R))
-        {
-            RespawnJob();
-        }
-
         if (waitForRespawn)
             return;
 
         if (waitAfterWin)
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                RespawnJob();
-            }
-            else if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Application.Quit();
-            }
-
             return;
-        }            
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetMouseButtonDown(1))
         {
             if (paused)
             {
@@ -85,7 +70,22 @@ public class LevelManager : MonoBehaviour
     public static void InitRespawn()
     {
         GameTimer.StopTime();
-        GUIManager.ShowText("You Died\nPress 'R' to Respawn");
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        GameObject screen = GUIManager.ShowDeathScreen();
+        Button[] buttons = screen.GetComponentsInChildren<Button>();
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i].name == "RespawnBtn")
+            {
+                buttons[i].onClick.AddListener(() => instance.RespawnJob());
+            }
+            else if (buttons[i].name == "ExitBtn")
+            {
+                buttons[i].onClick.AddListener(() => Application.Quit());
+            }
+        }
         instance.waitForRespawn = true;
     }
 
@@ -100,7 +100,22 @@ public class LevelManager : MonoBehaviour
     public static void InitWinGame()
     {
         GameTimer.StopTime();
-        GUIManager.ShowText("You Won\nPress 'R' to Restart\nor Press 'Esc' to Exit");
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        GameObject screen = GUIManager.ShowWinScreen();
+        Button[] buttons = screen.GetComponentsInChildren<Button>();
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i].name == "RestartBtn")
+            {
+                buttons[i].onClick.AddListener(() => instance.RespawnJob());
+            }
+            else if (buttons[i].name == "ExitBtn")
+            {
+                buttons[i].onClick.AddListener(() => Application.Quit());
+            }
+        }
         instance.waitAfterWin = true;
     }
 

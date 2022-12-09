@@ -231,7 +231,7 @@ MonoBehaviour:
   playerRigidbody: {fileID: 1307766254}
   gravityScale: 0.2
   mass: 10
-  staticMousePos: 0
+  staticMousePos: 1
   mouseObject: {fileID: 6297462287964603809}
   mouseSensitivity: 1
   virtualMousePosition: {x: 0, y: 0}
@@ -251,7 +251,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerControler: {fileID: 8169367737029908815}
   windBubbleRange: 4.5
-  windPower: 2
+  windPower: 10
+  maxMovePower: 20
   objectsInRange: []
 --- !u!1 &6297462287964603809
 GameObject:

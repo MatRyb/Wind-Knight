@@ -95,9 +95,6 @@ public class PlayerControler : ObjectHealth
     public override void OnDead()
     {
         LevelManager.InitRespawn();
-        Debug.Log("Player Dead");
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -110,6 +107,9 @@ public class PlayerControler : ObjectHealth
 
     void VirtualMousePositionCalculations()
     {
+        if (GameTimer.timeMultiplayer == 0f)
+            return;
+
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
         if (staticMousePos)
@@ -117,7 +117,7 @@ public class PlayerControler : ObjectHealth
 
         if (!(mouseDelta == Vector2.zero && velocity == Vector2.zero))
         {
-            virtualMousePosition += mouseDelta * mouseSensitivity * GameTimer.timeMultiplayer;
+            virtualMousePosition += mouseDelta * mouseSensitivity;
             mouseObject.transform.position = virtualMousePosition;
 
             playerState = PlayerState.MOVING;
@@ -132,6 +132,16 @@ public class PlayerControler : ObjectHealth
 
     void MovementBasis(Vector2 playerPos)
     {
+        if (GameTimer.timeMultiplayer == 0f)
+        {
+            playerRigidbody.bodyType = RigidbodyType2D.Static;
+            return;
+        }
+        else
+        {
+            playerRigidbody.bodyType = RigidbodyType2D.Dynamic;
+        }
+
         float totalDist = Mathf.Abs(Vector2.Distance(playerPos, virtualMousePosition));
         velocity = Vector2.zero;
         if (totalDist > minForceRadius)
@@ -150,7 +160,7 @@ public class PlayerControler : ObjectHealth
             playerRigidbody.gravityScale = gravityScale;
         }
 
-        playerRigidbody.velocity = playerRigidbody.velocity * GameTimer.timeMultiplayer;
+        playerRigidbody.velocity = playerRigidbody.velocity;
     }
 
     void MouseVisualisation(Vector2 playerPos)
