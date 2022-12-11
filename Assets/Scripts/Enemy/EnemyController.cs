@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class EnemyController : ObjectHealth
 {
@@ -6,6 +7,8 @@ public abstract class EnemyController : ObjectHealth
     public float attackRecharge = 1f;
     public float range = 15f;
 
+    public GameObject healthBarUI;
+    public Slider slider;
     private void OnValidate()
     {
         if (GameObject.FindGameObjectWithTag("Player") != null)
