@@ -1,5 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.UI;
 
 public class ObjectScript : ObjectHealth
 {
@@ -10,6 +13,10 @@ public class ObjectScript : ObjectHealth
 
     [Header("Damage:")]
     [SerializeField] private float factor = 1.0f;
+    [SerializeField] private List<Sprite> states;
+    [SerializeField] private float percent;
+    private SpriteRenderer image;
+    [SerializeField] private float minSpeed = 2.0f; 
 
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private Vector2 velocity;
@@ -29,10 +36,17 @@ public class ObjectScript : ObjectHealth
         {
             Debug.LogError("ObjectScript -> NO COLLIDER ATTACHED");
         }
+
+        if (states.Count == 0)
+        {
+            Debug.LogError("ObjectScript -> ADD AT LEAST ONE STATE");
+        }
     }
 
     void Awake()
     {
+        image = this.gameObject.GetComponent<SpriteRenderer>();
+        image.sprite = states[0];
         rb.mass = mass;
         rb.drag = linearDrag;
         this.StartHealth();
@@ -40,6 +54,10 @@ public class ObjectScript : ObjectHealth
 
     void Update()
     {
+        this.changeSprite();
+
+        percent = (this.getHealth() / this.getMaxHealth()) * 100;
+
         if (rb.velocity.x != 0.0f || rb.velocity.y != 0.0f)
         {
             velocity = rb.velocity;
@@ -79,20 +97,37 @@ public class ObjectScript : ObjectHealth
         factor = value;
     }
 
+    private void changeSprite()
+    {
+        if (this.getHealth() == this.getMaxHealth())
+        {
+            image.sprite = states[0];
+        }
+        else
+        {
+            image.sprite = states[states.Count-1-Mathf.FloorToInt((states.Count/this.getMaxHealth())*this.getHealth())];
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 vel = ComputeIncidentVelocity(collision);
 
         float speed = Mathf.Sqrt(Mathf.Pow(vel.x, 2) + Mathf.Pow(vel.y, 2));
 
-        float damage = speed * (mass/10) * factor;
+        Debug.Log(speed);
 
-        this.TakeDamage(damage);
-
-        IDamageTaker damageTaker;
-        if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
+        if (speed > minSpeed)
         {
-            damageTaker.TakeDamage(damage);
+            float damage = speed * (mass / 10) * factor;
+
+            this.TakeDamage(damage);
+
+            IDamageTaker damageTaker;
+            if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
+            {
+                damageTaker.TakeDamage(damage);
+            }
         }
     }
 }
