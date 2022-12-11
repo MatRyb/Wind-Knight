@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e629cdf7ec048e84a8fc48bed50c6850, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0d85ed8af19c5754698fa4ec357a30dd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -159,4 +159,11 @@ MonoBehaviour:
   mass: 82
   linearDrag: 0.83
   factor: 1
+  states:
+  - {fileID: 21300000, guid: 0d85ed8af19c5754698fa4ec357a30dd, type: 3}
+  - {fileID: 21300000, guid: 02499d29b2b8b39458a8e01c1fcec6b6, type: 3}
+  - {fileID: 21300000, guid: d1fe96a08286a65418d483f63cc7607f, type: 3}
+  - {fileID: 21300000, guid: 2ff78439911eb2348a9a4ac003fd1e19, type: 3}
+  percent: 0
+  minSpeed: 5
   velocity: {x: 0, y: 0}

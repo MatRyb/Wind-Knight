@@ -11,6 +11,8 @@ public class EnemyRanged : EnemyController
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform shootPosition;
 
+    [SerializeField] private float minSpeed = 2.0f;
+
     private float distanceToPlayer;
 
     void Start()
@@ -54,14 +56,17 @@ public class EnemyRanged : EnemyController
 
         float speed = Mathf.Sqrt(Mathf.Pow(vel.x, 2) + Mathf.Pow(vel.y, 2));
 
-        float damage = speed * (this.GetComponent<Rigidbody2D>().mass / 10);
-
-        this.TakeDamage(damage);
-
-        IDamageTaker damageTaker;
-        if (collision.collider.gameObject.TryGetComponent(out damageTaker))
+        if (speed > minSpeed)
         {
-            damageTaker.TakeDamage(damage);
+            float damage = speed * (this.GetComponent<Rigidbody2D>().mass / 10);
+
+            this.TakeDamage(damage);
+
+            IDamageTaker damageTaker;
+            if (collision.collider.gameObject.TryGetComponent(out damageTaker))
+            {
+                damageTaker.TakeDamage(damage);
+            }
         }
     }
 }
