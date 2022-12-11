@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyRanged : EnemyController
 {
     [SerializeField] private float shootSpeed = 2f;
-    [Range(0,100f)][SerializeField] private float aim = 50.0f;
+    [Range(-100f,100f)][SerializeField] private float aim = 50.0f;
     private bool canShoot = true;
 
     [SerializeField] private GameObject bullet;
@@ -15,10 +15,8 @@ public class EnemyRanged : EnemyController
 
     void Start()
     {
-        healthBarUI.SetActive(true);
         aim = (100 - aim) / 100;
-        StartHealth();
-        slider.value = CalculateHealth();
+        this.StartHealth();
     }
 
     void Update()
@@ -32,8 +30,6 @@ public class EnemyRanged : EnemyController
                 Attack();
             }
         }
-
-        slider.value = CalculateHealth();
     }
 
     public override void Attack()
@@ -67,10 +63,5 @@ public class EnemyRanged : EnemyController
         {
             damageTaker.TakeDamage(damage);
         }
-    }
-
-    private float CalculateHealth()
-    {
-        return getHealth() / getMaxHealth(); 
     }
 }
