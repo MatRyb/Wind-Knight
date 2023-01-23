@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LocalTimer : MonoBehaviour
+public class LocalTimer
 {
     private bool paused = true;
 
@@ -12,14 +12,6 @@ public class LocalTimer : MonoBehaviour
     public LocalTimer(float totalTime)
     {
         timeToEnd = totalTime;
-    }
-
-    private void Update()
-    {
-        if (paused)
-            return;
-
-        UpdateTime();
     }
 
     public LocalTimer Start()
@@ -34,8 +26,11 @@ public class LocalTimer : MonoBehaviour
         return this;
     }
 
-    private void UpdateTime()
+    public void UpdateTime()
     {
+        if (paused)
+            return;
+
         timeToEnd -= Time.deltaTime * GameTimer.timeMultiplayer;
         if (timeToEnd <= 0f)
         {
