@@ -58,7 +58,10 @@ public class WindControl : MonoBehaviour
 
         UpdateObjectsList();
 
-        MoveObjects();
+        if (Input.GetMouseButton(0))
+        {
+            MoveObjects();
+        }
     }
 
     private void UpdateObjectsList()
