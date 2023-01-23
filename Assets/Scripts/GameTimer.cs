@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class GameTimer : MonoBehaviour
 {
@@ -12,11 +11,13 @@ public class GameTimer : MonoBehaviour
         TimeMultiplayer = timeMultiplayer;
     }
 
+    [Button]
     public static void StopTime()
     {
         timeMultiplayer = 0f;
     }
 
+    [Button]
     public static void StartTime()
     {
         timeMultiplayer = 1f;
