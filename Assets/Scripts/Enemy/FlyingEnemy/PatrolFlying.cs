@@ -53,12 +53,19 @@ public class PatrolFlying : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, collision.transform.position - transform.position);
+            // B³¹d z uderzeniem
+            /*RaycastHit2D hit = Physics2D.Raycast(transform.position, collision.transform.position - transform.position);
+            Debug.Log(hit.collider.tag);
+            Debug.Log(hit.collider);
+            Debug.Log(hit.collider.gameObject);
             if (hit.collider.tag == "Player")
             {
                 LeanTween.cancel(tween.id);
                 this.enabled = false;
-            }
+            }*/
+
+            LeanTween.cancel(tween.id);
+            this.enabled = false;
         }
     }
 

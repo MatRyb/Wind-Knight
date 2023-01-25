@@ -62,6 +62,17 @@ public class WindControl : MonoBehaviour
         {
             MoveObjects();
         }
+        else
+        {
+            for (int i = 0; i < objectsInRange.Count; ++i)
+            {
+                if (objectsInRange[i].rigidbody != null)
+                {
+                    objectsInRange[i].rigidbody.gravityScale = objectsInRange[i].gravityScale;
+                }
+                objectsInRange.Remove(objectsInRange[i]);
+            }
+        }
     }
 
     private void UpdateObjectsList()

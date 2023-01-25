@@ -86,12 +86,15 @@ public class FlyingEnemy : EnemyController
     {
         if (collision.gameObject.tag == "Player" && !attack)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, collision.transform.position - transform.position);
+            /*RaycastHit2D hit = Physics2D.Raycast(transform.position, collision.transform.position - transform.position);
             if (hit.collider.tag == "Player")
             {
                 player = collision.gameObject.transform;
                 attack = true;
-            }
+            }*/
+
+            player = collision.gameObject.transform;
+            attack = true;
         }
     }
 
