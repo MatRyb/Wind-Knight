@@ -11,7 +11,7 @@ public class CameraChanger : MonoBehaviour
 
     private float size = 14f;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    /*private void OnTriggerEnter2D(Collider2D collision)
     {
         bool isOneOfUs = false;
 
@@ -31,6 +31,38 @@ public class CameraChanger : MonoBehaviour
             cam.GetComponent<CameraFolow>().enabled = false;
             cam.transform.position = new Vector3(collision.transform.position.x, collision.transform.position.y, cam.transform.position.z);
             cam.orthographicSize = .54f * box.size.y - 3.73f;
+        }
+    }*/
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        bool isOneOfUs = false;
+
+        foreach (BoxCollider2D col in staticColliders)
+        {
+            isOneOfUs = (col == collision && col.Equals(collision));
+
+            if (isOneOfUs)
+            {
+                break;
+            }
+        }
+
+        if (isOneOfUs)
+        {
+            BoxCollider2D box = (BoxCollider2D)collision;
+            cam.GetComponent<CameraFolow>().enabled = false;
+            cam.transform.position = new Vector3(collision.transform.position.x, collision.transform.position.y, cam.transform.position.z);
+            if (box.size.y > box.size.x)
+            {
+                //cam.orthographicSize = .54f * box.size.y - 3.73f;
+                cam.orthographicSize = .32f * box.size.y - 3.73f;
+            }
+            else
+            {
+                //cam.orthographicSize = .54f * box.size.x - 3.73f;
+                cam.orthographicSize = .32f * box.size.x - 3.73f;
+            }
         }
     }
 

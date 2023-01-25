@@ -17,10 +17,8 @@ public class EnemyRanged : EnemyController
 
     void Start()
     {
-        healthBarUI.SetActive(true);
         aim = (100 - aim) / 100;
         StartHealth();
-        slider.value = CalculateHealth();
     }
 
     void Update()
@@ -34,8 +32,6 @@ public class EnemyRanged : EnemyController
                 Attack();
             }
         }
-
-        slider.value = CalculateHealth();
     }
 
     public override void Attack()
@@ -72,10 +68,5 @@ public class EnemyRanged : EnemyController
                 damageTaker.TakeDamage(damage);
             }
         }
-    }
-
-    private float CalculateHealth()
-    {
-        return getHealth() / getMaxHealth(); 
     }
 }

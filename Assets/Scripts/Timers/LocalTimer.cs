@@ -28,7 +28,7 @@ public class LocalTimer
 
     public void UpdateTime()
     {
-        if (paused)
+        if (paused || GameTimer.timeMultiplayer == 0f)
             return;
 
         timeToEnd -= Time.deltaTime * GameTimer.timeMultiplayer;

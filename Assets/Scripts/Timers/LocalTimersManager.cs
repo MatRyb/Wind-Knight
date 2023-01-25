@@ -50,12 +50,21 @@ public class LocalTimersManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (timers.Count == 0)
+        {
+            return;
+        }
+
         foreach (var timer in timers)
         {
             timer.UpdateTime();
             if (timer.timeToEnd <= 0f)
             {
                 timers.Remove(timer);
+                if (timers.Count == 0)
+                {
+                    break;
+                }
             }
         }
     }

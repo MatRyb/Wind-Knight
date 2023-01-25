@@ -16,6 +16,8 @@ public class AiPatrol : MonoBehaviour
 
     [SerializeField] public new BoxCollider2D collider;
 
+    [SerializeField] private GameObject body;
+
     private void OnValidate()
     {
         if (GetComponent<EnemyController>() != null && enemyRange == null)
@@ -92,7 +94,7 @@ public class AiPatrol : MonoBehaviour
     public void Flip()
     {
         mustPatrol = false;
-        transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+        body.transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
         walkSpead *= -1;
         mustPatrol = true;
     }
