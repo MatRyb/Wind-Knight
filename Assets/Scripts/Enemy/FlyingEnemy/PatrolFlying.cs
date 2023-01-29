@@ -25,9 +25,9 @@ public class PatrolFlying : MonoBehaviour
         float flyTime = Vector3.Distance(points[i], this.transform.position) / speed;
 
         Vector2 dir = points[i] - (Vector2) this.transform.position;
-        if ((dir.x > 0 && transform.localScale.x < 0) || (dir.x < 0 && transform.localScale.x > 0))
+        if ((dir.x > 0 && body.transform.localScale.x < 0) || (dir.x < 0 && body.transform.localScale.x > 0))
         {
-            body.transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+            body.transform.localScale = new Vector2(body.transform.localScale.x * -1, body.transform.localScale.y);
         }
 
         tween = LeanTween.move(this.gameObject, points[i], flyTime)

@@ -225,6 +225,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 0
+  bodySprite: {fileID: 787269825349021896}
+  deathParticle: {fileID: 840825463644067242, guid: 72c3b48529f8a104ca028811d4684334, type: 3}
   playerBodyTransform: {fileID: 787269825349021897}
   minForceRadius: 1
   maxForceRadius: 10

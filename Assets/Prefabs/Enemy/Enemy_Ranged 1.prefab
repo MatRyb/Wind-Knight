@@ -453,6 +453,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 0
+  bodySprite: {fileID: 580585821}
+  deathParticle: {fileID: 840825463644067242, guid: 72c3b48529f8a104ca028811d4684334, type: 3}
   player: {fileID: 0}
   attackRecharge: 1
   range: 10
@@ -474,6 +476,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpead: 4
+  maxFallingSpeed: -25
+  gravityScale: 10
   enemyRange: {fileID: 7733115897562188547}
   player: {fileID: 0}
   groundCheckerPosition: {fileID: 1163239386256955690}

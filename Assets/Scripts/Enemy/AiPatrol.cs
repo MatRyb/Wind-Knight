@@ -3,6 +3,8 @@ using UnityEngine;
 public class AiPatrol : MonoBehaviour
 {
     [SerializeField] private float walkSpead;
+    [SerializeField] private float maxFallingSpeed;
+    [SerializeField] private float gravityScale;
     private bool mustPatrol = true;
     private bool mustFlip;
     private float distanceToPlayer;
@@ -43,10 +45,17 @@ public class AiPatrol : MonoBehaviour
             if (GameObject.FindGameObjectWithTag("Player") != null)
                 player = GameObject.FindGameObjectWithTag("Player").transform;
         }
+
+        gravityScale = rb.gravityScale;
     }
 
     private void FixedUpdate()
     {
+        if (rb.velocity.y < maxFallingSpeed)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, maxFallingSpeed);
+        }
+
         if (mustPatrol)
         {
             Patrol();
@@ -55,8 +64,8 @@ public class AiPatrol : MonoBehaviour
         if (distanceToPlayer <= enemyRange.range) 
         {
             mustPatrol = false;
-            if (player.position.x > transform.position.x && transform.localScale.x < 0 ||
-            player.position.x < transform.position.x && transform.localScale.x > 0)
+            if (player.position.x > body.transform.position.x && body.transform.localScale.x < 0 ||
+            player.position.x < body.transform.position.x && body.transform.localScale.x > 0)
             {
                 Flip();
             }
@@ -71,7 +80,8 @@ public class AiPatrol : MonoBehaviour
             mustFlip = !Physics2D.OverlapCircle(groundCheckerPosition.position, 0.15f, groundLayer);
         }
 
-        rb.velocity = rb.velocity * GameTimer.timeMultiplayer;
+        rb.velocity *= GameTimer.timeMultiplayer;
+        rb.gravityScale = gravityScale * GameTimer.timeMultiplayer;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -94,7 +104,7 @@ public class AiPatrol : MonoBehaviour
     public void Flip()
     {
         mustPatrol = false;
-        body.transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+        body.transform.localScale = new Vector2(body.transform.localScale.x * -1, body.transform.localScale.y);
         walkSpead *= -1;
         mustPatrol = true;
     }

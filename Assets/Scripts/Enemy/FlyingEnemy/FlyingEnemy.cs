@@ -30,9 +30,16 @@ public class FlyingEnemy : EnemyController
                     Vector3 vel = dir.normalized * speed;
                     enemyRigidbody.velocity = vel;
 
-                    if ((vel.x > 0 && transform.localScale.x < 0) || (vel.x < 0 && transform.localScale.x > 0))
+                    //Debug.Log(vel.x);
+                    //Debug.Log(body.transform.localScale.x);
+
+                    if ((vel.x > 0 && body.transform.localScale.x < 0) || (vel.x < 0 && body.transform.localScale.x > 0))
                     {
-                        body.transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+                        //Debug.Log("hej");
+                        body.transform.localScale = new Vector2(body.transform.localScale.x * -1, body.transform.localScale.y);
+                        //Debug.Log(body.transform.localScale);
+                        //Debug.Log(body.transform.localScale.x);
+                        //Debug.Log(body.transform.localScale.y);
                     }
                 }
                 else
@@ -72,13 +79,13 @@ public class FlyingEnemy : EnemyController
                         float damage = Mathf.Clamp01(powerPercente) * explosionPower;
                         damageTaker.TakeDamage(damage);
 
-                        Debug.Log(damageTaker);
-                        Debug.Log(powerPercente);
-                        Debug.Log(damage);
+                        //Debug.Log(damageTaker);
+                        //Debug.Log(powerPercente);
+                        //Debug.Log(damage);
                     }
                 }
             }
-            Destroy(this.gameObject);
+            TakeDamage(getMaxHealth());
         }).Start();
     }
 

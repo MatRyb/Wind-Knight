@@ -12,10 +12,10 @@ public class ObjectHealth : MonoBehaviour, IDamageTaker
         health = maxHealth;
     }
 
-    public void TakeDamage(float value)
+    public virtual void TakeDamage(float value)
     {
         health -= value;
-        if(health <= 0f)
+        if (health <= 0f)
         {
             health = 0f;
             OnDead();
