@@ -61,7 +61,7 @@ public class AiPatrol : MonoBehaviour
             Patrol();
         }
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        if (distanceToPlayer <= enemyRange.range) 
+        if (distanceToPlayer <= enemyRange.range && !enemyRange.isObjectBlockedByOtherObject(player.gameObject)) 
         {
             mustPatrol = false;
             if (player.position.x > body.transform.position.x && body.transform.localScale.x < 0 ||

@@ -27,7 +27,7 @@ public class EnemyRanged : EnemyController
 
         if(distanceToPlayer <= range && GameTimer.timeMultiplayer != 0f)
         {
-            if (canShoot)
+            if (canShoot && !isObjectBlockedByOtherObject(player.gameObject))
             {    
                 Attack();
             }
@@ -45,6 +45,7 @@ public class EnemyRanged : EnemyController
         yield return new WaitForSeconds(attackRecharge);
         Vector2 direction = (player.position - transform.position).normalized;
         GameObject newBullet = Instantiate(bullet, shootPosition.position, Quaternion.identity);
+        newBullet.transform.localScale = transform.localScale / 2f;
         newBullet.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x, direction.y - UnityEngine.Random.Range(-0.2f, 0.15f) * aim) * shootSpeed;
         yield return new WaitForSeconds(attackRecharge);
         canShoot = true;

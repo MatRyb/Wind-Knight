@@ -73,6 +73,7 @@ MonoBehaviour:
   player: {fileID: 0}
   attackRecharge: 1
   range: 7
+  patrol: {fileID: 2435575188841906586}
   enemyRigidbody: {fileID: 2435575188841906589}
   body: {fileID: 4473339957538727347}
   speed: 15
@@ -81,6 +82,9 @@ MonoBehaviour:
   setOffRange: 3
   setOffTime: 0.5
   explosionPower: 25
+  viewRayBlockingLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!50 &2435575188841906589
 Rigidbody2D:
   serializedVersion: 4

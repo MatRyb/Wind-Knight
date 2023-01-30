@@ -155,7 +155,7 @@ public class WindControl : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Vector2 playerPos = playerControler.playerBodyTransform.position;
 

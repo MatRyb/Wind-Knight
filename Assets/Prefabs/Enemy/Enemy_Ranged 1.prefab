@@ -458,6 +458,9 @@ MonoBehaviour:
   player: {fileID: 0}
   attackRecharge: 1
   range: 10
+  viewRayBlockingLayers:
+    serializedVersion: 2
+    m_Bits: 193
   shootSpeed: 20
   aim: 50
   bullet: {fileID: 6574801120051804515, guid: 078df0fec1a65a24a899a5a33b0a3d23, type: 3}

@@ -34,6 +34,12 @@ public class PatrolFlying : MonoBehaviour
             .setOnComplete(() => { moveToPoint((++i)%points.Count); });
     }
 
+    public void StopPatrol()
+    {
+        LeanTween.cancel(tween.id);
+        this.enabled = false;
+    }
+
     private void Update()
     {
         if (tween == null)
@@ -49,27 +55,7 @@ public class PatrolFlying : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            // B³¹d z uderzeniem
-            /*RaycastHit2D hit = Physics2D.Raycast(transform.position, collision.transform.position - transform.position);
-            Debug.Log(hit.collider.tag);
-            Debug.Log(hit.collider);
-            Debug.Log(hit.collider.gameObject);
-            if (hit.collider.tag == "Player")
-            {
-                LeanTween.cancel(tween.id);
-                this.enabled = false;
-            }*/
-
-            LeanTween.cancel(tween.id);
-            this.enabled = false;
-        }
-    }
-
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (points.Count > 0)
         {

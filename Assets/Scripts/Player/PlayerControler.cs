@@ -222,7 +222,7 @@ public class PlayerControler : ObjectHealth
         BoundMousePositionToMainCameraView();
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Vector2 playerPos = playerBodyTransform.position;
         float totalDist = Mathf.Abs(Vector2.Distance(playerPos, virtualMousePosition));

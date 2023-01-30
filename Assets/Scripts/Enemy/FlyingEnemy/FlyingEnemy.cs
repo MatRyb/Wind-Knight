@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class FlyingEnemy : EnemyController
 {
+    [SerializeField] private PatrolFlying patrol;
     [SerializeField] private Rigidbody2D enemyRigidbody;
     [SerializeField] private GameObject body;
     [SerializeField] private float speed = 10f;
@@ -30,16 +31,9 @@ public class FlyingEnemy : EnemyController
                     Vector3 vel = dir.normalized * speed;
                     enemyRigidbody.velocity = vel;
 
-                    //Debug.Log(vel.x);
-                    //Debug.Log(body.transform.localScale.x);
-
                     if ((vel.x > 0 && body.transform.localScale.x < 0) || (vel.x < 0 && body.transform.localScale.x > 0))
                     {
-                        //Debug.Log("hej");
                         body.transform.localScale = new Vector2(body.transform.localScale.x * -1, body.transform.localScale.y);
-                        //Debug.Log(body.transform.localScale);
-                        //Debug.Log(body.transform.localScale.x);
-                        //Debug.Log(body.transform.localScale.y);
                     }
                 }
                 else
@@ -47,7 +41,7 @@ public class FlyingEnemy : EnemyController
                     enemyRigidbody.velocity = Vector3.zero;
                 }
             }
-            else
+            else if (!isObjectBlockedByOtherObject(player.gameObject))
             {
                 enemyRigidbody.velocity = Vector3.zero;
                 Attack();
@@ -57,55 +51,60 @@ public class FlyingEnemy : EnemyController
 
     public override void Attack()
     {
-        Debug.Log("SETTING OFF");
         settingOff = true;
         LocalTimersManager.CreateNewTimer(setOffTime).DoAfter(() =>
         {
-            Debug.Log("EXPLOSION");
-            Collider2D[] collidersInExplosion = Physics2D.OverlapCircleAll(transform.position, range);
-            if (collidersInExplosion.Length > 0)
+            Explode();
+        }).Start();
+    }
+
+    private void Explode()
+    {
+        Collider2D[] collidersInExplosion = Physics2D.OverlapCircleAll(transform.position, range);
+        if (collidersInExplosion.Length > 0)
+        {
+            foreach (var collider in collidersInExplosion)
             {
-                foreach (var collider in collidersInExplosion)
+                IDamageTaker damageTaker;
+                if (collider.TryGetComponent<IDamageTaker>(out damageTaker))
                 {
-                    IDamageTaker damageTaker;
-                    if (collider.TryGetComponent<IDamageTaker>(out damageTaker))
+                    if ((Object)damageTaker == this)
                     {
-                        if ((Object)damageTaker == this)
-                        {
-                            continue;
-                        }
-
-                        float powerPercente = 1f - (Mathf.Abs(Vector2.Distance(collider.gameObject.transform.position, transform.position)) / range);
-                        float damage = Mathf.Clamp01(powerPercente) * explosionPower;
-                        damageTaker.TakeDamage(damage);
-
-                        //Debug.Log(damageTaker);
-                        //Debug.Log(powerPercente);
-                        //Debug.Log(damage);
+                        continue;
                     }
+
+                    float powerPercente = 1f - (Mathf.Abs(Vector2.Distance(collider.gameObject.transform.position, transform.position)) / range);
+                    float damage = Mathf.Clamp01(powerPercente) * explosionPower;
+                    damageTaker.TakeDamage(damage);
                 }
             }
-            TakeDamage(getMaxHealth());
-        }).Start();
+        }
+        TakeDamage(getMaxHealth());
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player" && !attack)
         {
-            /*RaycastHit2D hit = Physics2D.Raycast(transform.position, collision.transform.position - transform.position);
-            if (hit.collider.tag == "Player")
+            if (!isObjectBlockedByOtherObject(collision.gameObject))
             {
                 player = collision.gameObject.transform;
                 attack = true;
-            }*/
-
-            player = collision.gameObject.transform;
-            attack = true;
+                patrol.StopPatrol();
+            }
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") || collision.gameObject.layer == LayerMask.NameToLayer("Wall") 
+            || collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Object")
+        {
+            Explode();
+        }
+    }
+
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, setOffRange);
