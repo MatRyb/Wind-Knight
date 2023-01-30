@@ -26,6 +26,7 @@ public class PlayerControler : ObjectHealth
     [SerializeField] private bool staticMousePos = false;
     [SerializeField] private GameObject mouseObject;
     [SerializeField] private float mouseSensitivity = 1f;
+    [SerializeField] private Vector2 mouseBoundryOffset = Vector2.zero;
 
 
     [Foldout("info")]
@@ -145,10 +146,38 @@ public class PlayerControler : ObjectHealth
         }
         else
         {
-            virtualMousePosition = mouseObject.transform.position;
+            virtualMousePosition = (Vector2) mouseObject.transform.position + ((Vector2) mouseObject.transform.position - virtualMousePosition);
 
             playerState = PlayerState.FALLING;
         }
+    }
+
+    void BoundMousePositionToMainCameraView()
+    {
+        Vector3 finalMousePosition = virtualMousePosition;
+
+        Vector3 lowerBound = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
+        Vector3 upperBound = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0));
+
+        if (virtualMousePosition.x <= lowerBound.x)
+        {
+            finalMousePosition = new Vector3(lowerBound.x + mouseBoundryOffset.x, finalMousePosition.y, finalMousePosition.z);
+        }
+        else if (virtualMousePosition.x >= upperBound.x)
+        {
+            finalMousePosition = new Vector3(upperBound.x - mouseBoundryOffset.x, finalMousePosition.y, finalMousePosition.z);
+        }
+
+        if (virtualMousePosition.y <= lowerBound.y)
+        {
+            finalMousePosition = new Vector3(finalMousePosition.x, lowerBound.y + mouseBoundryOffset.y, finalMousePosition.z);
+        }
+        else if (virtualMousePosition.y >= upperBound.y)
+        {
+            finalMousePosition = new Vector3(finalMousePosition.x, upperBound.y - mouseBoundryOffset.y, finalMousePosition.z);
+        }
+
+        mouseObject.transform.position = finalMousePosition;
     }
 
     void MovementBasis(Vector2 playerPos)
@@ -189,6 +218,8 @@ public class PlayerControler : ObjectHealth
         float degreeToAdd = AdvancedMath.GetAngleBetweenPoints(playerPos, virtualMousePosition, Vector2.right + playerPos);
 
         mouseObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90 + degreeToAdd));
+
+        BoundMousePositionToMainCameraView();
     }
 
     private void OnDrawGizmos()
@@ -214,5 +245,12 @@ public class PlayerControler : ObjectHealth
             Gizmos.color = Color.white;
             Gizmos.DrawLine(playerPos, calculateTo);
         }
+
+        Vector3 lowerBound = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
+        Vector3 upperBound = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0));
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(lowerBound, 2f);
+        Gizmos.DrawWireSphere(upperBound, 2f);
     }
 }
