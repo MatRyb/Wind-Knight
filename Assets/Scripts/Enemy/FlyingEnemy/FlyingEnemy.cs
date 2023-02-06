@@ -1,0 +1,115 @@
+using UnityEngine;
+
+public class FlyingEnemy : EnemyController
+{
+    [SerializeField] private PatrolFlying patrol;
+    [SerializeField] private Rigidbody2D enemyRigidbody;
+    [SerializeField] private GameObject body;
+    [SerializeField] private float speed = 10f;
+
+    [SerializeField] private bool attack = false;
+    [SerializeField] private bool settingOff = false;
+    [SerializeField] private float setOffRange = 3f;
+    [SerializeField] private float setOffTime = 2f;
+    [SerializeField] private float explosionPower = 2f;
+
+    private void Start()
+    {
+        StartHealth();
+    }
+
+    private void FixedUpdate()
+    {
+        if (attack && !settingOff)
+        {
+            Vector3 dir = player.position - this.gameObject.transform.position;
+
+            if (Mathf.Abs(Vector3.Distance(Vector3.zero, dir)) > setOffRange)
+            {
+                if (GameTimer.timeMultiplayer == 1f)
+                {
+                    Vector3 vel = dir.normalized * speed;
+                    enemyRigidbody.velocity = vel;
+
+                    if ((vel.x > 0 && body.transform.localScale.x < 0) || (vel.x < 0 && body.transform.localScale.x > 0))
+                    {
+                        body.transform.localScale = new Vector2(body.transform.localScale.x * -1, body.transform.localScale.y);
+                    }
+                }
+                else
+                {
+                    enemyRigidbody.velocity = Vector3.zero;
+                }
+            }
+            else if (!isObjectBlockedByOtherObject(player.gameObject))
+            {
+                enemyRigidbody.velocity = Vector3.zero;
+                Attack();
+            }
+        }   
+    }
+
+    public override void Attack()
+    {
+        settingOff = true;
+        LocalTimersManager.CreateNewTimer(setOffTime).DoAfter(() =>
+        {
+            Explode();
+        }).Start();
+    }
+
+    private void Explode()
+    {
+        Collider2D[] collidersInExplosion = Physics2D.OverlapCircleAll(transform.position, range);
+        if (collidersInExplosion.Length > 0)
+        {
+            foreach (var collider in collidersInExplosion)
+            {
+                IDamageTaker damageTaker;
+                if (collider.TryGetComponent<IDamageTaker>(out damageTaker))
+                {
+                    if ((Object)damageTaker == this)
+                    {
+                        continue;
+                    }
+
+                    float powerPercente = 1f - (Mathf.Abs(Vector2.Distance(collider.gameObject.transform.position, transform.position)) / range);
+                    float damage = Mathf.Clamp01(powerPercente) * explosionPower;
+                    damageTaker.TakeDamage(damage);
+                }
+            }
+        }
+        TakeDamage(getMaxHealth());
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player" && !attack)
+        {
+            if (!isObjectBlockedByOtherObject(collision.gameObject))
+            {
+                player = collision.gameObject.transform;
+                attack = true;
+                patrol.StopPatrol();
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") || collision.gameObject.layer == LayerMask.NameToLayer("Wall") 
+            || collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Object")
+        {
+            Explode();
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, setOffRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
+    }
+}

@@ -7,24 +7,24 @@ public class EnemyWinCondition : MonoBehaviour
 {
     public TextMeshProUGUI textUI;
     [SerializeField] private GameObject blockingWall = null;
-    private List<EnemyController> enemys = new List<EnemyController>();
+    private List<EnemyController> enemies = new List<EnemyController>();
     private bool inizialized = false;
 
     void Update()
     {
         int deleted = 0;
-        for (int i = 0; i < enemys.Count - deleted; i++)
+        for (int i = 0; i < enemies.Count - deleted; i++)
         {
-            if (enemys[i] == null)
+            if (enemies[i] == null)
             {
-                enemys.RemoveAt(i - deleted);
+                enemies.RemoveAt(i - deleted);
                 deleted++;
             }
         }
 
-        textUI.text = "Enemys Left: " + enemys.Count;
+        textUI.text = "Enemies Left: " + enemies.Count;
 
-        if (enemys.Count == 0 && inizialized)
+        if (enemies.Count == 0 && inizialized)
         {
             Destroy(blockingWall);
         }
@@ -35,9 +35,9 @@ public class EnemyWinCondition : MonoBehaviour
         EnemyController enemy;
         if (collision.TryGetComponent<EnemyController>(out enemy))
         {
-            if (!enemys.Contains(enemy))
+            if (!enemies.Contains(enemy))
             {
-                enemys.Add(enemy);
+                enemies.Add(enemy);
                 inizialized = true;
             }
         }
@@ -48,9 +48,9 @@ public class EnemyWinCondition : MonoBehaviour
         EnemyController enemy;
         if (collision.TryGetComponent<EnemyController>(out enemy))
         {
-            if (!enemys.Contains(enemy))
+            if (!enemies.Contains(enemy))
             {
-                enemys.Add(enemy);
+                enemies.Add(enemy);
                 inizialized = true;
             }
         }
@@ -61,9 +61,9 @@ public class EnemyWinCondition : MonoBehaviour
         EnemyController enemy;
         if (collision.TryGetComponent<EnemyController>(out enemy))
         {
-            if (enemys.Contains(enemy))
+            if (enemies.Contains(enemy))
             {
-                enemys.Remove(enemy);
+                enemies.Remove(enemy);
             }
         }
     }

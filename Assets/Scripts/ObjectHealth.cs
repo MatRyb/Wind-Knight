@@ -1,4 +1,5 @@
 using UnityEngine;
+using NaughtyAttributes;
 
 public class ObjectHealth : MonoBehaviour, IDamageTaker
 {   
@@ -11,10 +12,10 @@ public class ObjectHealth : MonoBehaviour, IDamageTaker
         health = maxHealth;
     }
 
-    public void TakeDamage(float value)
+    public virtual void TakeDamage(float value)
     {
         health -= value;
-        if(health <= 0f)
+        if (health <= 0f)
         {
             health = 0f;
             OnDead();
@@ -64,5 +65,11 @@ public class ObjectHealth : MonoBehaviour, IDamageTaker
         Vector2 impulse = ComputeTotalImpulse(collision);
         var myBody = collision.otherRigidbody;
         return myBody.velocity - impulse / myBody.mass;
+    }
+
+    [Button]
+    private void TakeTestDamage()
+    {
+        TakeDamage(0.1f * getMaxHealth());
     }
 }
