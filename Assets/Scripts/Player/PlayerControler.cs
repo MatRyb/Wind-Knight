@@ -146,7 +146,7 @@ public class PlayerControler : ObjectHealth
         }
         else
         {
-            virtualMousePosition = (Vector2) mouseObject.transform.position + ((Vector2) mouseObject.transform.position - virtualMousePosition);
+            virtualMousePosition = mouseObject.transform.position;
 
             playerState = PlayerState.FALLING;
         }
