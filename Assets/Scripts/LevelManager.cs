@@ -30,7 +30,7 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PauseGame();
+        PauseGame(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         waitingForStart = true;
@@ -58,12 +58,17 @@ public class LevelManager : MonoBehaviour
         {
             if (paused)
             {
-                ResumeGameJob();
+                ResumeGameJob(false);
             }
             else
             {
-                PauseGameJob();
+                PauseGameJob(false);
             }
+        }
+
+        if (Input.GetKeyDown("escape") && !paused)
+        {
+            PauseGameJob(true);
         }
     }
 
@@ -123,32 +128,57 @@ public class LevelManager : MonoBehaviour
     {
         Destroy(startText);
         waitingForStart = false;
-        ResumeGame();
+        ResumeGame(false);
     }
 
-    public static void PauseGame()
+    public static void PauseGame(bool isScreen)
     {
-        instance.PauseGameJob();
+        instance.PauseGameJob(isScreen);
     }
 
-    private void PauseGameJob()
+    private void PauseGameJob(bool isScreen)
     {
         GameTimer.StopTime();
         paused = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        if (isScreen)
+        {
+            GameObject screen = GUIManager.ShowPauseScreen();
+            Button[] buttons = screen.GetComponentsInChildren<Button>();
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].name == "RestartBtn")
+                {
+                    buttons[i].onClick.AddListener(() => instance.RespawnJob());
+                }
+                else if (buttons[i].name == "ResumeBtn")
+                {
+                    buttons[i].onClick.AddListener(() => instance.ResumeGameJob(isScreen));
+                }
+                else if (buttons[i].name == "ExitBtn")
+                {
+                    buttons[i].onClick.AddListener(() => Application.Quit());
+                }
+            }
+        }
     }
 
-    public static void ResumeGame()
+    public static void ResumeGame(bool isScreen)
     {
-        instance.ResumeGameJob();
+        instance.ResumeGameJob(isScreen);
     }
 
-    private void ResumeGameJob()
+    private void ResumeGameJob(bool isScreen)
     {
         GameTimer.StartTime();
-        paused = true;
+        paused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        if (isScreen)
+        {
+            GUIManager.HidePauseScreen();
+        }
     }
 }
