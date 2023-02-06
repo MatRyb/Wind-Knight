@@ -10,6 +10,7 @@ public class ObjectScript : ObjectHealth
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float mass = 0f;
     [SerializeField] private float linearDrag = 0f;
+    private float gravityScale;
 
     [Header("Damage:")]
     [SerializeField] private float factor = 1.0f;
@@ -49,6 +50,7 @@ public class ObjectScript : ObjectHealth
         image.sprite = states[0];
         rb.mass = mass;
         rb.drag = linearDrag;
+        gravityScale = rb.gravityScale;
         this.StartHealth();
     }
 
@@ -63,7 +65,8 @@ public class ObjectScript : ObjectHealth
             velocity = rb.velocity;
         }
 
-        rb.velocity = rb.velocity * GameTimer.timeMultiplayer;
+        rb.velocity *= GameTimer.timeMultiplayer;
+        rb.gravityScale = gravityScale * GameTimer.timeMultiplayer;
     }
 
     public override void OnDead()
@@ -114,8 +117,6 @@ public class ObjectScript : ObjectHealth
         Vector2 vel = ComputeIncidentVelocity(collision);
 
         float speed = Mathf.Sqrt(Mathf.Pow(vel.x, 2) + Mathf.Pow(vel.y, 2));
-
-        Debug.Log(speed);
 
         if (speed > minSpeed)
         {
