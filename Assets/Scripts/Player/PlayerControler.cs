@@ -67,13 +67,9 @@ public class PlayerControler : ObjectHealth
 
     private void Awake()
     {
-        virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
         velocity = Vector2.zero;
 
-        if (mouseObject != null)
-        {
-            mouseObject.transform.position = virtualMousePosition;
-        }
+        mouseInit();
 
         if (playerRigidbody != null)
         {
@@ -83,6 +79,16 @@ public class PlayerControler : ObjectHealth
         }
 
         this.StartHealth();
+    }
+
+    public void mouseInit()
+    {
+        virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+
+        if (mouseObject != null)
+        {
+            mouseObject.transform.position = virtualMousePosition;
+        }
     }
 
     void Update()
