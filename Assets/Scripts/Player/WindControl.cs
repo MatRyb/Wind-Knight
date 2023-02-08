@@ -175,7 +175,7 @@ public class WindControl : MonoBehaviour
         windBubble.SetActive(true);
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Vector2 playerPos = playerControler.playerBodyTransform.position;
 
