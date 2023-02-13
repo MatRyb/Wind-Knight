@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AiPatrol : MonoBehaviour
@@ -7,11 +8,13 @@ public class AiPatrol : MonoBehaviour
     [SerializeField] private float gravityScale;
     private bool mustPatrol = true;
     private bool mustFlip;
+    private bool fliped = true;
     private float distanceToPlayer;
 
     [SerializeField] private EnemyController enemyRange;
     [SerializeField] private Transform player;
-    [SerializeField] private Transform groundCheckerPosition;
+    [SerializeField] private Transform frontGroundCheckerPosition;
+    [SerializeField] private Transform backGroundCheckerPosition;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
@@ -60,6 +63,7 @@ public class AiPatrol : MonoBehaviour
         {
             Patrol();
         }
+
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
         if (distanceToPlayer <= enemyRange.range && !enemyRange.isObjectBlockedByOtherObject(player.gameObject)) 
         {
@@ -77,7 +81,7 @@ public class AiPatrol : MonoBehaviour
 
         if (mustPatrol)
         {
-            mustFlip = !Physics2D.OverlapCircle(groundCheckerPosition.position, 0.15f, groundLayer);
+            mustFlip = (!Physics2D.OverlapCircle(frontGroundCheckerPosition.position, 0.15f, groundLayer) && Physics2D.OverlapCircle(backGroundCheckerPosition.position, 0.15f, groundLayer));
         }
 
         rb.velocity *= GameTimer.timeMultiplayer;
@@ -86,7 +90,7 @@ public class AiPatrol : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Object") || collision.gameObject.CompareTag("Enemy"))
+        if ((collision.gameObject.CompareTag("Object") || collision.gameObject.CompareTag("Enemy")) && fliped)
         {
             Flip();
         }
@@ -94,7 +98,7 @@ public class AiPatrol : MonoBehaviour
 
     private void Patrol()
     {
-        if (mustFlip || collider.IsTouchingLayers(wallLayer)) 
+        if ((mustFlip || collider.IsTouchingLayers(wallLayer)) && fliped) 
         {
             Flip();
         }
@@ -103,9 +107,23 @@ public class AiPatrol : MonoBehaviour
 
     public void Flip()
     {
+        fliped = false;
         mustPatrol = false;
         body.transform.localScale = new Vector2(body.transform.localScale.x * -1, body.transform.localScale.y);
         walkSpead *= -1;
         mustPatrol = true;
+        StartCoroutine(flipping(0.5f));
+    }
+    private IEnumerator flipping(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        fliped = true;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(frontGroundCheckerPosition.position, 0.15f);
+        Gizmos.DrawWireSphere(backGroundCheckerPosition.position, 0.15f);
     }
 }
