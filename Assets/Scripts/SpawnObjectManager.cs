@@ -26,8 +26,6 @@ public class SpawnObjectManager : MonoBehaviour
         yield return new WaitForSeconds(i);
         GameObject obj = Instantiate(prefabList[Random.Range(0, prefabList.Count)], tran.position, Quaternion.identity);
         obj.GetComponent<ObjectScript>().setFactor(0);
-        obj.GetComponent<ObjectScript>().setMass(Random.Range(1, 10));
-        obj.GetComponent<ObjectScript>().setMaxHealth(Random.Range(100, 1000));
         obj.GetComponent<ObjectScript>().StartHealth();
         yield return new WaitForSeconds(2);
         obj.GetComponent<ObjectScript>().setFactor(1);

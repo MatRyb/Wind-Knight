@@ -72,7 +72,6 @@ public class ObjectScript : ObjectHealth
     public override void OnDead()
     {
         Destroy(gameObject);
-        Debug.Log("Object Dead");
     }
 
     public float getMass()
