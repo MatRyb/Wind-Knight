@@ -452,7 +452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfae1005304789944857a61fbe27dc51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 400
   health: 0
   bodySprite: {fileID: 580585821}
   deathParticle: {fileID: 840825463644067242, guid: 72c3b48529f8a104ca028811d4684334, type: 3}
