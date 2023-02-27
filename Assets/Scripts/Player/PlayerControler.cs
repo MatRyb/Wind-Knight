@@ -1,5 +1,6 @@
 using UnityEngine;
 using NaughtyAttributes;
+using System.Collections.Generic;
 
 public enum PlayerState { FALLING, MOVING }
 
@@ -27,7 +28,7 @@ public class PlayerControler : ObjectHealth
     [SerializeField] private GameObject mouseObject;
     [SerializeField] private float mouseSensitivity = 1f;
     [SerializeField] private Vector2 mouseBoundryOffset = Vector2.zero;
-
+    [SerializeField] private List<Sprite> mouseStates;
 
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 virtualMousePosition;
@@ -49,6 +50,11 @@ public class PlayerControler : ObjectHealth
             Debug.LogError("Mouse Object can't be null. Please provide one. :)");
         }
 
+        if (mouseStates.Count == 0)
+        {
+            Debug.LogError("There must be at least 2 states.");
+        }
+
         if (GetComponent<Rigidbody2D>() != null && playerRigidbody == null)
         {
             playerRigidbody = GetComponent<Rigidbody2D>();
@@ -61,13 +67,9 @@ public class PlayerControler : ObjectHealth
 
     private void Awake()
     {
-        virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
         velocity = Vector2.zero;
 
-        if (mouseObject != null)
-        {
-            mouseObject.transform.position = virtualMousePosition;
-        }
+        mouseInit();
 
         if (playerRigidbody != null)
         {
@@ -77,6 +79,16 @@ public class PlayerControler : ObjectHealth
         }
 
         this.StartHealth();
+    }
+
+    public void mouseInit()
+    {
+        virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+
+        if (mouseObject != null)
+        {
+            mouseObject.transform.position = virtualMousePosition;
+        }
     }
 
     void Update()
@@ -119,13 +131,13 @@ public class PlayerControler : ObjectHealth
         LevelManager.InitRespawn();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    /*private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Wall") || collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             OnDead();
         }
-    }
+    }*/
 
     void VirtualMousePositionCalculations()
     {
@@ -202,11 +214,14 @@ public class PlayerControler : ObjectHealth
             {
                 calculateTo = (virtualMousePosition - playerPos).normalized * maxForceRadius + playerPos;
             }
+            int state = Mathf.CeilToInt(((mouseStates.Count-1) / maxForceRadius) * Mathf.Abs(Vector2.Distance(calculateTo, playerPos)));
+            mouseObject.GetComponent<SpriteRenderer>().sprite = mouseStates[state == mouseStates.Count ? mouseStates.Count - 1 : state];
             velocity = (calculateTo - playerPos) * basePower;
             playerRigidbody.velocity = velocity;
         }
         else
         {
+            mouseObject.GetComponent<SpriteRenderer>().sprite = mouseStates[0];
             playerRigidbody.gravityScale = gravityScale;
         }
 
