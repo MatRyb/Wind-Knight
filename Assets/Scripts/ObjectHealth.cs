@@ -1,7 +1,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-public class ObjectHealth : MonoBehaviour, IDamageTaker
+public class ObjectHealth : BaseEntityBehaviour, IDamageTaker
 {   
     [Header("Health:")]
     [SerializeField] private float maxHealth = 100f;

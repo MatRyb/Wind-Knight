@@ -2,13 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-public class WindControl : MonoBehaviour
+public class WindControl : BaseEntityBehaviour
 {
     [SerializeField] private PlayerControler playerControler;
     [SerializeField] private float windBubbleRange = 4.5f;
     [SerializeField] private float windPower = 2f;
     [SerializeField] private float maxMovePower = 20f;
     [SerializeField] private float throwForceConstant = 5f;
+
+    [SerializeField] private LayerMask blockingLayers;
 
     [SerializeField] private GameObject windBubble = null;
 
@@ -114,6 +116,11 @@ public class WindControl : MonoBehaviour
                 Rigidbody2D rigid;
                 if (collider.TryGetComponent<Rigidbody2D>(out rigid))
                 {
+                    if (isObjectBlockedByOtherObject(rigid.gameObject, blockingLayers))
+                    {
+                        continue;
+                    }
+
                     if (rigid != playerControler.playerRigidbody && objectsInRange.Find((o) => o.gameObject == rigid.gameObject) == null)
                     {
                         objectsInRange.Add(new ObjectInRange(rigid.gameObject, rigid.gravityScale));
