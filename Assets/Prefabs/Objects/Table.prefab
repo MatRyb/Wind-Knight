@@ -153,11 +153,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38ece31f384d184ab6fc845b197e915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 1000
   health: 0
   rb: {fileID: 8776821380493041886}
   mass: 82
-  linearDrag: 0.83
+  linearDrag: 0.3
   factor: 1
   states:
   - {fileID: 21300000, guid: 0d85ed8af19c5754698fa4ec357a30dd, type: 3}

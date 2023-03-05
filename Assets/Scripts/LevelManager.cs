@@ -1,9 +1,23 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public class LevelManager : MonoBehaviour
 {
+    [System.Serializable]
+    private class RespawnPoint
+    {
+        public int id = 0;
+        public Vector3 position = new Vector3(0,0,0);
+
+        public RespawnPoint(int _id, Vector3 _pos)
+        {
+            id = _id;
+            position = _pos;
+        }
+    };
+
     private static LevelManager instance = null;
 
     private bool waitingForStart = false;
@@ -15,31 +29,44 @@ public class LevelManager : MonoBehaviour
 
     private bool paused = false;
 
-    private void OnEnable()
+    private bool start;
+
+    private RespawnPoint resp = new RespawnPoint(0, new Vector3(0,0,0));
+
+    void OnLevelWasLoaded(int level)
     {
-        if (instance != this && instance != null)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            instance = this;
-        }
+        instance.start = true;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        PauseGame();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        waitingForStart = true;
-        startText = GUIManager.ShowText("Press 'Left Mouse Button' to start");
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        instance.start = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (instance.start)
+        {
+            instance.start = false;
+            GameObject player = FindObjectOfType<PlayerControler>().gameObject;
+            Camera.main.transform.position = new Vector3(instance.resp.position.x, instance.resp.position.y, Camera.main.transform.position.z);
+            player.transform.position = instance.resp.position;
+            player.GetComponent<PlayerControler>().mouseInit();
+            PauseGame(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            waitingForStart = true;
+            startText = GUIManager.ShowText("Press 'Left Mouse Button' to start");
+        }
+
         if (waitingForStart && Input.GetMouseButtonDown(0))
         {
             StartGame();
@@ -58,12 +85,17 @@ public class LevelManager : MonoBehaviour
         {
             if (paused)
             {
-                ResumeGameJob();
+                ResumeGameJob(false);
             }
             else
             {
-                PauseGameJob();
+                PauseGameJob(false);
             }
+        }
+
+        if (Input.GetKeyDown("escape") && !paused)
+        {
+            PauseGameJob(true);
         }
     }
 
@@ -81,6 +113,10 @@ public class LevelManager : MonoBehaviour
             {
                 buttons[i].onClick.AddListener(() => instance.RespawnJob());
             }
+            else if (buttons[i].name == "RestartBtn")
+            {
+                buttons[i].onClick.AddListener(() => instance.RestartJob());
+            }
             else if (buttons[i].name == "ExitBtn")
             {
                 buttons[i].onClick.AddListener(() => Application.Quit());
@@ -91,9 +127,15 @@ public class LevelManager : MonoBehaviour
 
     private void RespawnJob()
     {
-        GameTimer.StartTime();
         waitForRespawn = false;
-        instance = null;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void RestartJob()
+    {
+        waitForRespawn = false;
+        instance.resp.id = 0;
+        instance.resp.position = new Vector3(0,0,0);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -123,32 +165,104 @@ public class LevelManager : MonoBehaviour
     {
         Destroy(startText);
         waitingForStart = false;
-        ResumeGame();
+        ResumeGame(false);
     }
 
-    public static void PauseGame()
+    public static void PauseGame(bool isScreen)
     {
-        instance.PauseGameJob();
+        instance.PauseGameJob(isScreen);
     }
 
-    private void PauseGameJob()
+    private void PauseGameJob(bool isScreen)
     {
         GameTimer.StopTime();
         paused = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        if (isScreen)
+        {
+            GameObject screen = GUIManager.ShowPauseScreen();
+            Button[] buttons = screen.GetComponentsInChildren<Button>();
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].name == "RestartBtn")
+                {
+                    buttons[i].onClick.AddListener(() => instance.RespawnJob());
+                }
+                else if (buttons[i].name == "ResumeBtn")
+                {
+                    buttons[i].onClick.AddListener(() => instance.ResumeGameJob(isScreen));
+                }
+                else if (buttons[i].name == "ExitBtn")
+                {
+                    buttons[i].onClick.AddListener(() => Application.Quit());
+                }
+            }
+        }
     }
 
-    public static void ResumeGame()
+    public static void ResumeGame(bool isScreen)
     {
-        instance.ResumeGameJob();
+        instance.ResumeGameJob(isScreen);
     }
 
-    private void ResumeGameJob()
+    private void ResumeGameJob(bool isScreen)
     {
         GameTimer.StartTime();
-        paused = true;
+        paused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        if (isScreen)
+        {
+            GUIManager.HidePauseScreen();
+        }
+    }
+
+    public Vector3 getRespawnPointPosition()
+    {
+        return instance.resp.position;
+    }
+
+    public void setRespawnPoint(int id, Vector3 pos, Action action)
+    {
+        if (id >= instance.resp.id && instance.resp.position != pos)
+        {
+            Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
+
+            foreach (Checkpoint check in checkpoints)
+            {
+                if(check.getId() == instance.resp.id)
+                {
+                    if (check.getId() < id)
+                    {
+                        check.setDisabled();
+                    }
+                    else
+                    {
+                        check.setNotActive();
+                    }
+                }
+
+            }
+
+            instance.resp.id = id;
+            instance.resp.position = pos;
+            action.Invoke();
+        }
+        else if (id == instance.resp.id && instance.resp.position == pos)
+        {
+            Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
+
+            foreach (Checkpoint check in checkpoints)
+            {
+                if (check.getId() < instance.resp.id)
+                {
+                    check.setDisabled();
+                }
+            }
+
+            action.Invoke();
+        }
     }
 }

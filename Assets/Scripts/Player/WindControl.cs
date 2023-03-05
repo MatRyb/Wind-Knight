@@ -8,6 +8,9 @@ public class WindControl : MonoBehaviour
     [SerializeField] private float windBubbleRange = 4.5f;
     [SerializeField] private float windPower = 2f;
     [SerializeField] private float maxMovePower = 20f;
+    [SerializeField] private float throwForceConstant = 5f;
+
+    [SerializeField] private GameObject windBubble = null;
 
     [DisableIf("true")] [SerializeField] private List<ObjectInRange> objectsInRange;
 
@@ -56,11 +59,24 @@ public class WindControl : MonoBehaviour
         if (playerControler == null)
             return;
 
-        UpdateObjectsList();
-
         if (Input.GetMouseButton(0))
         {
+            UpdateObjectsList();
             MoveObjects();
+            DrawWindRange();
+        }
+        else
+        {
+            windBubble.SetActive(false);
+            for (int i = 0; i < objectsInRange.Count; ++i)
+            {
+                if (objectsInRange[i].rigidbody != null)
+                {
+                    objectsInRange[i].rigidbody.gravityScale = objectsInRange[i].gravityScale;
+                }
+                objectsInRange[i].rigidbody.AddForce(playerControler.playerRigidbody.velocity.normalized * throwForceConstant * Vector3.Distance(Vector3.zero, objectsInRange[i].rigidbody.velocity) / maxMovePower, ForceMode2D.Impulse);
+                objectsInRange.Remove(objectsInRange[i]);
+            }
         }
     }
 
@@ -144,7 +160,22 @@ public class WindControl : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    [Button()]
+    private void DrawWindRange()
+    {
+        if (windBubble == null)
+        {
+            return;
+        }
+
+        const float imageToRangeRatio = 2.52f / 10f;
+
+        windBubble.transform.localScale = new Vector3(windBubbleRange * imageToRangeRatio, windBubbleRange * imageToRangeRatio, windBubble.transform.localScale.z);
+
+        windBubble.SetActive(true);
+    }
+
+    private void OnDrawGizmosSelected()
     {
         Vector2 playerPos = playerControler.playerBodyTransform.position;
 

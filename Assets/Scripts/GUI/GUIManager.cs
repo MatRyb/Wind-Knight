@@ -11,6 +11,7 @@ public class GUIManager : MonoBehaviour
     [SerializeField] private GameObject textObject;
     [SerializeField] private GameObject deathScreenObject;
     [SerializeField] private GameObject winScreenObject;
+    [SerializeField] private GameObject pauseScreenObject;
 
     private void OnEnable()
     {
@@ -66,5 +67,23 @@ public class GUIManager : MonoBehaviour
     private GameObject ShowWinScreenJob()
     {
         return Instantiate(winScreenObject, canvas.transform, false);
+    }
+    public static GameObject ShowPauseScreen()
+    {
+        return instance.ShowPauseScreenJob();
+    }
+
+    private GameObject ShowPauseScreenJob()
+    {
+        return Instantiate(pauseScreenObject, canvas.transform, false);
+    }
+    public static void HidePauseScreen()
+    {
+        instance.HidePauseScreenJob();
+    }
+
+    private void HidePauseScreenJob()
+    {
+        Destroy(GameObject.Find("PauseScreen(Clone)"));
     }
 }
