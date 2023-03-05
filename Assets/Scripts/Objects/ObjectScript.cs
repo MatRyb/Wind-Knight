@@ -115,7 +115,7 @@ public class ObjectScript : ObjectHealth
 
         float speed = Mathf.Sqrt(Mathf.Pow(vel.x, 2) + Mathf.Pow(vel.y, 2));
 
-        Debug.Log(speed);
+        //Debug.Log(speed);
 
         if (speed > minSpeed)
         {
