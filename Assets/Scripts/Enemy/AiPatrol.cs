@@ -18,6 +18,7 @@ public class AiPatrol : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask viewBlockingLayers;
 
     [SerializeField] public new BoxCollider2D collider;
 
@@ -65,7 +66,7 @@ public class AiPatrol : MonoBehaviour
         }
 
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        if (distanceToPlayer <= enemyRange.range && !enemyRange.isObjectBlockedByOtherObject(player.gameObject)) 
+        if (distanceToPlayer <= enemyRange.range && !enemyRange.isObjectBlockedByOtherObject(player.gameObject, viewBlockingLayers)) 
         {
             mustPatrol = false;
             if (player.position.x > body.transform.position.x && body.transform.localScale.x < 0 ||
