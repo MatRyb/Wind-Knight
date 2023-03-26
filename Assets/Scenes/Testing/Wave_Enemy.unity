@@ -500,14 +500,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3840676313637492572, guid: d06ae6904778f3d47872c44a7e6f2754, type: 3}
-      propertyPath: dieTime
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7318166867706645059, guid: d06ae6904778f3d47872c44a7e6f2754, type: 3}
-      propertyPath: damage
-      value: 2
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7318166867706645059, guid: d06ae6904778f3d47872c44a7e6f2754, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d06ae6904778f3d47872c44a7e6f2754, type: 3}
