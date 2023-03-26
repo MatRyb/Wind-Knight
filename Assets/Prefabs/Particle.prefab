@@ -136,8 +136,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24ff44dee73c6f74ea1a745b7676b376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dieTime: 6
+  dieTime: 0.5
   damage: 0.5
+  baseMinDist: 0.1
   minDist: 0.1
   angle: 0
   speed: 0
+  radius: 0

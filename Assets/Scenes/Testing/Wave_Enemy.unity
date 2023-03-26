@@ -168,12 +168,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99c6750053c32ac4ba61bd9d3903c2be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 6
-  thickness: 2
+  amount: 3
+  thickness: 0.5
   offset: 3
-  particle: {fileID: 2385618043628708710, guid: d06ae6904778f3d47872c44a7e6f2754, type: 3}
+  prefab: {fileID: 653196124}
   speed: 10
   angle: 45
+  inactiveCount: 0
+  activeCount: 0
 --- !u!212 &485683137
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -226,6 +228,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &653196124 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3840676313637492572, guid: d06ae6904778f3d47872c44a7e6f2754, type: 3}
+  m_PrefabInstance: {fileID: 2385618044201048784}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24ff44dee73c6f74ea1a745b7676b376, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &943372146
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -280,6 +293,10 @@ PrefabInstance:
     - target: {fileID: 3053495975456952606, guid: 7891cc93714890247915902f6387e37d, type: 3}
       propertyPath: m_Name
       value: DeadlyWall (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3053495975456952606, guid: 7891cc93714890247915902f6387e37d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7891cc93714890247915902f6387e37d, type: 3}
@@ -422,6 +439,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeadlyWall
       objectReference: {fileID: 0}
+    - target: {fileID: 3053495975456952606, guid: 7891cc93714890247915902f6387e37d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7891cc93714890247915902f6387e37d, type: 3}
 --- !u!1001 &2385618044201048784
@@ -478,6 +499,10 @@ PrefabInstance:
     - target: {fileID: 2385618043628708712, guid: d06ae6904778f3d47872c44a7e6f2754, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3840676313637492572, guid: d06ae6904778f3d47872c44a7e6f2754, type: 3}
+      propertyPath: dieTime
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7318166867706645059, guid: d06ae6904778f3d47872c44a7e6f2754, type: 3}
       propertyPath: damage

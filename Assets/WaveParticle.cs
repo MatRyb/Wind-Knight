@@ -1,41 +1,42 @@
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.Pool;
 
 public class WaveParticle : MonoBehaviour
 {
     [SerializeField] private float dieTime = 2f;
     [SerializeField] private float damage = 0.5f;
 
-    private GameObject particle;
     [SerializeField] private float baseMinDist = 0.1f;
 
-    [Foldout("Info")] [DisableIf("true")][SerializeField] private float minDist = 0.1f;
+    [Foldout("Info")][DisableIf("true")][SerializeField] private float minDist = 0.1f;
     [Foldout("Info")][DisableIf("true")][SerializeField] private float angle;
     [Foldout("Info")][DisableIf("true")][SerializeField] private float speed;
+    [Foldout("Info")][DisableIf("true")][SerializeField] private float radius;
 
     private WaveParticle right = null;
     private WaveParticle left = null;
 
-    private void Start()
-    {
-        Destroy(this.gameObject, dieTime);
-    }
+    IObjectPool<WaveParticle> _pool;
+
+    private LocalTimerContainer timer = null;
 
     void Update()
     {
+        if (_pool == null)
+        {
+            return;
+        }
+
         dieTime -= Time.deltaTime;
+
         if (left == null && right == null)
         {
-            Destroy(this.gameObject);
+            ResetParameters();
+            _pool.Release(this);
         }
 
         CheckRight();
-    }
-
-    public WaveParticle SetParticle(GameObject gameObject)
-    {
-        particle = gameObject;
-        return this;
     }
 
     public WaveParticle SetAngle(float value)
@@ -50,9 +51,11 @@ public class WaveParticle : MonoBehaviour
         return this;
     }
 
-    public WaveParticle SetScale(float value)
+    public WaveParticle SetRadius(float value)
     {
-        transform.localScale = new Vector3(value, value, transform.localScale.z);
+        const float ratio = 1f / 0.5f;
+        radius = value;
+        transform.localScale = new Vector3(value * ratio, value * ratio, transform.localScale.z);
         minDist = baseMinDist * value;
         return this;
     }
@@ -61,6 +64,17 @@ public class WaveParticle : MonoBehaviour
     {
         dieTime = value;
         return this;
+    }
+
+    public WaveParticle SetLocalTimer(LocalTimerContainer value)
+    {
+        timer = value;
+        return this;
+    }
+
+    public float GetDieTime()
+    {
+        return dieTime;
     }
 
     public WaveParticle SetLeft(WaveParticle obj)
@@ -73,9 +87,11 @@ public class WaveParticle : MonoBehaviour
         return this;
     }
 
+    public void SetPool(IObjectPool<WaveParticle> pool) => _pool = pool;
+
     void CheckRight()
     {
-        if (right == null)
+        if (right == null || _pool == null)
         {
             return;
         }
@@ -90,15 +106,17 @@ public class WaveParticle : MonoBehaviour
 
             Vector2 pos = (gameObject.transform.position + right.gameObject.transform.position) / 2f;
 
-            GameObject obj = Instantiate(particle, pos, new Quaternion(0, 0, 0, 0));
+            WaveParticle obj = _pool.Get();
+
+            obj.transform.SetPositionAndRotation(pos, new Quaternion(0, 0, 0, 0));
 
             right.SetLeft(obj.GetComponent<WaveParticle>());
-            obj.GetComponent<WaveParticle>().SetParticle(particle).SetSpeed(speed).SetAngle(angleCalculated).SetDieTime(dieTime).SetScale(transform.localScale.x).SetLeft(this);
+
+            obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetDieTime(dieTime).SetRadius(radius).SetLeft(this);
 
             obj.transform.eulerAngles = new Vector3(0, 0, angleCalculated);
 
-            Rigidbody2D rb;
-            if (obj.TryGetComponent<Rigidbody2D>(out rb))
+            if (obj.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
             {
                 rb.velocity = new Vector2(speed * Mathf.Cos(radian), speed * Mathf.Sin(radian));
             }
@@ -111,7 +129,14 @@ public class WaveParticle : MonoBehaviour
         {
             if (this != null)
             {
-                Destroy(this.gameObject);
+                if (_pool != null)
+                {
+                    _pool.Release(this);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }
@@ -120,10 +145,24 @@ public class WaveParticle : MonoBehaviour
     {
         if (left == null)
         {
-            if (this != null)
+            if (_pool != null)
             {
-                Destroy(this.gameObject);
+                _pool.Release(this);
             }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    public void ResetParameters()
+    {
+        timer?.Stop();
+
+        if (TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+        {
+            rb.velocity = Vector2.zero;
         }
     }
 
@@ -135,12 +174,19 @@ public class WaveParticle : MonoBehaviour
             damageTaker.TakeDamage(damage);
         }
 
-        WaveParticle wave;
-        if (!collision.gameObject.TryGetComponent<WaveParticle>(out wave))
+        if (!collision.gameObject.TryGetComponent<WaveParticle>(out WaveParticle _))
         {
             left?.RightDied();
             right?.LeftDied();
-            Destroy(gameObject);
+
+            if (_pool != null)
+            {
+                _pool.Release(this);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

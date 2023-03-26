@@ -23,6 +23,12 @@ public class LocalTimerContainer
         return this;
     }
 
+    public LocalTimerContainer Stop()
+    {
+        this.timer.Stop();
+        return this;
+    }
+
     public LocalTimerContainer DoAfter(Action action)
     {
         this.timer.DoAfter(action);
@@ -55,18 +61,20 @@ public class LocalTimersManager : MonoBehaviour
             return;
         }
 
+        List<LocalTimer> newTimers = new List<LocalTimer>(timers);
         foreach (var timer in timers)
         {
             timer.UpdateTime();
             if (timer.timeToEnd <= 0f)
             {
-                timers.Remove(timer);
+                newTimers.Remove(timer);
                 if (timers.Count == 0)
                 {
                     break;
                 }
             }
         }
+        timers = newTimers;
     }
 
     public static LocalTimerContainer CreateNewTimer(float totalTime)
