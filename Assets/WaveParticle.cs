@@ -21,9 +21,11 @@ public class WaveParticle : MonoBehaviour
 
     private LocalTimerContainer timer = null;
 
+    private bool inPool = false;
+
     void Update()
     {
-        if (_pool == null)
+        if (_pool == null || inPool)
         {
             return;
         }
@@ -63,6 +65,12 @@ public class WaveParticle : MonoBehaviour
     public WaveParticle SetDieTime(float value)
     {
         dieTime = value;
+        return this;
+    }
+
+    public WaveParticle SetInPool(bool value)
+    {
+        inPool = value;
         return this;
     }
 

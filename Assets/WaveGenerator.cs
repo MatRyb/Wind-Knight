@@ -62,6 +62,7 @@ public class WaveGenerator : MonoBehaviour
     {
         WaveParticle particle = Instantiate(prefab);
         particle.SetPool(_pool);
+        particle.SetInPool(false);
 
         particle.SetLocalTimer(LocalTimersManager.CreateNewTimer(particle.GetDieTime()).DoAfter(() =>
         {
@@ -74,6 +75,7 @@ public class WaveGenerator : MonoBehaviour
     void OnTakeParticleFromPool(WaveParticle particle)
     {
         particle.gameObject.SetActive(true);
+        particle.SetInPool(false);
 
         particle.SetLocalTimer(LocalTimersManager.CreateNewTimer(particle.GetDieTime()).DoAfter(() =>
         {
@@ -84,6 +86,7 @@ public class WaveGenerator : MonoBehaviour
     void OnReturnParticleToPool(WaveParticle particle)
     {
         particle.gameObject.SetActive(false);
+        particle.SetInPool(true);
         particle.ResetParameters();
     }
 
