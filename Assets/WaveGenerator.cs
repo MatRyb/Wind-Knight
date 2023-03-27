@@ -1,6 +1,5 @@
 using UnityEngine;
 using NaughtyAttributes;
-using UnityEngine.Pool;
 
 public class WaveGenerator : MonoBehaviour
 {
@@ -13,25 +12,9 @@ public class WaveGenerator : MonoBehaviour
 
     [SerializeField] private float offset = 3f;
 
-    [SerializeField] public WaveParticle prefab;
-
     [SerializeField] private float speed = 10f;
 
     [SerializeField] [Range(0, 180)] private float angle = 45f;
-
-    private ObjectPool<WaveParticle> _pool;
-
-    [SerializeField] private int inactiveCount;
-
-    [SerializeField] private int activeCount;
-
-    void Awake() => _pool = new ObjectPool<WaveParticle>(CreateParticle, OnTakeParticleFromPool, OnReturnParticleToPool);
-
-    private void Update()
-    {
-        inactiveCount = _pool.CountInactive;
-        activeCount = _pool.CountActive;
-    }
 
     [Button]
     public void SpawnWave()
@@ -47,7 +30,7 @@ public class WaveGenerator : MonoBehaviour
 
             float lookRadian = gameObject.transform.eulerAngles.z * Mathf.PI / 180f;
 
-            WaveParticle obj = _pool.Get();
+            WaveParticle obj = WavePoolManager.instance.GetPool().Get();
 
             obj.transform.SetPositionAndRotation(gameObject.transform.position + new Vector3(offset * Mathf.Cos(lookRadian), offset * Mathf.Sin(lookRadian)), new Quaternion(0, 0, 0, 0));
 
@@ -58,28 +41,6 @@ public class WaveGenerator : MonoBehaviour
                 rb.velocity = new Vector2(speed * Mathf.Cos(radian), speed * Mathf.Sin(radian));
             }
         }
-    }
-
-    WaveParticle CreateParticle()
-    {
-        WaveParticle particle = Instantiate(prefab);
-        particle.SetPool(_pool);
-        particle.SetInPool(false);
-
-        return particle;
-    }
-
-    void OnTakeParticleFromPool(WaveParticle particle)
-    {
-        particle.gameObject.SetActive(true);
-        particle.SetInPool(false);
-    }
-
-    void OnReturnParticleToPool(WaveParticle particle)
-    {
-        particle.gameObject.SetActive(false);
-        particle.SetInPool(true);
-        particle.ResetParameters();
     }
 
     public void OnDrawGizmos()

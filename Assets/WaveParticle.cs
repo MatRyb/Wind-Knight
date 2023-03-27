@@ -205,16 +205,9 @@ public class WaveParticle : MonoBehaviour
             left?.RightDied();
             right?.LeftDied();
 
-            if (_pool != null)
+            if (_pool != null && !inPool)
             {
-                if(!inPool)
-                {
-                    _pool.Release(this);
-                }
-            }
-            else
-            {
-                Destroy(gameObject);
+                _pool.Release(this);
             }
         }
     }
