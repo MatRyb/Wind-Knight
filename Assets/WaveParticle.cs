@@ -4,7 +4,7 @@ using UnityEngine.Pool;
 
 public class WaveParticle : MonoBehaviour
 {
-    [SerializeField] private float dieTime = 2f;
+    private float dieTime = 2f;
     [SerializeField] private float damage = 0.5f;
 
     [SerializeField] private float baseMinDist = 0.1f;
@@ -73,9 +73,13 @@ public class WaveParticle : MonoBehaviour
         return this;
     }
 
-    public WaveParticle SetLocalTimer(LocalTimerContainer value)
+    public WaveParticle SetLocalTimer(float time)
     {
-        timer = value;
+        timer = LocalTimersManager.CreateNewTimer(time).DoAfter(() =>
+        {
+            _pool?.Release(this);
+        }).Start();
+
         return this;
     }
 
@@ -129,7 +133,7 @@ public class WaveParticle : MonoBehaviour
 
             right.SetLeft(obj.GetComponent<WaveParticle>());
 
-            obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetDieTime(dieTime).SetRadius(radius).SetLeft(this);
+            obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetLocalTimer(dieTime).SetDieTime(dieTime).SetRadius(radius).SetLeft(this);
 
             obj.transform.eulerAngles = new Vector3(0, 0, angleCalculated);
 
@@ -203,7 +207,10 @@ public class WaveParticle : MonoBehaviour
 
             if (_pool != null)
             {
-                _pool.Release(this);
+                if(!inPool)
+                {
+                    _pool.Release(this);
+                }
             }
             else
             {

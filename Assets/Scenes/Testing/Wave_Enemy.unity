@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amount: 3
+  dieTime: 4
   thickness: 0.5
   offset: 3
   prefab: {fileID: 653196124}

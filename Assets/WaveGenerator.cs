@@ -6,6 +6,8 @@ public class WaveGenerator : MonoBehaviour
 {
     [SerializeField] private uint amount = 3;
 
+    [SerializeField] private float dieTime = 2f;
+
     // change to radius of particle
     [SerializeField] private float thickness = 0.5f;
 
@@ -49,7 +51,7 @@ public class WaveGenerator : MonoBehaviour
 
             obj.transform.SetPositionAndRotation(gameObject.transform.position + new Vector3(offset * Mathf.Cos(lookRadian), offset * Mathf.Sin(lookRadian)), new Quaternion(0, 0, 0, 0));
 
-            left = obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetRadius(thickness).SetLeft(left);
+            left = obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetRadius(thickness).SetLeft(left).SetDieTime(dieTime).SetLocalTimer(dieTime);
 
             if (obj.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
             {
@@ -64,11 +66,6 @@ public class WaveGenerator : MonoBehaviour
         particle.SetPool(_pool);
         particle.SetInPool(false);
 
-        particle.SetLocalTimer(LocalTimersManager.CreateNewTimer(particle.GetDieTime()).DoAfter(() =>
-        {
-            _pool.Release(particle);
-        }));
-
         return particle;
     }
 
@@ -76,11 +73,6 @@ public class WaveGenerator : MonoBehaviour
     {
         particle.gameObject.SetActive(true);
         particle.SetInPool(false);
-
-        particle.SetLocalTimer(LocalTimersManager.CreateNewTimer(particle.GetDieTime()).DoAfter(() =>
-        {
-            _pool.Release(particle);
-        }));
     }
 
     void OnReturnParticleToPool(WaveParticle particle)
