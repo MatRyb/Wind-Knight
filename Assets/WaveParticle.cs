@@ -34,7 +34,6 @@ public class WaveParticle : MonoBehaviour
 
         if (left == null && right == null)
         {
-            ResetParameters();
             _pool.Release(this);
         }
 
@@ -91,6 +90,16 @@ public class WaveParticle : MonoBehaviour
         if (obj != null)
         {
             obj.right = this;
+        }
+        return this;
+    }
+
+    public WaveParticle SetRight(WaveParticle obj)
+    {
+        right = obj;
+        if (obj != null)
+        {
+            obj.left = this;
         }
         return this;
     }
@@ -167,6 +176,11 @@ public class WaveParticle : MonoBehaviour
     public void ResetParameters()
     {
         timer?.Stop();
+
+        right?.SetLeft(null);
+        left?.SetRight(null);
+        left = null;
+        right = null;
 
         if (TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
         {
