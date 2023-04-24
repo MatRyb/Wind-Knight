@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public abstract class EnemyController : ObjectHealth
 {
@@ -12,7 +11,7 @@ public abstract class EnemyController : ObjectHealth
     public float attackRecharge = 1f;
     public float range = 15f;
 
-    [SerializeField] private LayerMask viewRayBlockingLayers;
+    [SerializeField] protected LayerMask viewRayBlockingLayers;
 
     private void OnValidate()
     {
@@ -39,38 +38,5 @@ public abstract class EnemyController : ObjectHealth
         particle.Play();
         Destroy(particle, 3);
         Destroy(gameObject);
-    }
-
-    public bool isObjectBlockedByOtherObject(GameObject objectToCheck)
-    {
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, (objectToCheck.transform.position - transform.position).normalized, Mathf.Abs(Vector3.Distance(objectToCheck.transform.position, transform.position)), viewRayBlockingLayers);
-        if (hits.Length == 0)
-        {
-            return true;
-        }
-
-        List<RaycastHit2D> allowedHits = new List<RaycastHit2D>();
-        foreach (var hit in hits)
-        {
-            if (hit.collider.gameObject != this.gameObject)
-                allowedHits.Add(hit);
-        }
-        if (allowedHits.Count == 0)
-        {
-            return true;
-        }
-
-        RaycastHit2D closestHit = allowedHits[0];
-        float minDist = Mathf.Abs(Vector3.Distance(closestHit.point, transform.position));
-        for (int i = 1; i < allowedHits.Count; i++)
-        {
-            float dist = Mathf.Abs(Vector3.Distance(allowedHits[i].point, transform.position));
-            if (dist < minDist)
-            {
-                minDist = dist;
-                closestHit = allowedHits[i];
-            }
-        }
-        return closestHit.collider.gameObject != objectToCheck;
     }
 }

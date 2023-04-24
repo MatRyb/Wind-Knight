@@ -41,7 +41,7 @@ public class FlyingEnemy : EnemyController
                     enemyRigidbody.velocity = Vector3.zero;
                 }
             }
-            else if (!isObjectBlockedByOtherObject(player.gameObject))
+            else if (!isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
             {
                 enemyRigidbody.velocity = Vector3.zero;
                 Attack();
@@ -86,7 +86,7 @@ public class FlyingEnemy : EnemyController
     {
         if (collision.gameObject.tag == "Player" && !attack)
         {
-            if (!isObjectBlockedByOtherObject(collision.gameObject))
+            if (!isObjectBlockedByOtherObject(collision.gameObject, viewRayBlockingLayers))
             {
                 player = collision.gameObject.transform;
                 attack = true;

@@ -27,7 +27,7 @@ public class EnemyRanged : EnemyController
 
         if(distanceToPlayer <= range && GameTimer.timeMultiplayer != 0f)
         {
-            if (canShoot && !isObjectBlockedByOtherObject(player.gameObject))
+            if (canShoot && !isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
             {    
                 Attack();
             }
