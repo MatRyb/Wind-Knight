@@ -4,12 +4,6 @@ using NaughtyAttributes;
 public class GameTimer : MonoBehaviour
 {
     public static float timeMultiplayer { get; private set; } = 1f;
-    [SerializeField] private float TimeMultiplayer;
-
-    private void Update()
-    {
-        TimeMultiplayer = timeMultiplayer;
-    }
 
     [Button]
     public static void StopTime()
