@@ -16,9 +16,9 @@ public class MeleeEnemy : EnemyController
 
     void Start()
     {
-        healthBarUI.SetActive(true);
+        //healthBarUI.SetActive(true);
         StartHealth();
-        slider.value = CalculateHealth();
+        //slider.value = CalculateHealth();
     }
 
     // Update is called once per frame
@@ -34,7 +34,7 @@ public class MeleeEnemy : EnemyController
             }
         }
 
-        slider.value = CalculateHealth();
+        //slider.value = CalculateHealth();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
