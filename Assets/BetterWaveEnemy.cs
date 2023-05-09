@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class WaveEnemy : EnemyController
+public class BetterWaveEnemy : EnemyController
 {
     private Rigidbody2D rb;
     private WaveGenerator wg;
@@ -43,6 +43,8 @@ public class WaveEnemy : EnemyController
 
     private void FixedUpdate()
     {
+        Debug.Log(canAttack);
+
         Vector3 dir = player.position - transform.position;
         float distance = Mathf.Abs(Vector3.Distance(Vector3.zero, dir));
 
@@ -50,9 +52,8 @@ public class WaveEnemy : EnemyController
         {
             canAttack = true;
             return;
-        }
-
-        if (distance > escapeRange && distance <= range)
+        } 
+        else if (distance > escapeRange && distance <= range)
         {
             if (GameTimer.timeMultiplayer == 1f)
             {
@@ -90,8 +91,7 @@ public class WaveEnemy : EnemyController
                 }
                 moved = false;
             }
-
-            if (moved)
+            else if (moved)
             {
                 moved = false;
             }
@@ -107,7 +107,7 @@ public class WaveEnemy : EnemyController
         }).Start();
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, range);
