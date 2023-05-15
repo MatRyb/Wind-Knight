@@ -153,6 +153,8 @@ MonoBehaviour:
   rayCastLayer:
     serializedVersion: 2
     m_Bits: 192
+  portalOut: {fileID: 1323925819306358218, guid: f220678eea873b9468d626c5fec93f16, type: 3}
+  portalIn: {fileID: 4443271603967911528, guid: f5093f9bcd2aac6428e3fe20b65e2d46, type: 3}
 --- !u!114 &5134007151201672451
 MonoBehaviour:
   m_ObjectHideFlags: 0

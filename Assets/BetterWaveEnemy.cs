@@ -11,6 +11,8 @@ public class BetterWaveEnemy : EnemyController
     [SerializeField] private float moveDist = 10f;
 
     [SerializeField] private LayerMask rayCastLayer;
+    [SerializeField] private ParticleSystem portalOut;
+    [SerializeField] private ParticleSystem portalIn;
 
     private bool canAttack = true;
     private bool moved = false;
@@ -43,8 +45,6 @@ public class BetterWaveEnemy : EnemyController
 
     private void FixedUpdate()
     {
-        Debug.Log(canAttack);
-
         Vector3 dir = player.position - transform.position;
         float distance = Mathf.Abs(Vector3.Distance(Vector3.zero, dir));
 
@@ -70,8 +70,6 @@ public class BetterWaveEnemy : EnemyController
         }
         else if (distance <= escapeRange)
         {
-            Debug.Log(transform.position);
-
             if (GameTimer.timeMultiplayer == 1f && !moved)
             {
                 float degree = AdvancedMath.GetAngleBetweenPoints(transform.position, player.position, Vector3.right + transform.position);
@@ -83,11 +81,23 @@ public class BetterWaveEnemy : EnemyController
                 moved = true;
                 if (Physics2D.Raycast(transform.position, new Vector2(factorX, factorY), moveDist, rayCastLayer))
                 {
+                    GameObject particleIn = Instantiate(portalIn.gameObject, transform.position, transform.rotation);
+                    particleIn.GetComponent<ParticleSystem>().Play();
+                    Destroy(particleIn, 2f);
                     transform.position += new Vector3(moveDist * -factorX, moveDist * -factorY, 0);
+                    GameObject particleOut = Instantiate(portalOut.gameObject, transform.position, transform.rotation);
+                    particleOut.GetComponent<ParticleSystem>().Play();
+                    Destroy(particleOut, 2f);
                 }
                 else
                 {
+                    GameObject particleIn = Instantiate(portalIn.gameObject, transform.position, transform.rotation);
+                    particleIn.GetComponent<ParticleSystem>().Play();
+                    Destroy(particleIn, 2f);
                     transform.position += new Vector3(moveDist * factorX, moveDist * factorY, 0);
+                    GameObject particleOut = Instantiate(portalOut.gameObject, transform.position, transform.rotation);
+                    particleOut.GetComponent<ParticleSystem>().Play();
+                    Destroy(particleOut, 2f);
                 }
                 moved = false;
             }
