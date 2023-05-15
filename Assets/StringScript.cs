@@ -28,6 +28,5 @@ public class StringScript : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
-        gameObject.GetComponent<Rigidbody2D>().gravityScale = 1f;
     }
 }
