@@ -31,7 +31,7 @@ public class LevelManager : MonoBehaviour
 
     private bool start;
 
-    private RespawnPoint resp = new RespawnPoint(0, new Vector3(0,0,0));
+    [SerializeField] private RespawnPoint resp = new RespawnPoint(0, new Vector3(0,0,0));
 
     void OnLevelWasLoaded(int level)
     {

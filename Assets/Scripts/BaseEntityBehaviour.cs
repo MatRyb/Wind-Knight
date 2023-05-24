@@ -48,7 +48,7 @@ public class BaseEntityBehaviour : MonoBehaviour
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, (objectToCheck.transform.position - transform.position).normalized, Mathf.Abs(Vector3.Distance(objectToCheck.transform.position, transform.position)));
         if (hits.Length == 0)
         {
-            return true;
+            return false;
         }
 
         List<RaycastHit2D> allowedHits = new List<RaycastHit2D>();
@@ -74,7 +74,7 @@ public class BaseEntityBehaviour : MonoBehaviour
             }
 
             int layerVal = 1 << hit.collider.gameObject.layer;
-            if ((blockingLayers | layerVal) != blockingLayers)
+            if ((blockingLayers & layerVal) == 0)
             {
                 continue;
             }
@@ -83,7 +83,7 @@ public class BaseEntityBehaviour : MonoBehaviour
         }
         if (allowedHits.Count == 0)
         {
-            return true;
+            return false;
         }
 
         RaycastHit2D closestHit = allowedHits[0];
