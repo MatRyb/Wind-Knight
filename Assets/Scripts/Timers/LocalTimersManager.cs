@@ -23,6 +23,12 @@ public class LocalTimerContainer
         return this;
     }
 
+    public LocalTimerContainer Stop()
+    {
+        this.timer.Stop();
+        return this;
+    }
+
     public LocalTimerContainer DoAfter(Action action)
     {
         this.timer.DoAfter(action);
@@ -34,6 +40,7 @@ public class LocalTimersManager : MonoBehaviour
 {
     public static LocalTimersManager instance = null;
     private List<LocalTimer> timers = new List<LocalTimer>();
+    private List<LocalTimer> toAddTimers = new List<LocalTimer>();
 
     private static LocalTimersManager Init()
     {
@@ -50,30 +57,32 @@ public class LocalTimersManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        timers.AddRange(toAddTimers);
+        toAddTimers.Clear();
+
         if (timers.Count == 0)
         {
             return;
         }
 
+        List<LocalTimer> newTimers = new List<LocalTimer>();
+        newTimers.AddRange(timers);
         foreach (var timer in timers)
         {
             timer.UpdateTime();
             if (timer.timeToEnd <= 0f)
             {
-                timers.Remove(timer);
-                if (timers.Count == 0)
-                {
-                    break;
-                }
+                newTimers.Remove(timer);
             }
         }
+        timers = newTimers;
     }
 
     public static LocalTimerContainer CreateNewTimer(float totalTime)
     {
         LocalTimersManager timersHandler = LocalTimersManager.Init();
         LocalTimer newTimer = new LocalTimer(totalTime);
-        timersHandler.timers.Add(newTimer);
+        timersHandler.toAddTimers.Add(newTimer);
         return new LocalTimerContainer(ref newTimer);
     }
 }

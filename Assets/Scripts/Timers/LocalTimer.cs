@@ -5,6 +5,7 @@ using UnityEngine;
 public class LocalTimer
 {
     private bool paused = true;
+    private bool stopped = false;
 
     public float timeToEnd { get; private set; }
     public Queue<Action> actions = new Queue<Action>();
@@ -26,13 +27,20 @@ public class LocalTimer
         return this;
     }
 
+    public LocalTimer Stop()
+    {
+        stopped = true;
+        timeToEnd = 0;
+        return this;
+    }
+
     public void UpdateTime()
     {
         if (paused || GameTimer.timeMultiplayer == 0f)
             return;
 
         timeToEnd -= Time.deltaTime * GameTimer.timeMultiplayer;
-        if (timeToEnd <= 0f)
+        if (timeToEnd <= 0f && !stopped)
         {
             OnEnd();
         }
