@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 2761737501788284197}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 5.979931, y: -15.659172, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6193453442526225084}
@@ -150,9 +150,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpead: 4
+  maxFallingSpeed: 0
+  gravityScale: 10
   enemyRange: {fileID: 5209816240133236623}
   player: {fileID: 0}
-  groundCheckerPosition: {fileID: 6193453442526225084}
+  frontGroundCheckerPosition: {fileID: 0}
+  backGroundCheckerPosition: {fileID: 0}
   rb: {fileID: 1610669047753384738}
   groundLayer:
     serializedVersion: 2
@@ -160,7 +163,11 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
+  viewBlockingLayers:
+    serializedVersion: 2
+    m_Bits: 0
   collider: {fileID: 1800486532198368510}
+  body: {fileID: 0}
 --- !u!114 &5209816240133236623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,11 +182,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 0
+  bodySprite: {fileID: 0}
+  deathParticle: {fileID: 0}
   player: {fileID: 0}
   attackRecharge: 5
   range: 15
-  healthBarUI: {fileID: 6460406938553129917}
-  slider: {fileID: 5372476810075011769}
+  viewRayBlockingLayers:
+    serializedVersion: 2
+    m_Bits: 0
   attackCooldown: 20
   attackPrefab: {fileID: 6481746782879414969, guid: e66b8dea33e3dd644af93ef924676506, type: 3}
   minSpeed: 2
@@ -326,21 +336,5 @@ PrefabInstance:
 --- !u!224 &499797580080863497 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4448978795203880357, guid: 2c3d98b51be76984090790072e9d9f1d, type: 3}
-  m_PrefabInstance: {fileID: 4274569036979682476}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5372476810075011769 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8204589669015733781, guid: 2c3d98b51be76984090790072e9d9f1d, type: 3}
-  m_PrefabInstance: {fileID: 4274569036979682476}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &6460406938553129917 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7130790328698873617, guid: 2c3d98b51be76984090790072e9d9f1d, type: 3}
   m_PrefabInstance: {fileID: 4274569036979682476}
   m_PrefabAsset: {fileID: 0}
