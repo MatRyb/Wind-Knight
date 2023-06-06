@@ -8,15 +8,20 @@ public class PlayerControler : ObjectHealth
 {
     public PlayerState playerState { get; private set; }
 
-    [SerializeField] private SpriteRenderer bodySprite;
     [SerializeField] private ParticleSystem deathParticle;
-    private Color damageColor = new Color(1, 79/255, 79/255);
-    private Color normalColor = new Color(1, 1, 1);
+    private Color damageColor = new(1, 79/255, 79/255);
+    private Color normalColor = new(1, 1, 1);
 
     public Transform playerBodyTransform = null;
     [SerializeField] private float minForceRadius = 1f;
     [SerializeField] private float maxForceRadius = 10f;
     [SerializeField] private float basePower = 2f;
+
+    [Header("Body: ")]
+    [SerializeField] private GameObject body;
+    [SerializeField] private bool m_FacingRight = true;
+    [SerializeField] private float maxRotation = 90;
+    [SerializeField] private float minRotation = -90;
 
     [Header("Rigidbody: ")]
     public Rigidbody2D playerRigidbody = null;
@@ -43,6 +48,11 @@ public class PlayerControler : ObjectHealth
         if (playerBodyTransform == null)
         {
             playerBodyTransform = this.transform;
+        }
+
+        if (body == null)
+        {
+            Debug.LogError("Body Object can't be null. Please provide one. :)");
         }
 
         if (mouseObject == null)
@@ -100,6 +110,32 @@ public class PlayerControler : ObjectHealth
 
         VirtualMousePositionCalculations();
 
+        if (virtualMousePosition.x >= transform.position.x && !m_FacingRight)
+        {
+            Flip();
+        }
+        else if (virtualMousePosition.x < transform.position.x && m_FacingRight)
+        {
+            Flip();
+        }
+
+        float y = virtualMousePosition.y - transform.position.y;
+
+        float x = Mathf.Abs(virtualMousePosition.x - transform.position.x);
+
+        if (Mathf.Atan2(y, x) * 45 >= minRotation && Mathf.Atan2(y, x) * 45 <= maxRotation)
+        {
+            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? Mathf.Atan2(y, x) * 45 : - Mathf.Atan2(y, x) * 45);
+        }
+        else if (Mathf.Atan2(y, x) * 45 < minRotation)
+        {
+            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? minRotation : maxRotation);
+        }
+        else if (Mathf.Atan2(y, x) * 45 > maxRotation)
+        {
+            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? maxRotation : minRotation);
+        }
+
         MouseVisualisation(playerBodyTransform.position);
 
         MovementBasis(playerBodyTransform.position);
@@ -112,15 +148,26 @@ public class PlayerControler : ObjectHealth
 
     public override void TakeDamage(float value)
     {
-        LeanTween.value(bodySprite.gameObject, setSpriteColor, bodySprite.color, damageColor, 0.15f).setOnComplete(() => {
-            LeanTween.value(bodySprite.gameObject, setSpriteColor, bodySprite.color, normalColor, 0.15f);
+        LeanTween.value(body.gameObject, setSpriteColor, body.GetComponent<SpriteRenderer>().color, damageColor, 0.15f).setOnComplete(() => {
+            LeanTween.value(body.gameObject, setSpriteColor, body.GetComponent<SpriteRenderer>().color, normalColor, 0.15f);
         });
         base.TakeDamage(value);
     }
 
+    private void Flip()
+    {
+        // Switch the way the player is labelled as facing.
+        m_FacingRight = !m_FacingRight;
+
+        // Multiply the player's x local scale by -1.
+        Vector3 theScale = body.transform.localScale;
+        theScale.x *= -1;
+        body.transform.localScale = theScale;
+    }
+
     public void setSpriteColor(Color val)
     {
-        bodySprite.color = val;
+        body.GetComponent<SpriteRenderer>().color = val;
     }
 
     public override void OnDead()
