@@ -9,7 +9,7 @@ public class LevelManager : MonoBehaviour
     private class RespawnPoint
     {
         public int id = 0;
-        public Vector3 position = new Vector3(0,0,0);
+        public Vector3 position = new(0,0,0);
 
         public RespawnPoint(int _id, Vector3 _pos)
         {
@@ -31,10 +31,12 @@ public class LevelManager : MonoBehaviour
 
     private bool start;
 
-    [SerializeField] private RespawnPoint resp = new RespawnPoint(0, new Vector3(0,0,0));
+    private RespawnPoint startResp;
+    private RespawnPoint resp = null;
 
     void OnLevelWasLoaded(int level)
     {
+        Debug.Log(instance.resp.position);
         instance.start = true;
     }
 
@@ -49,6 +51,7 @@ public class LevelManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
         instance.start = true;
+        instance.startResp = new(0, GameObject.FindGameObjectWithTag("Player").transform.position);
     }
 
     void Update()
@@ -56,10 +59,18 @@ public class LevelManager : MonoBehaviour
         if (instance.start)
         {
             instance.start = false;
-            GameObject player = FindObjectOfType<PlayerControler>().gameObject;
-            Camera.main.transform.position = new Vector3(instance.resp.position.x, instance.resp.position.y, Camera.main.transform.position.z);
-            player.transform.position = instance.resp.position;
-            player.GetComponent<PlayerControler>().mouseInit();
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (instance.resp != null)
+            {
+                Camera.main.transform.position = new Vector3(instance.resp.position.x, instance.resp.position.y, Camera.main.transform.position.z);
+                player.transform.position = instance.resp.position;
+            }
+            else
+            {
+                Camera.main.transform.position = new Vector3(instance.startResp.position.x, instance.startResp.position.y, Camera.main.transform.position.z);
+                player.transform.position = instance.startResp.position;
+            }
+            player.GetComponentInChildren<PlayerControler>().mouseInit();
             PauseGame(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -81,6 +92,7 @@ public class LevelManager : MonoBehaviour
         if (waitAfterWin)
             return;
 
+        /*
         if (Input.GetMouseButtonDown(1))
         {
             if (paused)
@@ -92,6 +104,7 @@ public class LevelManager : MonoBehaviour
                 PauseGameJob(false);
             }
         }
+        */
 
         if (Input.GetKeyDown("escape") && !paused)
         {
@@ -115,7 +128,7 @@ public class LevelManager : MonoBehaviour
             }
             else if (buttons[i].name == "RestartBtn")
             {
-                buttons[i].onClick.AddListener(() => instance.RestartJob());
+                buttons[i].onClick.AddListener(() => instance.RestartLevelJob(true));
             }
             else if (buttons[i].name == "ExitBtn")
             {
@@ -131,12 +144,54 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void RestartJob()
+    public static void RestartLevel(bool isScreen)
+    {
+        instance.RestartLevelJob(isScreen);
+    }
+
+    private void RestartLevelJob(bool isScreen)
+    {
+        if (isScreen)
+        {
+            GameObject screen = GUIManager.ShowRestartQuestionScreen();
+            Button[] buttons = screen.GetComponentsInChildren<Button>();
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].name == "YesBtn")
+                {
+                    buttons[i].onClick.AddListener(() => instance.RestartYesJob());
+                }
+                else if (buttons[i].name == "NoBtn")
+                {
+                    buttons[i].onClick.AddListener(() => instance.RestartNoJob(isScreen));
+                }
+            }
+        }
+    }
+
+    private void RestartYesJob()
     {
         waitForRespawn = false;
-        instance.resp.id = 0;
-        instance.resp.position = new Vector3(0,0,0);
+        if (instance.resp == null)
+        {
+            instance.resp = new(startResp.id, startResp.position);
+        }
+        else
+        {
+            instance.resp.id = startResp.id;
+            instance.resp.position = startResp.position;
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void RestartNoJob(bool isScreen)
+    {
+        if (isScreen)
+        {
+            Debug.Log("hello");
+            GUIManager.HideRestartQuestionScreen();
+        }
     }
 
     public static void InitWinGame()
@@ -151,7 +206,7 @@ public class LevelManager : MonoBehaviour
         {
             if (buttons[i].name == "RestartBtn")
             {
-                buttons[i].onClick.AddListener(() => instance.RespawnJob());
+                buttons[i].onClick.AddListener(() => instance.RestartLevelJob(true));
             }
             else if (buttons[i].name == "ExitBtn")
             {
@@ -188,7 +243,7 @@ public class LevelManager : MonoBehaviour
             {
                 if (buttons[i].name == "RestartBtn")
                 {
-                    buttons[i].onClick.AddListener(() => instance.RespawnJob());
+                    buttons[i].onClick.AddListener(() => instance.RestartLevelJob(true));
                 }
                 else if (buttons[i].name == "ResumeBtn")
                 {
@@ -219,20 +274,27 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public Vector3 getRespawnPointPosition()
+    public Vector3 GetRespawnPointPosition()
     {
-        return instance.resp.position;
+        if (instance.resp != null)
+        {
+            return instance.resp.position;
+        }
+        else
+        {
+            return instance.startResp.position;
+        }
     }
 
-    public void setRespawnPoint(int id, Vector3 pos, Action action)
+    public void SetRespawnPoint(int id, Vector3 pos, Action action)
     {
-        if (id >= instance.resp.id && instance.resp.position != pos)
+        if (instance.resp == null || (id >= instance.resp.id && instance.resp.position != pos))
         {
             Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
 
             foreach (Checkpoint check in checkpoints)
             {
-                if(check.getId() == instance.resp.id)
+                if (instance.resp == null)
                 {
                     if (check.getId() < id)
                     {
@@ -243,11 +305,31 @@ public class LevelManager : MonoBehaviour
                         check.setNotActive();
                     }
                 }
-
+                else
+                {
+                    if (check.getId() <= instance.resp.id)
+                    {
+                        if (check.getId() < id)
+                        {
+                            check.setDisabled();
+                        }
+                        else
+                        {
+                            check.setNotActive();
+                        }
+                    }
+                }
             }
 
-            instance.resp.id = id;
-            instance.resp.position = pos;
+            if (instance.resp == null)
+            {
+                instance.resp = new(id, pos);
+            }
+            else
+            {
+                instance.resp.id = id;
+                instance.resp.position = pos;
+            }
             action.Invoke();
         }
         else if (id == instance.resp.id && instance.resp.position == pos)

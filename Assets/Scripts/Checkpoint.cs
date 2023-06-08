@@ -6,9 +6,9 @@ public class Checkpoint : MonoBehaviour
     private LevelManager lvl;
     private SpriteRenderer sprite;
 
-    private Color activeColor = new Color(117f / 255f, 205f / 255f, 94f / 255f);
-    private Color notActiveColor = new Color(106f / 255f, 106f / 255f, 106f / 255f);
-    private Color disabledColor = new Color(205f / 255f, 94f / 255f, 94f / 255f);
+    private Color activeColor = new(117f / 255f, 205f / 255f, 94f / 255f);
+    private Color notActiveColor = new(106f / 255f, 106f / 255f, 106f / 255f);
+    private Color disabledColor = new(205f / 255f, 94f / 255f, 94f / 255f);
 
     void Awake()
     {
@@ -22,7 +22,10 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        lvl.setRespawnPoint(id, gameObject.transform.position, setActive);
+        if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler p))
+        {
+            lvl.SetRespawnPoint(id, gameObject.transform.position, setActive);
+        }
     }
 
     public void setActive()
