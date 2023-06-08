@@ -57,6 +57,9 @@ public class BaseEntityBehaviour : MonoBehaviour
             if (hit.collider.gameObject == this.gameObject)
                 continue;
 
+            if (hit.collider.isTrigger)
+                continue;
+
             bool next = false;
             if (excludedTags != null)
             {

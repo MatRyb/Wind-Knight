@@ -3,17 +3,20 @@ using NaughtyAttributes;
 
 public class GameTimer : MonoBehaviour
 {
-    public static float timeMultiplayer { get; private set; } = 1f;
+    public static readonly float STOPPED = 0f;
+    public static readonly float PLAYING = 1f;
+
+    public static float TimeMultiplier { get; private set; } = PLAYING;
 
     [Button]
     public static void StopTime()
     {
-        timeMultiplayer = 0f;
+        TimeMultiplier = STOPPED;
     }
 
     [Button]
     public static void StartTime()
     {
-        timeMultiplayer = 1f;
+        TimeMultiplier = PLAYING;
     }
 }

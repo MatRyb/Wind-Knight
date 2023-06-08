@@ -36,7 +36,6 @@ public class LevelManager : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
-        Debug.Log(instance.resp.position);
         instance.start = true;
     }
 

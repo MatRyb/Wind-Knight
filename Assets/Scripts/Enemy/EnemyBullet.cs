@@ -17,7 +17,7 @@ public class EnemyBullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        GetComponent<Rigidbody2D>().velocity = velocity * GameTimer.timeMultiplayer;
+        GetComponent<Rigidbody2D>().velocity = velocity * GameTimer.TimeMultiplier;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -6,7 +6,7 @@ public class WinTrigger : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.TryGetComponent<PlayerControler>(out PlayerControler _))
         {
             LevelManager.InitWinGame();
         }

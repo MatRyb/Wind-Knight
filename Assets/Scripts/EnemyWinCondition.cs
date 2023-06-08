@@ -7,7 +7,7 @@ public class EnemyWinCondition : MonoBehaviour
 {
     public TextMeshProUGUI textUI;
     [SerializeField] private GameObject blockingWall = null;
-    private List<EnemyController> enemies = new List<EnemyController>();
+    private List<EnemyController> enemies = new();
     private bool inizialized = false;
 
     void Update()

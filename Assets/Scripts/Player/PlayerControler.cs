@@ -47,7 +47,7 @@ public class PlayerControler : ObjectHealth
     {
         if (playerBodyTransform == null)
         {
-            playerBodyTransform = this.transform;
+            playerBodyTransform = transform;
         }
 
         if (body == null)
@@ -65,9 +65,9 @@ public class PlayerControler : ObjectHealth
             Debug.LogError("There must be at least 2 states.");
         }
 
-        if (GetComponent<Rigidbody2D>() != null && playerRigidbody == null)
+        if (GetComponentInParent<Rigidbody2D>() != null && playerRigidbody == null)
         {
-            playerRigidbody = GetComponent<Rigidbody2D>();
+            playerRigidbody = GetComponentInParent<Rigidbody2D>();
         }
         else if (playerRigidbody == null)
         {
@@ -188,10 +188,10 @@ public class PlayerControler : ObjectHealth
 
     void VirtualMousePositionCalculations()
     {
-        if (GameTimer.timeMultiplayer == 0f)
+        if (GameTimer.TimeMultiplier == GameTimer.STOPPED)
             return;
 
-        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector2 mouseDelta = new(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
         if (staticMousePos)
             virtualMousePosition += positionChange;
@@ -241,7 +241,7 @@ public class PlayerControler : ObjectHealth
 
     void MovementBasis(Vector2 playerPos)
     {
-        if (GameTimer.timeMultiplayer == 0f)
+        if (GameTimer.TimeMultiplier == GameTimer.STOPPED)
         {
             playerRigidbody.bodyType = RigidbodyType2D.Static;
             return;

@@ -22,7 +22,7 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler p))
+        if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler _))
         {
             lvl.SetRespawnPoint(id, gameObject.transform.position, setActive);
         }

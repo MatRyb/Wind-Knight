@@ -40,9 +40,9 @@ public class WindControl : BaseEntityBehaviour
 
     private void OnValidate()
     {
-        if (playerControler == null && GetComponent<PlayerControler>() != null)
+        if (playerControler == null && GetComponentInChildren<PlayerControler>() != null)
         {
-            playerControler = GetComponent<PlayerControler>();
+            playerControler = GetComponentInChildren<PlayerControler>();
         }
         else if (playerControler == null)
         {
@@ -162,7 +162,7 @@ public class WindControl : BaseEntityBehaviour
                     obj.rigidbody.gravityScale = obj.gravityScale;
                 }
 
-                obj.rigidbody.velocity = obj.rigidbody.velocity * GameTimer.timeMultiplayer;
+                obj.rigidbody.velocity = obj.rigidbody.velocity * GameTimer.TimeMultiplier;
             }
         }
     }

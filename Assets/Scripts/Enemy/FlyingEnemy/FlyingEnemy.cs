@@ -26,7 +26,7 @@ public class FlyingEnemy : EnemyController
 
             if (Mathf.Abs(Vector3.Distance(Vector3.zero, dir)) > setOffRange)
             {
-                if (GameTimer.timeMultiplayer == 1f)
+                if (GameTimer.TimeMultiplier == GameTimer.PLAYING)
                 {
                     Vector3 vel = dir.normalized * speed;
                     enemyRigidbody.velocity = vel;
@@ -84,12 +84,13 @@ public class FlyingEnemy : EnemyController
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player" && !attack)
+        if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler _) && !attack)
         {
             if (!isObjectBlockedByOtherObject(collision.gameObject, viewRayBlockingLayers))
             {
                 player = collision.gameObject.transform;
                 attack = true;
+                enemyRigidbody.freezeRotation = true;
                 patrol.StopPatrol();
             }
         }

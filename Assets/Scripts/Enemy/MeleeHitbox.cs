@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MeleeHitbox : MonoBehaviour
@@ -20,8 +18,7 @@ public class MeleeHitbox : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Contact!");
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler _))
         {
             IDamageTaker damageTaker;
             if (collision.transform.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))

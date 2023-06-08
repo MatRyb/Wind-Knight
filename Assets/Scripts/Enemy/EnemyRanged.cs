@@ -25,7 +25,7 @@ public class EnemyRanged : EnemyController
     {
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        if(distanceToPlayer <= range && GameTimer.timeMultiplayer != 0f)
+        if(distanceToPlayer <= range && GameTimer.TimeMultiplier != GameTimer.STOPPED)
         {
             if (canShoot && !isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
             {    

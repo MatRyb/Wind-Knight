@@ -8,7 +8,7 @@ public class LocalTimer
     private bool stopped = false;
 
     public float timeToEnd { get; private set; }
-    public Queue<Action> actions = new Queue<Action>();
+    public Queue<Action> actions = new();
 
     public LocalTimer(float totalTime)
     {
@@ -36,10 +36,10 @@ public class LocalTimer
 
     public void UpdateTime()
     {
-        if (paused || GameTimer.timeMultiplayer == 0f)
+        if (paused || GameTimer.TimeMultiplier == GameTimer.STOPPED)
             return;
 
-        timeToEnd -= Time.deltaTime * GameTimer.timeMultiplayer;
+        timeToEnd -= Time.deltaTime * GameTimer.TimeMultiplier;
         if (timeToEnd <= 0f && !stopped)
         {
             OnEnd();

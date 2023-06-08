@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MeleeEnemy : EnemyController
@@ -16,25 +14,23 @@ public class MeleeEnemy : EnemyController
 
     void Start()
     {
-        //healthBarUI.SetActive(true);
         StartHealth();
-        //slider.value = CalculateHealth();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        if (distanceToPlayer <= range && GameTimer.timeMultiplayer != 0f)
+        if (distanceToPlayer <= range && GameTimer.TimeMultiplier != GameTimer.STOPPED)
         {
             if (canAttack)
             {
                 Attack();
             }
         }
-
-        //slider.value = CalculateHealth();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
-using UnityEngine.UI;
 
 public class ObjectScript : ObjectHealth
 {
@@ -65,8 +63,8 @@ public class ObjectScript : ObjectHealth
             velocity = rb.velocity;
         }
 
-        rb.velocity *= GameTimer.timeMultiplayer;
-        rb.gravityScale = gravityScale * GameTimer.timeMultiplayer;
+        rb.velocity *= GameTimer.TimeMultiplier;
+        rb.gravityScale = gravityScale * GameTimer.TimeMultiplier;
     }
 
     public override void OnDead()

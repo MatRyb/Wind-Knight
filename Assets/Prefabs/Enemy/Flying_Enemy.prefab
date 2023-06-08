@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2435575188841906591}
   - component: {fileID: 2435575188841906589}
   - component: {fileID: 2435575188841906586}
-  - component: {fileID: 8649292189574130434}
+  - component: {fileID: 3384053592256625633}
   m_Layer: 0
   m_Name: Flying_Enemy
   m_TagString: Enemy
@@ -105,7 +105,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &2435575188841906586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,12 +120,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 4473339957538727347}
   points:
-  - {x: 116.7, y: -19.7}
-  - {x: 149.8, y: -0.5}
-  - {x: 174.5, y: -19.7}
-  - {x: 150.1, y: -7.6}
+  - {x: 4.44, y: -1.07}
+  - {x: 13.53, y: 7.4}
+  - {x: 26.1, y: -0.2}
+  - {x: 16.5, y: 2.17}
   speed: 10
---- !u!58 &8649292189574130434
+--- !u!58 &3384053592256625633
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

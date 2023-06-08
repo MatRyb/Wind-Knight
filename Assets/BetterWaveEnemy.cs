@@ -55,7 +55,7 @@ public class BetterWaveEnemy : EnemyController
         } 
         else if (distance > escapeRange && distance <= range)
         {
-            if (GameTimer.timeMultiplayer == 1f)
+            if (GameTimer.TimeMultiplier == GameTimer.PLAYING)
             {
                 float degreeToAdd = AdvancedMath.GetAngleBetweenPoints(transform.position, player.position, Vector3.right + transform.position);
 
@@ -70,7 +70,7 @@ public class BetterWaveEnemy : EnemyController
         }
         else if (distance <= escapeRange)
         {
-            if (GameTimer.timeMultiplayer == 1f && !moved)
+            if (GameTimer.TimeMultiplier == GameTimer.PLAYING && !moved)
             {
                 float degree = AdvancedMath.GetAngleBetweenPoints(transform.position, player.position, Vector3.right + transform.position);
 
