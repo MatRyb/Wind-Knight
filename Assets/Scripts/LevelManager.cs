@@ -36,7 +36,15 @@ public class LevelManager : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
-        instance.start = true;
+        if (level == 0)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            instance.start = true;
+        }
     }
 
     void Awake()
@@ -129,6 +137,10 @@ public class LevelManager : MonoBehaviour
             {
                 buttons[i].onClick.AddListener(() => instance.RestartLevelJob(true));
             }
+            else if (buttons[i].name == "MenuBtn")
+            {
+                buttons[i].onClick.AddListener(() => SceneManager.LoadScene("Menu"));
+            }
             else if (buttons[i].name == "ExitBtn")
             {
                 buttons[i].onClick.AddListener(() => Application.Quit());
@@ -207,6 +219,10 @@ public class LevelManager : MonoBehaviour
             {
                 buttons[i].onClick.AddListener(() => instance.RestartLevelJob(true));
             }
+            else if (buttons[i].name == "MenuBtn")
+            {
+                buttons[i].onClick.AddListener(() => SceneManager.LoadScene("Menu"));
+            }
             else if (buttons[i].name == "ExitBtn")
             {
                 buttons[i].onClick.AddListener(() => Application.Quit());
@@ -247,6 +263,10 @@ public class LevelManager : MonoBehaviour
                 else if (buttons[i].name == "ResumeBtn")
                 {
                     buttons[i].onClick.AddListener(() => instance.ResumeGameJob(isScreen));
+                }
+                else if (buttons[i].name == "MenuBtn")
+                {
+                    buttons[i].onClick.AddListener(() => SceneManager.LoadScene("Menu"));
                 }
                 else if (buttons[i].name == "ExitBtn")
                 {
