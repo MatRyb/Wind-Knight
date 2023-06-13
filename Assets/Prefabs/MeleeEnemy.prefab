@@ -1,5 +1,69 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &819498047283956124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8585818300068066699}
+  m_Layer: 0
+  m_Name: body
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8585818300068066699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 819498047283956124}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6193453442526225084}
+  - {fileID: 2560621725650520423}
+  m_Father: {fileID: 7336270318660727246}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1131714224602683366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2560621725650520423}
+  m_Layer: 0
+  m_Name: back Checker of Ground (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2560621725650520423
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131714224602683366}
+  m_LocalRotation: {x: -0, y: 0.017451515, z: -0, w: 0.99984777}
+  m_LocalPosition: {x: -0.5, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8585818300068066699}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 2, z: 0}
 --- !u!1 &2761737501788284197
 GameObject:
   m_ObjectHideFlags: 0
@@ -33,7 +97,7 @@ Transform:
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6193453442526225084}
+  - {fileID: 8585818300068066699}
   - {fileID: 5686367838859651533}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -150,12 +214,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpead: 4
-  maxFallingSpeed: 0
+  maxFallingSpeed: -25
   gravityScale: 10
   enemyRange: {fileID: 5209816240133236623}
   player: {fileID: 0}
-  frontGroundCheckerPosition: {fileID: 0}
-  backGroundCheckerPosition: {fileID: 0}
+  frontGroundCheckerPosition: {fileID: 6193453442526225084}
+  backGroundCheckerPosition: {fileID: 2560621725650520423}
   rb: {fileID: 1610669047753384738}
   groundLayer:
     serializedVersion: 2
@@ -167,7 +231,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   collider: {fileID: 1800486532198368510}
-  body: {fileID: 0}
+  body: {fileID: 819498047283956124}
 --- !u!114 &5209816240133236623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,11 +250,10 @@ MonoBehaviour:
   deathParticle: {fileID: 840825463644067242, guid: 72c3b48529f8a104ca028811d4684334, type: 3}
   player: {fileID: 0}
   attackRecharge: 5
-  range: 15
+  range: 10
   viewRayBlockingLayers:
     serializedVersion: 2
     m_Bits: 193
-  attackCooldown: 20
   attackPrefab: {fileID: 6481746782879414969, guid: e66b8dea33e3dd644af93ef924676506, type: 3}
   minSpeed: 2
 --- !u!1 &2940796644657627581
@@ -472,7 +535,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6193453442526225084}
   m_Layer: 0
-  m_Name: the Checker of Ground
+  m_Name: front Checker of Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -486,10 +549,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8753234309698759400}
   m_LocalRotation: {x: -0, y: 0.017451515, z: -0, w: 0.99984777}
-  m_LocalPosition: {x: 0.5039978, y: -0.29199982, z: 0}
+  m_LocalPosition: {x: 0.5, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7336270318660727246}
+  m_Father: {fileID: 8585818300068066699}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 2, z: 0}
