@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 787269825349021897}
   - component: {fileID: 1307766254}
   - component: {fileID: 715271559197590787}
-  - component: {fileID: 1343710515}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -164,22 +163,6 @@ MonoBehaviour:
     m_Bits: 0
   windBubble: {fileID: 5401348134195849030}
   objectsInRange: []
---- !u!114 &1343710515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 787269825349021895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25578ee7140f5d54487dbd1834fbd647, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 0}
-  target: {fileID: 787269825349021897}
-  staticColliders:
-  - {fileID: 0}
 --- !u!1 &2909449294157770248
 GameObject:
   m_ObjectHideFlags: 0

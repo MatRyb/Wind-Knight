@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MeleeEnemy : EnemyController
 {
-    [SerializeField] private float attackCooldown = 2f;
+    //[SerializeField] private float attackCooldown = 2f; not needed anymore
     private bool canAttack = true;
 
     [SerializeField] private GameObject attackPrefab;
@@ -55,7 +55,7 @@ public class MeleeEnemy : EnemyController
 
     public override void Attack()
     {
-        if (Time.time - timeofLastAttack < attackCooldown)
+        if (Time.time - timeofLastAttack < attackRecharge)
         {
             return;
         }
