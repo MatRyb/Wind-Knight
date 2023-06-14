@@ -8,7 +8,7 @@ public class PuzzleOpenDoor : IPuzzleSolvedEvent
     [SerializeField] private Vector3 openPosition = Vector3.zero;
 
     [SerializeField] private float openTimeAnimation = 0.0f;
-    private bool playing = false;
+    [SerializeField] private bool playing = false;
     private int anim_id = 0;
 
     public override void Solved()

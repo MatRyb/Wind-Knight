@@ -105,7 +105,7 @@ public class LevelManager : MonoBehaviour
         }
         */
 
-        if (Input.GetKeyDown("escape") && !paused)
+        if (Input.GetKeyDown(KeyCode.Escape) && !paused)
         {
             PauseGameJob(true);
         }

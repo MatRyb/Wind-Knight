@@ -286,6 +286,10 @@ public class PlayerControler : ObjectHealth
 
     private void OnDrawGizmosSelected()
     {
+        if (!Application.isPlaying)
+        {
+            virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+        }
         Vector2 playerPos = playerBodyTransform.position;
         float totalDist = Mathf.Abs(Vector2.Distance(playerPos, virtualMousePosition));
 

@@ -116,7 +116,7 @@ public class WindControl : BaseEntityBehaviour
                 Rigidbody2D rigid;
                 if (collider.TryGetComponent<Rigidbody2D>(out rigid))
                 {
-                    if (isObjectBlockedByOtherObject(rigid.gameObject, blockingLayers))
+                    if (isObjectBlockedByOtherObject(rigid.gameObject, blockingLayers) || rigid.gameObject.CompareTag("Enemy"))
                     {
                         continue;
                     }

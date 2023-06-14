@@ -18,7 +18,7 @@ TagManager:
   - CameraViewCollider
   - Bullet
   - PlayerHitboxes
-  - 
+  - ViewNotBlockingWall
   - 
   - 
   - Puzzle
