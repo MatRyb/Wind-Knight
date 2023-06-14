@@ -9,7 +9,7 @@ public class PatrolFlying : MonoBehaviour
     private LTDescr tween = null;
     private Matrix4x4 localToWorld;
 
-    void OnValidate()
+    void Awake()
     {
         localToWorld = transform.localToWorldMatrix;
     }

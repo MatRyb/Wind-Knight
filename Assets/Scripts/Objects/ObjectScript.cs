@@ -28,10 +28,10 @@ public class ObjectScript : ObjectHealth
         }
         else if (rb == null)
         {
-            rb = this.gameObject.AddComponent<Rigidbody2D>();
+            rb = gameObject.AddComponent<Rigidbody2D>();
         }
 
-        if (this.gameObject.GetComponent<Collider2D>() == null)
+        if (gameObject.GetComponent<Collider2D>() == null)
         {
             Debug.LogError("ObjectScript -> NO COLLIDER ATTACHED");
         }

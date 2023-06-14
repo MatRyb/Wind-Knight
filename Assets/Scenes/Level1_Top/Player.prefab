@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 787269825349021897}
   - component: {fileID: 1307766254}
-  - component: {fileID: 715271559197590787}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -141,28 +140,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &715271559197590787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 787269825349021895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1e7ce45ba1e39f43a19e4630bf7633c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerControler: {fileID: 426906029}
-  windBubbleRange: 5
-  windPower: 50
-  maxMovePower: 20
-  throwForceConstant: 5
-  blockingLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  windBubble: {fileID: 5401348134195849030}
-  objectsInRange: []
 --- !u!1 &2909449294157770248
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,6 +385,7 @@ GameObject:
   - component: {fileID: 5591883978590751760}
   - component: {fileID: 426906028}
   - component: {fileID: 426906029}
+  - component: {fileID: 3933951556066273430}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -560,9 +538,31 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6070ef5c5eed24746bdfa4adf468d4af, type: 3}
   - {fileID: 7482667652216324306, guid: 55630cc465e714943bacbc159405811a, type: 3}
   - {fileID: 21300000, guid: 09235589ca973004ea0c6f91e89230f6, type: 3}
-  virtualMousePosition: {x: 0, y: 0}
+  virtualMousePosition: {x: 1.2, y: -0.2}
   velocity: {x: 0, y: 0}
   positionChange: {x: 0, y: 0}
+--- !u!114 &3933951556066273430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6043441914305587015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1e7ce45ba1e39f43a19e4630bf7633c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerControler: {fileID: 426906029}
+  windBubbleRange: 5
+  windPower: 50
+  maxMovePower: 20
+  throwForceConstant: 5
+  blockingLayers:
+    serializedVersion: 2
+    m_Bits: 193
+  windBubble: {fileID: 5401348134195849030}
+  objectsInRange: []
 --- !u!1 &6297462287964603809
 GameObject:
   m_ObjectHideFlags: 0

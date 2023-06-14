@@ -5,5 +5,5 @@ using TMPro;
 public class EnemyCounter : MonoBehaviour
 {
     public TextMeshProUGUI textUI;
-    private List<EnemyController> enemys = new();
+    private List<EnemyController> enemies = new();
 }

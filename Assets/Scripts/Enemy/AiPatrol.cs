@@ -43,9 +43,12 @@ public class AiPatrol : MonoBehaviour
         {
             Debug.LogError("AiPatrol -> No RigidBody2D");
         }
+    }
 
+    private void Awake()
+    {
         if (player == null)
-        {   
+        {
             if (FindObjectOfType<PlayerControler>() != null)
                 player = FindObjectOfType<PlayerControler>().transform;
         }

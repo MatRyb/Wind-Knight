@@ -13,7 +13,7 @@ public abstract class EnemyController : ObjectHealth
 
     [SerializeField] protected LayerMask viewRayBlockingLayers;
 
-    private void OnValidate()
+    private void Awake()
     {
         if (FindObjectOfType<PlayerControler>() != null)
             player = FindObjectOfType<PlayerControler>().transform;

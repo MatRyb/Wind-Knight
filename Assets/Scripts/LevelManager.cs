@@ -67,6 +67,7 @@ public class LevelManager : MonoBehaviour
         {
             instance.start = false;
             GameObject player = GameObject.FindGameObjectWithTag("Player");
+            player.GetComponentInChildren<TrailRenderer>().enabled = false;
             if (instance.resp != null)
             {
                 Camera.main.transform.position = new Vector3(instance.resp.position.x, instance.resp.position.y, Camera.main.transform.position.z);
@@ -78,6 +79,7 @@ public class LevelManager : MonoBehaviour
                 player.transform.position = instance.startResp.position;
             }
             player.GetComponentInChildren<PlayerControler>().mouseInit();
+            player.GetComponentInChildren<TrailRenderer>().enabled = true;
             PauseGame(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
