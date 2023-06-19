@@ -48,7 +48,7 @@ public class BetterWaveEnemy : EnemyController
         Vector3 dir = player.position - transform.position;
         float distance = Mathf.Abs(Vector3.Distance(Vector3.zero, dir));
 
-        if (isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers) || distance > range + rangeOffset)
+        if (IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers) || distance > range + rangeOffset)
         {
             canAttack = true;
             return;
@@ -83,21 +83,21 @@ public class BetterWaveEnemy : EnemyController
                 {
                     GameObject particleIn = Instantiate(portalIn.gameObject, transform.position, transform.rotation);
                     particleIn.GetComponent<ParticleSystem>().Play();
-                    Destroy(particleIn, 2f);
+                    Destroy(particleIn.gameObject, 2f);
                     transform.position += new Vector3(moveDist * -factorX, moveDist * -factorY, 0);
                     GameObject particleOut = Instantiate(portalOut.gameObject, transform.position, transform.rotation);
                     particleOut.GetComponent<ParticleSystem>().Play();
-                    Destroy(particleOut, 2f);
+                    Destroy(particleOut.gameObject, 2f);
                 }
                 else
                 {
                     GameObject particleIn = Instantiate(portalIn.gameObject, transform.position, transform.rotation);
                     particleIn.GetComponent<ParticleSystem>().Play();
-                    Destroy(particleIn, 2f);
+                    Destroy(particleIn.gameObject, 2f);
                     transform.position += new Vector3(moveDist * factorX, moveDist * factorY, 0);
                     GameObject particleOut = Instantiate(portalOut.gameObject, transform.position, transform.rotation);
                     particleOut.GetComponent<ParticleSystem>().Play();
-                    Destroy(particleOut, 2f);
+                    Destroy(particleOut.gameObject, 2f);
                 }
                 moved = false;
             }

@@ -194,8 +194,7 @@ public class WaveParticle : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IDamageTaker damageTaker;
-        if (collision.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
+        if (collision.gameObject.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
         {
             damageTaker.TakeDamage(damage);
         }

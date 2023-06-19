@@ -17,15 +17,14 @@ public class Wall : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        PlayerControler damageTaker;
-        if (collision.collider.gameObject.TryGetComponent<PlayerControler>(out damageTaker))
+        if (collision.collider.gameObject.TryGetComponent<PlayerControler>(out PlayerControler damageTaker))
         {
             switch (type)
             {
                 case Type.Zero:
                     break;
                 case Type.Deadly:
-                    damageTaker.TakeDamage(damageTaker.getMaxHealth());
+                    damageTaker.TakeDamage(damageTaker.GetMaxHealth());
                     break;
                 case Type.Damage:
                     damageTaker.TakeDamage(damage);

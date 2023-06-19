@@ -20,8 +20,6 @@ public class MeleeEnemy : EnemyController
     // Update is called once per frame
     void Update()
     {
-
-
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
         if (distanceToPlayer <= range && GameTimer.TimeMultiplier != GameTimer.STOPPED)
@@ -41,12 +39,11 @@ public class MeleeEnemy : EnemyController
 
         if (speed > minSpeed)
         {
-            float damage = speed * (this.GetComponent<Rigidbody2D>().mass / 10);
+            float damage = speed * (GetComponent<Rigidbody2D>().mass / 10);
 
-            this.TakeDamage(damage);
+            TakeDamage(damage);
 
-            IDamageTaker damageTaker;
-            if (collision.collider.gameObject.TryGetComponent(out damageTaker))
+            if (collision.collider.gameObject.TryGetComponent(out IDamageTaker damageTaker))
             {
                 damageTaker.TakeDamage(damage);
             }
@@ -69,10 +66,5 @@ public class MeleeEnemy : EnemyController
         float degreeToAdd = AdvancedMath.GetAngleBetweenPoints(targetPos, transform.position, Vector2.right + targetPos);
 
         objectToRotate.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90 + degreeToAdd));
-    }
-
-    private float CalculateHealth()
-    {
-        return getHealth() / getMaxHealth();
     }
 }

@@ -27,22 +27,22 @@ public class ObjectHealth : BaseEntityBehaviour, IDamageTaker
         Debug.Log("Dead");
     }
 
-    public float getMaxHealth()
+    public float GetMaxHealth()
     {
         return maxHealth;
     }
 
-    public float getHealth()
+    public float GetHealth()
     {
         return health;
     }
 
-    public void setMaxHealth(float value)
+    public void SetMaxHealth(float value)
     {
         maxHealth = value;
     }
 
-    public void addHealth(float value)
+    public void AddHealth(float value)
     {
         health += value;
     }
@@ -70,6 +70,6 @@ public class ObjectHealth : BaseEntityBehaviour, IDamageTaker
     [Button]
     private void TakeTestDamage()
     {
-        TakeDamage(0.1f * getMaxHealth());
+        TakeDamage(0.1f * GetMaxHealth());
     }
 }

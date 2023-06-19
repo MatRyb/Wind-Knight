@@ -27,7 +27,7 @@ public class EnemyRanged : EnemyController
 
         if(distanceToPlayer <= range && GameTimer.TimeMultiplier != GameTimer.STOPPED)
         {
-            if (canShoot && !isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
+            if (canShoot && !IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
             {    
                 Attack();
             }
@@ -59,12 +59,11 @@ public class EnemyRanged : EnemyController
 
         if (speed > minSpeed)
         {
-            float damage = speed * (this.GetComponent<Rigidbody2D>().mass / 10);
+            float damage = speed * (GetComponent<Rigidbody2D>().mass / 10);
 
-            this.TakeDamage(damage);
+            TakeDamage(damage);
 
-            IDamageTaker damageTaker;
-            if (collision.collider.gameObject.TryGetComponent(out damageTaker))
+            if (collision.collider.gameObject.TryGetComponent(out IDamageTaker damageTaker))
             {
                 damageTaker.TakeDamage(damage);
             }

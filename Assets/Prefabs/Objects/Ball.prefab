@@ -149,4 +149,5 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c17b0fc5cd11e4b4d866b598bb445ca8, type: 3}
   percent: 0
   minSpeed: 5
+  destroyParticle: {fileID: 840825463644067242, guid: 100b305cb1e473c4fbfb611c43b5e377, type: 3}
   velocity: {x: 0, y: 0}

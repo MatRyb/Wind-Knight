@@ -69,7 +69,7 @@ public class AiPatrol : MonoBehaviour
         }
 
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        if (distanceToPlayer <= enemyRange.range && !enemyRange.isObjectBlockedByOtherObject(player.gameObject, viewBlockingLayers)) 
+        if (distanceToPlayer <= enemyRange.range && !enemyRange.IsObjectBlockedByOtherObject(player.gameObject, viewBlockingLayers)) 
         {
             mustPatrol = false;
             if (player.position.x > body.transform.position.x && body.transform.localScale.x < 0 ||

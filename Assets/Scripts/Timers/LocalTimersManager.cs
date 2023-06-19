@@ -13,25 +13,25 @@ public class LocalTimerContainer
 
     public LocalTimerContainer Start()
     {
-        this.timer.Start();
+        timer.Start();
         return this;
     }
 
     public LocalTimerContainer Pause()
     {
-        this.timer.Pause();
+        timer.Pause();
         return this;
     }
 
     public LocalTimerContainer Stop()
     {
-        this.timer.Stop();
+        timer.Stop();
         return this;
     }
 
     public LocalTimerContainer DoAfter(Action action)
     {
-        this.timer.DoAfter(action);
+        timer.DoAfter(action);
         return this;
     }
 }

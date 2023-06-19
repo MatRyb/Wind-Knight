@@ -22,8 +22,7 @@ public class EnemyBullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        IDamageTaker damageTaker;
-        if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
+        if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
         {
             damageTaker.TakeDamage(damage);
         }

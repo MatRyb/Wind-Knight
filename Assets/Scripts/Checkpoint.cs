@@ -24,26 +24,26 @@ public class Checkpoint : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler _))
         {
-            lvl.SetRespawnPoint(id, gameObject.transform.position, setActive);
+            lvl.SetRespawnPoint(id, gameObject.transform.position, SetActive);
         }
     }
 
-    public void setActive()
+    public void SetActive()
     {
         sprite.color = activeColor;
     }
 
-    public void setNotActive()
+    public void SetNotActive()
     {
         sprite.color = notActiveColor;
     }
 
-    public void setDisabled()
+    public void SetDisabled()
     {
         sprite.color = disabledColor;
     }
 
-    public int getId()
+    public int GetId()
     {
         return id;
     }

@@ -5,23 +5,17 @@ public class MeleeHitbox : MonoBehaviour
     public float dieTime;
     public float damage;
 
-    private LocalTimer dieTimer;
-
     void Start()
     {
-
-        Destroy(gameObject, dieTime);
-        /* z jakiegos powodu nie chce dzialac :c
-          dieTimer = new LocalTimer(dieTime).DoAfter(() => Destroy(this.gameObject)).Start();
-        */
+        //Destroy(gameObject, dieTime);
+        LocalTimersManager.CreateNewTimer(dieTime).DoAfter(() => Destroy(gameObject)).Start();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler _))
         {
-            IDamageTaker damageTaker;
-            if (collision.transform.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
+            if (collision.transform.gameObject.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
             {
                 damageTaker.TakeDamage(damage);
             }

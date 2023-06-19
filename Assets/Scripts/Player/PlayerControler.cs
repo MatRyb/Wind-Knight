@@ -148,8 +148,8 @@ public class PlayerControler : ObjectHealth
 
     public override void TakeDamage(float value)
     {
-        LeanTween.value(body.gameObject, setSpriteColor, body.GetComponent<SpriteRenderer>().color, damageColor, 0.15f).setOnComplete(() => {
-            LeanTween.value(body.gameObject, setSpriteColor, body.GetComponent<SpriteRenderer>().color, normalColor, 0.15f);
+        LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, damageColor, 0.15f).setOnComplete(() => {
+            LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, normalColor, 0.15f);
         });
         base.TakeDamage(value);
     }
@@ -165,16 +165,16 @@ public class PlayerControler : ObjectHealth
         body.transform.localScale = theScale;
     }
 
-    public void setSpriteColor(Color val)
+    public void SetSpriteColor(Color val)
     {
         body.GetComponent<SpriteRenderer>().color = val;
     }
 
     public override void OnDead()
     {
-        ParticleSystem particle = Instantiate(deathParticle, this.gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        ParticleSystem particle = Instantiate(deathParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
         particle.Play();
-        Destroy(particle, 3);
+        Destroy(particle.gameObject, 3);
         LevelManager.InitRespawn();
     }
 

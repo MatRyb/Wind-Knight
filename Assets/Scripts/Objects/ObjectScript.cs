@@ -15,7 +15,8 @@ public class ObjectScript : ObjectHealth
     [SerializeField] private List<Sprite> states;
     [SerializeField] private float percent;
     private SpriteRenderer image;
-    [SerializeField] private float minSpeed = 2.0f; 
+    [SerializeField] private float minSpeed = 2.0f;
+    [SerializeField] private ParticleSystem destroyParticle;
 
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private Vector2 velocity;
@@ -44,19 +45,19 @@ public class ObjectScript : ObjectHealth
 
     void Awake()
     {
-        image = this.gameObject.GetComponent<SpriteRenderer>();
+        image = gameObject.GetComponent<SpriteRenderer>();
         image.sprite = states[0];
         rb.mass = mass;
         rb.drag = linearDrag;
         gravityScale = rb.gravityScale;
-        this.StartHealth();
+        StartHealth();
     }
 
     void Update()
     {
-        this.changeSprite();
+        ChangeSprite();
 
-        percent = (this.getHealth() / this.getMaxHealth()) * 100;
+        percent = (GetHealth() / GetMaxHealth()) * 100;
 
         if (rb.velocity.x != 0.0f || rb.velocity.y != 0.0f)
         {
@@ -69,15 +70,18 @@ public class ObjectScript : ObjectHealth
 
     public override void OnDead()
     {
+        ParticleSystem particle = Instantiate(destroyParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        particle.Play();
+        Destroy(particle.gameObject, 3);
         Destroy(gameObject);
     }
 
-    public float getMass()
+    public float GetMass()
     {
         return mass;
     }
 
-    public void setMass(float value)
+    public void SetMass(float value)
     {
         if (value < 0f)
         {
@@ -87,7 +91,7 @@ public class ObjectScript : ObjectHealth
         mass = value;
     }
 
-    public void setFactor(float value)
+    public void SetFactor(float value)
     {
         if (value < 0f)
         {
@@ -97,15 +101,15 @@ public class ObjectScript : ObjectHealth
         factor = value;
     }
 
-    private void changeSprite()
+    private void ChangeSprite()
     {
-        if (this.getHealth() == this.getMaxHealth())
+        if (GetHealth() == GetMaxHealth())
         {
             image.sprite = states[0];
         }
         else
         {
-            image.sprite = states[states.Count-1-Mathf.FloorToInt((states.Count/this.getMaxHealth())*this.getHealth())];
+            image.sprite = states[states.Count-1-Mathf.FloorToInt((states.Count/GetMaxHealth())*GetHealth())];
         }
     }
 
@@ -119,12 +123,14 @@ public class ObjectScript : ObjectHealth
         {
             float damage = speed * (mass / 10) * factor;
 
-            this.TakeDamage(damage);
+            TakeDamage(damage);
 
-            IDamageTaker damageTaker;
-            if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
+            if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
             {
-                damageTaker.TakeDamage(damage);
+                if (!collision.gameObject.CompareTag("Player"))
+                {
+                    damageTaker.TakeDamage(damage);
+                }
             }
         }
     }

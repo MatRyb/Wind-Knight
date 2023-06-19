@@ -113,10 +113,9 @@ public class WindControl : BaseEntityBehaviour
         {
             foreach (var collider in collidersInRange)
             {
-                Rigidbody2D rigid;
-                if (collider.TryGetComponent<Rigidbody2D>(out rigid))
+                if (collider.TryGetComponent<Rigidbody2D>(out Rigidbody2D rigid))
                 {
-                    if (isObjectBlockedByOtherObject(rigid.gameObject, blockingLayers) || rigid.gameObject.CompareTag("Enemy"))
+                    if (IsObjectBlockedByOtherObject(rigid.gameObject, blockingLayers) || rigid.gameObject.CompareTag("Enemy"))
                     {
                         continue;
                     }

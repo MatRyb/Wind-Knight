@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class WaveEnemy : EnemyController
@@ -46,7 +44,7 @@ public class WaveEnemy : EnemyController
         Vector3 dir = player.position - transform.position;
         float distance = Mathf.Abs(Vector3.Distance(Vector3.zero, dir));
 
-        if (isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers) || distance > range + rangeOffset)
+        if (IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers) || distance > range + rangeOffset)
         {
             canAttack = true;
             return;

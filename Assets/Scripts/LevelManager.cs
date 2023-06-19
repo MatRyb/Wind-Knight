@@ -317,26 +317,26 @@ public class LevelManager : MonoBehaviour
             {
                 if (instance.resp == null)
                 {
-                    if (check.getId() < id)
+                    if (check.GetId() < id)
                     {
-                        check.setDisabled();
+                        check.SetDisabled();
                     }
                     else
                     {
-                        check.setNotActive();
+                        check.SetNotActive();
                     }
                 }
                 else
                 {
-                    if (check.getId() <= instance.resp.id)
+                    if (check.GetId() <= instance.resp.id)
                     {
-                        if (check.getId() < id)
+                        if (check.GetId() < id)
                         {
-                            check.setDisabled();
+                            check.SetDisabled();
                         }
                         else
                         {
-                            check.setNotActive();
+                            check.SetNotActive();
                         }
                     }
                 }
@@ -359,9 +359,9 @@ public class LevelManager : MonoBehaviour
 
             foreach (Checkpoint check in checkpoints)
             {
-                if (check.getId() < instance.resp.id)
+                if (check.GetId() < instance.resp.id)
                 {
-                    check.setDisabled();
+                    check.SetDisabled();
                 }
             }
 

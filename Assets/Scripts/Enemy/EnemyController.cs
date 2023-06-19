@@ -34,9 +34,9 @@ public abstract class EnemyController : ObjectHealth
 
     public override void OnDead()
     {
-        ParticleSystem particle = Instantiate(deathParticle, this.gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        ParticleSystem particle = Instantiate(deathParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
         particle.Play();
-        Destroy(particle, 3);
+        Destroy(particle.gameObject, 3);
         Destroy(gameObject);
     }
 }

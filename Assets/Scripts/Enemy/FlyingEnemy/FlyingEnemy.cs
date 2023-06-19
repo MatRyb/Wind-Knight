@@ -41,7 +41,7 @@ public class FlyingEnemy : EnemyController
                     enemyRigidbody.velocity = Vector3.zero;
                 }
             }
-            else if (!isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
+            else if (!IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
             {
                 enemyRigidbody.velocity = Vector3.zero;
                 Attack();
@@ -65,8 +65,7 @@ public class FlyingEnemy : EnemyController
         {
             foreach (var collider in collidersInExplosion)
             {
-                IDamageTaker damageTaker;
-                if (collider.TryGetComponent<IDamageTaker>(out damageTaker))
+                if (collider.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
                 {
                     if ((Object)damageTaker == this)
                     {
@@ -79,14 +78,14 @@ public class FlyingEnemy : EnemyController
                 }
             }
         }
-        TakeDamage(getMaxHealth());
+        TakeDamage(GetMaxHealth());
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler _) && !attack)
         {
-            if (!isObjectBlockedByOtherObject(collision.gameObject, viewRayBlockingLayers))
+            if (!IsObjectBlockedByOtherObject(collision.gameObject, viewRayBlockingLayers))
             {
                 player = collision.gameObject.transform;
                 attack = true;
@@ -99,7 +98,7 @@ public class FlyingEnemy : EnemyController
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") || collision.gameObject.layer == LayerMask.NameToLayer("Wall") 
-            || collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Object")
+            || collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Object"))
         {
             Explode();
         }

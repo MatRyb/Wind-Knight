@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
     int i = 0;
-    Vector2 pos = new Vector2(0.01f, -0.01f);
+    Vector2 pos = new(0.01f, -0.01f);
 
     void Update()
     {
