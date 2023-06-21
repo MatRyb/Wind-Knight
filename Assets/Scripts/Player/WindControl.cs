@@ -142,10 +142,10 @@ public class WindControl : BaseEntityBehaviour
             {
                 if (playerControler.playerState == PlayerState.MOVING)
                 {
-                    obj.rigidbody.gravityScale = 0f;
+                    //obj.rigidbody.gravityScale = 0f;
 
                     float percent = (Mathf.Abs(Vector2.Distance(obj.gameObject.transform.position, playerControler.playerBodyTransform.position)) - (windBubbleRange / 2f)) / (windBubbleRange / 2f);
-                    Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent * Time.fixedDeltaTime * windPower;
+                    //Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent * Time.fixedDeltaTime * windPower;
 
                     Vector2 newVelocityDirection = ((playerControler.velocity - obj.rigidbody.velocity) / obj.rigidbody.mass) * Time.fixedDeltaTime * windPower;
 
@@ -154,7 +154,7 @@ public class WindControl : BaseEntityBehaviour
                         newVelocityDirection = newVelocityDirection.normalized * maxMovePower;
                     }
 
-                    obj.rigidbody.velocity += (newVelocityDirection + additionForce);
+                    obj.rigidbody.velocity += (newVelocityDirection /*+ additionForce*/);
                 }
                 else
                 {

@@ -44,6 +44,7 @@ public class FlyingEnemy : EnemyController
             else if (!IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
             {
                 enemyRigidbody.velocity = Vector3.zero;
+                enemyRigidbody.constraints = RigidbodyConstraints2D.FreezePosition;
                 Attack();
             }
         }   
