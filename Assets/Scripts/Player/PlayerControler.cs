@@ -127,18 +127,17 @@ public class PlayerControler : ObjectHealth
 
         float y = virtualMousePosition.y - transform.position.y;
 
-        // Poprawiæ obracanie by mo¿na by³o patrzeæ w dó³
         float x = Mathf.Abs(virtualMousePosition.x - transform.position.x);
 
-        if (Mathf.Atan2(y, x) * 45 >= minRotation && Mathf.Atan2(y, x) * 45 <= maxRotation)
+        if (Mathf.Atan2(y, x) * 180 / Mathf.PI >= minRotation && Mathf.Atan2(y, x) * 180 / Mathf.PI <= maxRotation)
         {
-            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? Mathf.Atan2(y, x) * 45 : - Mathf.Atan2(y, x) * 45);
+            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? Mathf.Atan2(y, x) * 180 / Mathf.PI : - Mathf.Atan2(y, x) * 180 / Mathf.PI);
         }
-        else if (Mathf.Atan2(y, x) * 45 < minRotation)
+        else if (Mathf.Atan2(y, x) * 180 / Mathf.PI < minRotation)
         {
             body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? minRotation : maxRotation);
         }
-        else if (Mathf.Atan2(y, x) * 45 > maxRotation)
+        else if (Mathf.Atan2(y, x) * 180 / Mathf.PI > maxRotation)
         {
             body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? maxRotation : minRotation);
         }

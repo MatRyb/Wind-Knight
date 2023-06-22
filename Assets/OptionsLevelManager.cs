@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class OptionsLevelManager : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class OptionsLevelManager : MonoBehaviour
 
     [Header("Music:")]
     [SerializeField] private AudioSource musicSource;
+
+    [Header("SFX:")]
+    [SerializeField] private List<AudioSource> sfxSources;
+    [SerializeField] private string sfxTag = "SFX";
 
     void OnLevelWasLoaded(int level)
     {
@@ -32,16 +37,32 @@ public class OptionsLevelManager : MonoBehaviour
 
         player = FindObjectOfType<PlayerControler>();
 
-        musicSource.volume = PlayerPrefs.GetFloat("MinVolume", 60f) / 100f;
+        var arr = GameObject.FindGameObjectsWithTag(sfxTag);
 
-        musicSource.mute = PlayerPrefs.GetInt("MuteVolume", 0) == 0 ? false : true;
+        for (int i = 0; i < arr.Length; ++i)
+        {
+            if (arr[i].TryGetComponent(out AudioSource s))
+            {
+                sfxSources.Add(s);
+            }
+        }
+
+        foreach (var item in sfxSources)
+        {
+            item.volume = PlayerPrefs.GetFloat("SFXVolume", 40f) / 100f;
+            item.mute = PlayerPrefs.GetInt("MuteSFXVolume", 0) != 0;
+        }
+
+        musicSource.volume = PlayerPrefs.GetFloat("MinMusicVolume", 60f) / 100f;
+
+        musicSource.mute = PlayerPrefs.GetInt("MuteMusicVolume", 0) != 0;
     }
 
     void Update()
     {
         float x = (player.speed - player.minSpeed) / (player.maxSpeed - player.minSpeed);
-        float min = PlayerPrefs.GetFloat("MinVolume", 60f);
-        float max = PlayerPrefs.GetFloat("MaxVolume", 80f);
+        float min = PlayerPrefs.GetFloat("MinMusicVolume", 60f);
+        float max = PlayerPrefs.GetFloat("MaxMusicVolume", 80f);
         musicSource.volume = ((max - min) * x + min) / 100f;
     }
 }

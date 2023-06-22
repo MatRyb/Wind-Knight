@@ -11,10 +11,19 @@ public class OptionsManager : MonoBehaviour
     [SerializeField] private Slider music;
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private TMP_Text musicText;
-    [Range(0, 100)] [SerializeField] private float changeTextColorValue = 50f;
+    [Range(0, 100)] [SerializeField] private float changeTextColorMusicValue = 50f;
+    [SerializeField] private Image muteMusicIcon;
+
+    [Header("SFX:")]
+    [SerializeField] private Slider sfx;
+    [SerializeField] private TMP_Text sfxText;
+    [SerializeField] private bool sfxMute;
+    [Range(0, 100)] [SerializeField] private float changeTextColorSFXValue = 50f;
+    [SerializeField] private Image muteSFXIcon;
+
+    [Header("Global:")]
     [SerializeField] private Color textWhenBackground;
     [SerializeField] private Color textWhenForeground;
-    [SerializeField] private Image muteIcon;
     [SerializeField] private Sprite muteSprite;
     [SerializeField] private Sprite unMuteSprite;
 
@@ -22,16 +31,19 @@ public class OptionsManager : MonoBehaviour
     {
         instance = this;
 
-        music.onValueChanged.AddListener(delegate { ChangeVolume(musicSource, music.value, musicText); PlayerPrefs.SetFloat("MinVolume", music.value - 10f); PlayerPrefs.SetFloat("MaxVolume", music.value + 10f); });
+        // music
+        music.onValueChanged.AddListener(delegate { ChangeVolume(musicSource, music.value, musicText, changeTextColorMusicValue); PlayerPrefs.SetFloat("MinMusicVolume", music.value - 10f); PlayerPrefs.SetFloat("MaxMusicVolume", music.value + 10f); });
+        music.value = PlayerPrefs.GetFloat("MinMusicVolume", 60f) + 10f;
+        musicSource.mute = PlayerPrefs.GetInt("MuteMusicVolume", 0) != 0;
+        CheckAudioMute(musicSource.mute, muteMusicIcon);
 
-        music.value = PlayerPrefs.GetFloat("MinVolume", 60f) + 10f;
-
-        musicSource.mute = PlayerPrefs.GetInt("MuteVolume", 0) == 0 ? false : true;
-
-        CheckAudioSource(musicSource);
+        //sfx
+        sfx.onValueChanged.AddListener(delegate { ChangeVolume(sfx.value, sfxText, changeTextColorSFXValue); PlayerPrefs.SetFloat("SFXVolume", sfx.value); });
+        sfxMute = PlayerPrefs.GetInt("MuteSFXVolume", 0) != 0;
+        CheckAudioMute(sfxMute, muteSFXIcon);
     }
 
-    public void ChangeVolume(AudioSource audioSource, float volume, TMP_Text tekst)
+    public void ChangeVolume(AudioSource audioSource, float volume, TMP_Text tekst, float changeTextColorValue)
     {
         tekst.text = new StringBuilder("").Append((int)(volume - 10)).Append('-').Append((int)(volume + 10)).Append('%').ToString();
         if(volume < changeTextColorValue)
@@ -45,22 +57,42 @@ public class OptionsManager : MonoBehaviour
         audioSource.volume = volume / 100f;
     }
 
-    public void MuteAudio()
+    public void ChangeVolume(float volume, TMP_Text tekst, float changeTextColorValue)
     {
-        musicSource.mute = !musicSource.mute;
-        PlayerPrefs.SetInt("MuteVolume", musicSource.mute ? 1 : 0);
-        CheckAudioSource(musicSource);
-    }
-
-    private void CheckAudioSource(AudioSource audioSource)
-    {
-        if (audioSource.mute)
+        tekst.text = new StringBuilder("").Append((int)volume).Append('%').ToString();
+        if (volume < changeTextColorValue)
         {
-            muteIcon.sprite = muteSprite;
+            tekst.color = textWhenBackground;
         }
         else
         {
-            muteIcon.sprite = unMuteSprite;
+            tekst.color = textWhenForeground;
+        }
+    }
+
+    public void MuteMusicAudio()
+    {
+        musicSource.mute = !musicSource.mute;
+        PlayerPrefs.SetInt("MuteMusicVolume", musicSource.mute ? 1 : 0);
+        CheckAudioMute(musicSource.mute, muteMusicIcon);
+    }
+
+    public void MuteSFXAudio()
+    {
+        sfxMute = !sfxMute;
+        PlayerPrefs.SetInt("MuteSFXVolume", sfxMute ? 1 : 0);
+        CheckAudioMute(sfxMute, muteSFXIcon);
+    }
+
+    private void CheckAudioMute(bool audioMute, Image icon)
+    {
+        if (audioMute)
+        {
+            icon.sprite = muteSprite;
+        }
+        else
+        {
+            icon.sprite = unMuteSprite;
         }
     }
 }
