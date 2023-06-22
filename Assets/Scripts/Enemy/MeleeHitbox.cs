@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class MeleeHitbox : MonoBehaviour
 {
-    public float dieTime;
-    public float damage;
+    [SerializeField] private float dieTime;
+    [SerializeField] private float damage;
+    private LocalTimerContainer timer;
 
     void Start()
     {
         //Destroy(gameObject, dieTime);
-        LocalTimersManager.CreateNewTimer(dieTime).DoAfter(() => Destroy(gameObject)).Start();
+        timer = LocalTimersManager.CreateNewTimer(dieTime).DoAfter(() => Destroy(gameObject)).Start();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -21,5 +22,10 @@ public class MeleeHitbox : MonoBehaviour
             }
             Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        timer.Stop();
     }
 }

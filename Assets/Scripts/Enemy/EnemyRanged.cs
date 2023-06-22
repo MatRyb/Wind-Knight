@@ -10,12 +10,25 @@ public class EnemyRanged : EnemyController
 
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform shootPosition;
+    [SerializeField] private Rigidbody2D rb;
 
     [SerializeField] private float minSpeed = 2.0f;
 
     [SerializeField] private float scaleFactor = 2.0f;
 
     private float distanceToPlayer;
+
+    private void OnValidate()
+    {
+        if (rb == null && GetComponent<Rigidbody2D>() != null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+        else if (rb == null && GetComponent<Rigidbody2D>() == null)
+        {
+            Debug.LogError(gameObject.name + " EnemyRanged -> No RigidBody2D");
+        }
+    }
 
     void Start()
     {
@@ -61,7 +74,7 @@ public class EnemyRanged : EnemyController
 
         if (speed > minSpeed)
         {
-            float damage = speed * (GetComponent<Rigidbody2D>().mass / 10);
+            float damage = speed * (rb.mass / 10);
 
             TakeDamage(damage);
 

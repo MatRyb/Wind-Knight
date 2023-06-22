@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b629ecb756dcf6b4787265f4fde4e5e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthToMonitor: {fileID: 0}
+  healthToMonitor: {fileID: 5888977171575284708}
   image: {fileID: 1383003105}
 --- !u!1 &331882068
 GameObject:
@@ -391,6 +391,7 @@ MonoBehaviour:
   aim: 50
   bullet: {fileID: 6574801120051804515, guid: 078df0fec1a65a24a899a5a33b0a3d23, type: 3}
   shootPosition: {fileID: 430495104177919136}
+  rb: {fileID: 1421488409355366461}
   minSpeed: 8
   scaleFactor: 1.5
 --- !u!114 &2907124579774553396
@@ -408,11 +409,11 @@ MonoBehaviour:
   walkSpead: 4
   maxFallingSpeed: -25
   gravityScale: 10
-  enemyRange: {fileID: 5888977171575284708}
+  enemyController: {fileID: 5888977171575284708}
   player: {fileID: 0}
   frontGroundCheckerPosition: {fileID: 1163239386256955690}
   backGroundCheckerPosition: {fileID: 6245949410443773033}
-  rb: {fileID: 8879906949400098750}
+  rb: {fileID: 1421488409355366461}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -509,8 +510,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6311761400956564482}
-  - component: {fileID: 8879906949400098750}
   - component: {fileID: 4523038572969423143}
+  - component: {fileID: 1421488409355366461}
   m_Layer: 0
   m_Name: Enemy_Ranged 1
   m_TagString: Enemy
@@ -535,27 +536,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &8879906949400098750
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1244794210149225916}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 10
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!61 &4523038572969423143
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -582,6 +562,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.0050812, y: 0.99833596}
   m_EdgeRadius: 0
+--- !u!50 &1421488409355366461
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244794210149225916}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 10
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &3140393297256640387
 GameObject:
   m_ObjectHideFlags: 0

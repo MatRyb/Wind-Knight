@@ -11,7 +11,7 @@ public class AiPatrol : MonoBehaviour
     private bool fliped = true;
     private float distanceToPlayer;
 
-    [SerializeField] private EnemyController enemyRange;
+    [SerializeField] private EnemyController enemyController;
     [SerializeField] private Transform player;
     [SerializeField] private Transform frontGroundCheckerPosition;
     [SerializeField] private Transform backGroundCheckerPosition;
@@ -26,22 +26,22 @@ public class AiPatrol : MonoBehaviour
 
     private void OnValidate()
     {
-        if (GetComponent<EnemyController>() != null && enemyRange == null)
+        if (GetComponent<EnemyController>() != null && enemyController == null)
         {
-            enemyRange = GetComponent<EnemyController>();
+            enemyController = GetComponent<EnemyController>();
         }
-        else if (enemyRange == null)
+        else if (enemyController == null)
         {
-            Debug.LogError("AiPatrol -> No Enemy Range");
+            Debug.LogError(gameObject.name + " AiPatrol -> No Enemy Controller");
         }
 
         if (GetComponent<Rigidbody2D>() != null && rb == null)
         {
             rb = GetComponent<Rigidbody2D>();
         }
-        else if (enemyRange == null)
+        else if (rb == null && GetComponent<Rigidbody2D>() == null)
         {
-            Debug.LogError("AiPatrol -> No RigidBody2D");
+            Debug.LogError(gameObject.name + " AiPatrol -> No RigidBody2D");
         }
     }
 
@@ -69,7 +69,7 @@ public class AiPatrol : MonoBehaviour
         }
 
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        if (distanceToPlayer <= enemyRange.range && !enemyRange.IsObjectBlockedByOtherObject(player.gameObject, viewBlockingLayers)) 
+        if (distanceToPlayer <= enemyController.range && !enemyController.IsObjectBlockedByOtherObject(player.gameObject, viewBlockingLayers)) 
         {
             mustPatrol = false;
             if (player.position.x > body.transform.position.x && body.transform.localScale.x < 0 ||

@@ -58,17 +58,17 @@ public class PlayerControler : ObjectHealth
 
         if (body == null)
         {
-            Debug.LogError("Body Object can't be null. Please provide one. :)");
+            Debug.LogError(gameObject.name + " Body Object can't be null. Please provide one. :)");
         }
 
         if (mouseObject == null)
         {
-            Debug.LogError("Mouse Object can't be null. Please provide one. :)");
+            Debug.LogError(gameObject.name + " Mouse Object can't be null. Please provide one. :)");
         }
 
         if (mouseStates.Count == 0)
         {
-            Debug.LogError("There must be at least 2 states.");
+            Debug.LogError(gameObject.name + " There must be at least 2 states.");
         }
 
         if (GetComponentInParent<Rigidbody2D>() != null && playerRigidbody == null)
@@ -77,7 +77,7 @@ public class PlayerControler : ObjectHealth
         }
         else if (playerRigidbody == null)
         {
-            Debug.LogError("Players Rigidbody can't be null. Please provide one. :)");
+            Debug.LogError(gameObject.name + " Players Rigidbody can't be null. Please provide one. :)");
         }
     }
 

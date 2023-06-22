@@ -25,9 +25,9 @@ public class ExplosiveObjectScript : MonoBehaviour
         {
             renderer = GetComponent<SpriteRenderer>();
         }
-        else
+        else if (renderer == null && GetComponent<SpriteRenderer>() == null)
         {
-            Debug.LogError("Sprite Renderer doesn't provided!!!");
+            Debug.LogError(gameObject.name + " Sprite Renderer doesn't provided!!!");
         }
     }
 
