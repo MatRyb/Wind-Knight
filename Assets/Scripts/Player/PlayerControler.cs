@@ -40,6 +40,12 @@ public class PlayerControler : ObjectHealth
     [Foldout("info")]
     [DisableIf("true")] public Vector2 velocity = Vector2.zero;
     [Foldout("info")]
+    [DisableIf("true")] public float minSpeed = 0f;
+    [Foldout("info")]
+    [DisableIf("true")] public float speed = 0f;
+    [Foldout("info")]
+    [DisableIf("true")] public float maxSpeed = 0f;
+    [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 positionChange = Vector2.zero;
     private Vector2 lastPosition;
 
@@ -88,7 +94,7 @@ public class PlayerControler : ObjectHealth
             playerRigidbody.mass = mass;
         }
 
-        this.StartHealth();
+        StartHealth();
     }
 
     public void mouseInit()
@@ -121,6 +127,7 @@ public class PlayerControler : ObjectHealth
 
         float y = virtualMousePosition.y - transform.position.y;
 
+        // Poprawiæ obracanie by mo¿na by³o patrzeæ w dó³
         float x = Mathf.Abs(virtualMousePosition.x - transform.position.x);
 
         if (Mathf.Atan2(y, x) * 45 >= minRotation && Mathf.Atan2(y, x) * 45 <= maxRotation)
@@ -263,6 +270,7 @@ public class PlayerControler : ObjectHealth
             }
             int state = Mathf.CeilToInt(((mouseStates.Count-1) / maxForceRadius) * Mathf.Abs(Vector2.Distance(calculateTo, playerPos)));
             mouseObject.GetComponent<SpriteRenderer>().sprite = mouseStates[state == mouseStates.Count ? mouseStates.Count - 1 : state];
+            speed = Mathf.Abs(Vector2.Distance(calculateTo, playerPos)) * basePower;
             velocity = (calculateTo - playerPos) * basePower;
             playerRigidbody.velocity = velocity;
         }
@@ -271,6 +279,8 @@ public class PlayerControler : ObjectHealth
             mouseObject.GetComponent<SpriteRenderer>().sprite = mouseStates[0];
             playerRigidbody.gravityScale = gravityScale;
         }
+
+        maxSpeed = Mathf.Abs(Vector2.Distance(((virtualMousePosition - playerPos).normalized * maxForceRadius) + playerPos, playerPos)) * basePower;
 
         playerRigidbody.velocity = playerRigidbody.velocity;
     }

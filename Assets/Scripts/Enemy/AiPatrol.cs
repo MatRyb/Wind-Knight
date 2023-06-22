@@ -20,7 +20,7 @@ public class AiPatrol : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask viewBlockingLayers;
 
-    [SerializeField] public new BoxCollider2D collider;
+    [SerializeField] public new Collider2D collider;
 
     [SerializeField] private GameObject body;
 

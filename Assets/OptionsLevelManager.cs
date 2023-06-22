@@ -4,8 +4,11 @@ public class OptionsLevelManager : MonoBehaviour
 {
     public static OptionsLevelManager instance;
 
+    [Header("Player:")]
+    [SerializeField] private PlayerControler player;
+
     [Header("Music:")]
-    public AudioSource musicSource;
+    [SerializeField] private AudioSource musicSource;
 
     void OnLevelWasLoaded(int level)
     {
@@ -27,6 +30,18 @@ public class OptionsLevelManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        musicSource.volume = PlayerPrefs.GetFloat("Volume", 70f) / 100f;
+        player = FindObjectOfType<PlayerControler>();
+
+        musicSource.volume = PlayerPrefs.GetFloat("MinVolume", 60f) / 100f;
+
+        musicSource.mute = PlayerPrefs.GetInt("MuteVolume", 0) == 0 ? false : true;
+    }
+
+    void Update()
+    {
+        float x = (player.speed - player.minSpeed) / (player.maxSpeed - player.minSpeed);
+        float min = PlayerPrefs.GetFloat("MinVolume", 60f);
+        float max = PlayerPrefs.GetFloat("MaxVolume", 80f);
+        musicSource.volume = ((max - min) * x + min) / 100f;
     }
 }

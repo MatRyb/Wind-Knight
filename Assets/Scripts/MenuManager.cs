@@ -21,9 +21,6 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        OptionsManager.instance.ChangeVolume(OptionsManager.instance.musicSource, PlayerPrefs.GetFloat("Volume", 70f), OptionsManager.instance.musicText);
-        OptionsManager.instance.music.value = PlayerPrefs.GetFloat("Volume", 70f);
-
         menuState = MenuWindow.Title;
         TitleScreen.SetActive(true);
     }

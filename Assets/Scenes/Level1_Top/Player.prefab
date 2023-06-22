@@ -211,8 +211,8 @@ TrailRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 543252591
-  m_SortingLayer: -1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Time: 0.35
   m_Parameters:
@@ -449,7 +449,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: e250735ad0510124aba8a62cc9a88861, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -538,8 +538,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6070ef5c5eed24746bdfa4adf468d4af, type: 3}
   - {fileID: 7482667652216324306, guid: 55630cc465e714943bacbc159405811a, type: 3}
   - {fileID: 21300000, guid: 09235589ca973004ea0c6f91e89230f6, type: 3}
-  virtualMousePosition: {x: 1.2, y: -0.2}
+  virtualMousePosition: {x: 2.7, y: 1.5}
   velocity: {x: 0, y: 0}
+  minSpeed: 0
+  speed: 0
+  maxSpeed: 0
   positionChange: {x: 0, y: 0}
 --- !u!114 &3933951556066273430
 MonoBehaviour:
