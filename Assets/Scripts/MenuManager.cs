@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum MenuWindow { Title, Options, Credits }
+public enum MenuWindow { Title, LevelSelect, Options, Credits }
 
 public class MenuManager : MonoBehaviour
 {
@@ -11,6 +11,7 @@ public class MenuManager : MonoBehaviour
 
     [Header("Canvases:")]
     public GameObject TitleScreen;
+    public GameObject LevelSelectScreen;
     public GameObject OptionsScreen;
     public GameObject CreditsScreen;
 
@@ -47,7 +48,22 @@ public class MenuManager : MonoBehaviour
             OptionsScreen.SetActive(false);
             TitleScreen.SetActive(true);
         }
+        else if (menuState == MenuWindow.LevelSelect)
+        {
+            LevelSelectScreen.SetActive(false);
+            TitleScreen.SetActive(true);
+        }
         menuState = MenuWindow.Title;
+    }
+
+    public void OpenLevelSelect()
+    {
+        if (menuState == MenuWindow.Title)
+        {
+            TitleScreen.SetActive(false);
+            LevelSelectScreen.SetActive(true);
+        }
+        menuState = MenuWindow.LevelSelect;
     }
 
     public void OpenCredits()

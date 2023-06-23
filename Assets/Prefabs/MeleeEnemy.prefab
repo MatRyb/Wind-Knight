@@ -355,7 +355,7 @@ MonoBehaviour:
   walkSpead: 4
   maxFallingSpeed: -25
   gravityScale: 10
-  enemyRange: {fileID: 5209816240133236623}
+  enemyController: {fileID: 5209816240133236623}
   player: {fileID: 0}
   frontGroundCheckerPosition: {fileID: 6193453442526225084}
   backGroundCheckerPosition: {fileID: 2560621725650520423}
@@ -387,6 +387,7 @@ MonoBehaviour:
   health: 0
   bodySprite: {fileID: 7834633356005780645}
   deathParticle: {fileID: 840825463644067242, guid: 72c3b48529f8a104ca028811d4684334, type: 3}
+  objectToDestroy: {fileID: 2761737501788284197}
   player: {fileID: 0}
   attackRecharge: 5
   range: 10

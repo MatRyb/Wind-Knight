@@ -18,16 +18,20 @@ public class WaveEnemy : EnemyController
 
     void Awake()
     {
-        if (TryGetComponent(out rb))
+        if (rb == null && TryGetComponent(out rb))
         {
             rb.gravityScale = 0f;
         }
-        else
+        else if (rb != null)
+        {
+            rb.gravityScale = 0f;
+        }
+        else if (rb == null)
         {
             Debug.LogError("Wave Enemy needs Rigidbody2D");
         }
 
-        if (!TryGetComponent(out wg))
+        if (wg == null && !TryGetComponent(out wg))
         {
             Debug.LogError("Wave Enemy needs WaveGenerator");
         }

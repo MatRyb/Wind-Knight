@@ -22,7 +22,7 @@ public class FlyingEnemy : EnemyController
     {
         if (attack && !settingOff)
         {
-            Vector3 dir = player.position - this.gameObject.transform.position;
+            Vector3 dir = player.position - gameObject.transform.position;
 
             if (Mathf.Abs(Vector3.Distance(Vector3.zero, dir)) > setOffRange)
             {

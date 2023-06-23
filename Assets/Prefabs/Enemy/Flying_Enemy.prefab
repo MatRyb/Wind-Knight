@@ -71,6 +71,7 @@ MonoBehaviour:
   health: 0
   bodySprite: {fileID: 1808458351645184598}
   deathParticle: {fileID: 840825463644067242, guid: 72c3b48529f8a104ca028811d4684334, type: 3}
+  objectToDestroy: {fileID: 2435575188841906576}
   player: {fileID: 0}
   attackRecharge: 1
   range: 7

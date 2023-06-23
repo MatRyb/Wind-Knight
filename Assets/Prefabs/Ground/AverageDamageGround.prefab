@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2751858212510257312}
   - component: {fileID: 2751858212510257319}
   m_Layer: 6
-  m_Name: DamageGround
+  m_Name: AverageDamageGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,4 +125,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  damage: 50
+  cooldown: 0.5
+  damage: 30
