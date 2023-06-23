@@ -4,7 +4,7 @@ using UnityEngine;
 public class OrigamiPuzzleManager : MonoBehaviour
 {
     [SerializeField] private GameObject interactInfoText;
-    [SerializeField] private OrigamiUIPuzzleManager puzzleUI;
+    [SerializeField] private OrigamiUIPuzzleManager3 puzzleUI;
 
     private void Start()
     {
