@@ -34775,6 +34775,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d21e04119650a748801ba8f6e5293b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactInfoText: {fileID: 0}
+  puzzleUI: {fileID: 0}
 --- !u!1001 &1903485040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36345,6 +36347,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 725455727}
     m_Modifications:
+    - target: {fileID: 877054572, guid: 5395a486d5bc2624dbd90610e3d7b9c4, type: 3}
+      propertyPath: mass
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1774885935407635897, guid: 5395a486d5bc2624dbd90610e3d7b9c4, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -37944,6 +37950,26 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8169836858625906196, guid: a9f50c6e756281940b4b7560f04c4f73, type: 3}
   m_PrefabInstance: {fileID: 1217893841}
   m_PrefabAsset: {fileID: 0}
+  UICamera: {fileID: 0}
+  UIObject: {fileID: 0}
+  width: 0
+  height: 0
+  frontPuzzle:
+    mesh: {fileID: 0}
+    material: {fileID: 0}
+    filter: {fileID: 0}
+    renderer: {fileID: 0}
+  backPuzzle:
+    mesh: {fileID: 0}
+    material: {fileID: 0}
+    filter: {fileID: 0}
+    renderer: {fileID: 0}
+  dragPoint:
+    xPos: 0
+    yPos: 0
+    pointObj: {fileID: 0}
+    startPos: {x: 0, y: 0, z: 0}
+    offset: {x: 0, y: 0, z: 0}
 --- !u!4 &2098908352 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 746952629089250866, guid: 5565056054d8663418ef7b179ff69b02, type: 3}
