@@ -53,6 +53,7 @@ public class OrigamiUIPuzzleManager3 : MonoBehaviour
     public bool clickeBlocked = false;
 
     private int currentOrderIndex = 0;
+    private bool solved = false;
 
     private void Start()
     {
@@ -74,7 +75,7 @@ public class OrigamiUIPuzzleManager3 : MonoBehaviour
                     {
                         FoldPaper(foldIndex);
                     }
-                    else
+                    else if (!solved)
                     {
                         var moveIndex = movesHistory.IndexOf(movesHistory.Find((m) => m.foldData == foldIndex));
                         if (moveIndex < currentOrderIndex - 1)
@@ -158,6 +159,8 @@ public class OrigamiUIPuzzleManager3 : MonoBehaviour
             {
                 obj.parent = PaperObject.transform;
             }
+
+            solved = CheckIsSolved();
         };
 
         StartCoroutine(FoldAroundAxis(RotateHandler.transform, fold.line.GetAxis(), fold.angle, RotateHandler.transform.position - new Vector3(0, 0, currentOrderIndex * 0.001f + 0.001f), .5f, false, finishAction));
@@ -292,6 +295,24 @@ public class OrigamiUIPuzzleManager3 : MonoBehaviour
 
         onFinish.Invoke();
         clickeBlocked = false;
+    }
+
+    private bool CheckIsSolved()
+    {
+        if (movesHistory.Count != folds.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < movesHistory.Count; i++)
+        {
+            if (movesHistory[i].foldData != i)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void SetUIOn()
