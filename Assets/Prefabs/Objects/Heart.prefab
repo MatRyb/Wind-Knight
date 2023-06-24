@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2496210551758240056}
   - component: {fileID: 2496210551758240057}
   - component: {fileID: 2496210551758240054}
-  - component: {fileID: 2496210551758240055}
+  - component: {fileID: 4624613356146118385}
   - component: {fileID: 2496210551758240052}
   m_Layer: 0
   m_Name: Heart
@@ -108,7 +108,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!60 &2496210551758240055
+--- !u!60 &4624613356146118385
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,7 +125,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.98, y: 0.95}
+    oldSize: {x: 0.8046875, y: 0.78515625}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -133,14 +133,21 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.02, y: 0.475}
-      - {x: -0.48999998, y: 0.005}
-      - {x: -0.48999998, y: -0.285}
-      - {x: -0.29999998, y: -0.475}
-      - {x: 0.47, y: -0.475}
-      - {x: 0.48999998, y: -0.385}
-      - {x: 0.48999998, y: 0.295}
-      - {x: 0.35999998, y: 0.475}
+    - - {x: 0.40234375, y: 0.103515625}
+      - {x: 0.40234375, y: 0.22460938}
+      - {x: 0.38671875, y: 0.24414062}
+      - {x: 0.25, y: 0.39257812}
+      - {x: 0.0234375, y: 0.39257812}
+      - {x: -0.0703125, y: 0.30664062}
+      - {x: -0.07421875, y: 0.115234375}
+      - {x: -0.0859375, y: 0.076171875}
+      - {x: -0.30859375, y: 0.083984375}
+      - {x: -0.40234375, y: -0.013671875}
+      - {x: -0.40234375, y: -0.24414062}
+      - {x: -0.25, y: -0.39257812}
+      - {x: 0.3671875, y: -0.39257812}
+      - {x: 0.37109375, y: -0.38476562}
+      - {x: 0.375, y: -0.34570312}
 --- !u!114 &2496210551758240052
 MonoBehaviour:
   m_ObjectHideFlags: 0
