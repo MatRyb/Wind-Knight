@@ -79,6 +79,15 @@ public class ObjectScript : ObjectHealth
 
         rb.velocity *= GameTimer.TimeMultiplier;
         rb.gravityScale = gravityScale * GameTimer.TimeMultiplier;
+
+        if (GameTimer.TimeMultiplier == GameTimer.STOPPED)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        else
+        {
+            rb.constraints = RigidbodyConstraints2D.None;
+        }
     }
 
     public override void OnDead()
@@ -136,11 +145,11 @@ public class ObjectScript : ObjectHealth
         {
             float damage = speed * (mass / 10) * factor;
 
-            TakeDamage(damage);
-
-            if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
+            if(!collision.collider.gameObject.TryGetComponent(out PlayerControler _)) 
             {
-                if (!collision.gameObject.CompareTag("Player"))
+                TakeDamage(damage);
+
+                if (collision.collider.gameObject.TryGetComponent(out IDamageTaker damageTaker))
                 {
                     damageTaker.TakeDamage(damage);
                 }
