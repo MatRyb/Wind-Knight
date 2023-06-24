@@ -12,14 +12,15 @@ public class ObjectScript : ObjectHealth
 
     [Header("Damage:")]
     [SerializeField] private float factor = 1.0f;
-    [SerializeField] private List<Sprite> states;
-    [SerializeField] private float percent;
     private SpriteRenderer image;
+    [SerializeField] private List<Sprite> states;
     [SerializeField] private float minSpeed = 2.0f;
     [SerializeField] private ParticleSystem destroyParticle;
 
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private Vector2 velocity;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float percent;
 
     void OnValidate()
     {
