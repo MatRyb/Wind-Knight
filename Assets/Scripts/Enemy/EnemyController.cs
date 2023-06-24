@@ -1,7 +1,11 @@
 using UnityEngine;
+using NaughtyAttributes;
 
 public abstract class EnemyController : ObjectHealth
 {
+    [SerializeField] private bool isPaperScrap = false;
+    [SerializeField][ShowIf("isPaperScrap")] private GameObject paperScrap;
+    private int paperScrapId = 0;
     [SerializeField] private SpriteRenderer bodySprite;
     [SerializeField] private ParticleSystem deathParticle;
     [SerializeField] private GameObject objectToDestroy;
@@ -33,11 +37,33 @@ public abstract class EnemyController : ObjectHealth
         bodySprite.color = val;
     }
 
+    public void SetIsPaperScrap(bool value)
+    {
+        isPaperScrap = value;
+    }
+
+    public void SetPaperScrapId(int value)
+    {
+        paperScrapId = value;
+    }
+
+    public bool HavePaperScrap()
+    {
+        return isPaperScrap;
+    }
+
     public override void OnDead()
     {
         ParticleSystem particle = Instantiate(deathParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
         particle.Play();
         Destroy(particle.gameObject, 3);
+
+        if (isPaperScrap)
+        {
+            GameObject scrap = Instantiate(paperScrap, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+            scrap.GetComponent<PaperScrap>().SetId(paperScrapId);
+        }
+
         Destroy(objectToDestroy != null ? objectToDestroy : gameObject);
     }
 }

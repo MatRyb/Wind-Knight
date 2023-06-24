@@ -195,6 +195,7 @@ public class LevelManager : MonoBehaviour
             instance.resp.id = startResp.id;
             instance.resp.position = startResp.position;
         }
+        FindObjectOfType<PaperScrapManager>().Restart();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
