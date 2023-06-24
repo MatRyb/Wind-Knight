@@ -163,10 +163,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38ece31f384d184ab6fc845b197e915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 500
+  maxHealth: 800
   health: 0
   rb: {fileID: 5323675703518036172}
-  mass: 1.25
+  mass: 5
   linearDrag: 0.3
   factor: 2.5
   states:

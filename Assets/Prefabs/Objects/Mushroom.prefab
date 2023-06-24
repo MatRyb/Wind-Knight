@@ -157,12 +157,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38ece31f384d184ab6fc845b197e915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 800
+  maxHealth: 1250
   health: 0
   rb: {fileID: 424403291205317841}
-  mass: 2.5
+  mass: 43
   linearDrag: 0.3
-  factor: 2.5
+  factor: 1.5
   states:
   - {fileID: 21300000, guid: a0a0cb077d6abf64c93c083ace0818f8, type: 3}
   minSpeed: 5
