@@ -21,6 +21,12 @@ public class ObjectScript : ObjectHealth
     [DisableIf("true")] [SerializeField] private Vector2 velocity;
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private float percent;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float maxSpeed;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float minDealtDamage;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float maxDealtDamage;
 
     void OnValidate()
     {
@@ -42,6 +48,12 @@ public class ObjectScript : ObjectHealth
         {
             Debug.LogError("ObjectScript -> ADD AT LEAST ONE STATE");
         }
+
+        maxSpeed = 32.69955f;
+
+        minDealtDamage = minSpeed * (mass / 10) * factor;
+
+        maxDealtDamage = maxSpeed * (mass / 10) * factor;
     }
 
     void Awake()
