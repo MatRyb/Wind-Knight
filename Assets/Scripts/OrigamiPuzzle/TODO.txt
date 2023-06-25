@@ -1,4 +1,3 @@
 - Zastąpić kursor graczem podlatującym
-- linia color czerwony
-- linia cieńsza
-- linia 
+- Oznaczyć wciśnięte przyciski
+- Podpisać kolejność wciśnięcia
