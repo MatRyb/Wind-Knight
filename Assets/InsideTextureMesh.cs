@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
+using NaughtyAttributes;
 
 [System.Serializable]
 struct Triangle
@@ -18,6 +16,13 @@ public class InsideTextureMesh : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     [SerializeField] private Material material;
+    //[SerializeField] private Vector2 tilling;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float height;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float width;
+    [Foldout("Info")]
+    [DisableIf("true")] [Tooltip("height / width")] [SerializeField] private float ratio;
 
     void Awake()
     {
@@ -41,6 +46,7 @@ public class InsideTextureMesh : MonoBehaviour
         }
 
         Vector2 maxCoords = Vector2.zero;
+        Vector2 minCoords = Vector2.zero;
         for (int i = 0; i < Verticles.Length; i++)
         {
             if (Verticles[i].x > maxCoords.x)
@@ -48,9 +54,19 @@ public class InsideTextureMesh : MonoBehaviour
                 maxCoords.x = Verticles[i].x;
             }
 
+            if (Verticles[i].x < minCoords.x)
+            {
+                minCoords.x = Verticles[i].x;
+            }
+
             if (Verticles[i].y > maxCoords.y)
             {
                 maxCoords.y = Verticles[i].y;
+            }
+
+            if (Verticles[i].y < minCoords.y)
+            {
+                minCoords.y = Verticles[i].y;
             }
         }
 
@@ -73,5 +89,11 @@ public class InsideTextureMesh : MonoBehaviour
 
         meshFilter.mesh = mesh;
         meshRenderer.material = material;
+        //meshRenderer.material.mainTextureScale = tilling;
+
+        height = maxCoords.y - minCoords.y;
+        width = maxCoords.x - minCoords.x;
+
+        ratio = height / width;
     }
 }
