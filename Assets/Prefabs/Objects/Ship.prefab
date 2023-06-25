@@ -223,7 +223,7 @@ MonoBehaviour:
   maxHealth: 2000
   health: 0
   rb: {fileID: 978479147232324858}
-  mass: 82
+  mass: 30
   linearDrag: 0.3
   factor: 1
   states:
@@ -232,3 +232,6 @@ MonoBehaviour:
   destroyParticle: {fileID: 840825463644067242, guid: 100b305cb1e473c4fbfb611c43b5e377, type: 3}
   velocity: {x: 0, y: 0}
   percent: 0
+  maxSpeed: 32.69955
+  minDealtDamage: 15
+  maxDealtDamage: 98.09865

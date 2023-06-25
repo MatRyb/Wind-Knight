@@ -22,7 +22,7 @@ public class ObjectScript : ObjectHealth
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private float percent;
     [Foldout("Info")]
-    [DisableIf("true")] [SerializeField] private float maxSpeed;
+    [DisableIf("true")] [SerializeField] private float maxSpeed = 32.69955f;
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private float minDealtDamage;
     [Foldout("Info")]
@@ -48,8 +48,6 @@ public class ObjectScript : ObjectHealth
         {
             Debug.LogError("ObjectScript -> ADD AT LEAST ONE STATE");
         }
-
-        maxSpeed = 32.69955f;
 
         minDealtDamage = minSpeed * (mass / 10) * factor;
 
@@ -145,10 +143,10 @@ public class ObjectScript : ObjectHealth
         {
             float damage = speed * (mass / 10) * factor;
 
-            if(!collision.collider.gameObject.TryGetComponent(out PlayerControler _)) 
-            {
-                TakeDamage(damage);
+            TakeDamage(damage);
 
+            if (!collision.collider.gameObject.TryGetComponent(out PlayerControler _)) 
+            {
                 if (collision.collider.gameObject.TryGetComponent(out IDamageTaker damageTaker))
                 {
                     damageTaker.TakeDamage(damage);
