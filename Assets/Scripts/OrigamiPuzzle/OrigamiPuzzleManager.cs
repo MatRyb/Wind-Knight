@@ -61,7 +61,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
     [Foldout("info")] [DisableIf("true")] [SerializeField] private List<FoldMove> movesHistory = new();
     [Foldout("info")] [DisableIf("true")] [SerializeField] private bool solved = false;
 
-    private int currentOrderIndex = 0;
+    public int currentOrderIndex { get; private set; } = 0;
     private bool clickeBlocked = false;
 
     private void Start()
@@ -73,74 +73,46 @@ public class OrigamiPuzzleManager : MonoBehaviour
         SpriteHandler.SetActive(false);
     }
 
-    bool once = false;
-    void Update()
+    public void HighlightFoldLine(int foldIndex, bool enable)
     {
-        if (solved)
+        if (enable)
         {
-            if (once)
-                return;
-            GenerateSprite();
-            SpriteHandler.AddComponent<Rigidbody2D>();
-            // Particle (Konfetii czy coœ)
-            foreach (var slice in currentPaperSlices)
+            if (!movesHistory.Exists((m) => m.foldIndex == foldIndex))
             {
-                slice.SetActive(false);
-            }
-            SpriteHandler.SetActive(true);
-            once = true;
-            return;
-        }
-
-        if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out RaycastHit hit))
-        {
-            if (hit.transform.TryGetComponent(out FoldPaperClicker clicker))
-            {
-                int foldIndex = clicker.foldIndex;
-                bool moveExists = movesHistory.Exists((m) => m.foldIndex == foldIndex);
-
-                if (!moveExists)
-                {
-                    // Highlight Fold Line
-                    LineHandler.SetActive(true);
-                    var line = LineHandler.GetComponent<LineRenderer>();
-                    line.SetPosition(0, PercentPointToGlobalPoint(folds[foldIndex].line.GetPoint(0f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
-                    line.SetPosition(1, PercentPointToGlobalPoint(folds[foldIndex].line.GetPoint(1f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
-                }
-
-                if (Input.GetMouseButtonDown(0) && !clickeBlocked)
-                {
-                    // Disable Fold Line Highlight
-                    LineHandler.SetActive(false);
-
-                    if (!moveExists)
-                    {
-                        FoldPaper(foldIndex);
-                    }
-                    else
-                    {
-                        var moveIndex = movesHistory.IndexOf(movesHistory.Find((m) => m.foldIndex == foldIndex));
-                        if (moveIndex < currentOrderIndex - 1)
-                        {
-                            StartCoroutine(FoldPaperBackToIndex(moveIndex));
-                        }
-                        else
-                        {
-                            FoldPaperBack();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // Disable Fold Line Highlight
-                LineHandler.SetActive(false);
+                // Enable Fold Line Highlight
+                LineHandler.SetActive(true);
+                var line = LineHandler.GetComponent<LineRenderer>();
+                line.SetPosition(0, PercentPointToGlobalPoint(folds[foldIndex].line.GetPoint(0f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
+                line.SetPosition(1, PercentPointToGlobalPoint(folds[foldIndex].line.GetPoint(1f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
             }
         }
         else
         {
             // Disable Fold Line Highlight
             LineHandler.SetActive(false);
+        }
+    }
+
+    public void FoldButtonClicked(int foldIndex)
+    {
+        if (!clickeBlocked)
+        {
+            if (!movesHistory.Exists((m) => m.foldIndex == foldIndex))
+            {
+                FoldPaper(foldIndex);
+            }
+            else
+            {
+                var moveIndex = movesHistory.IndexOf(movesHistory.Find((m) => m.foldIndex == foldIndex));
+                if (moveIndex < currentOrderIndex - 1)
+                {
+                    StartCoroutine(FoldPaperBackToIndex(moveIndex));
+                }
+                else
+                {
+                    FoldPaperBack();
+                }
+            }
         }
     }
 
@@ -219,7 +191,17 @@ public class OrigamiPuzzleManager : MonoBehaviour
             // Move Fold Lines to new Mesh Coordinates
             RecalculateFoldPaperBoundries();
 
-            solved = CheckIsSolved();
+            if (CheckIsSolved())
+            {
+                GenerateSprite();
+                SpriteHandler.AddComponent<Rigidbody2D>();
+                // Particle (Konfetii czy coœ)
+                foreach (var slice in currentPaperSlices)
+                {
+                    slice.SetActive(false);
+                }
+                SpriteHandler.SetActive(true);
+            }
         };
 
         StartCoroutine(FoldAroundAxis(RotateHandler.transform, (PercentPointToGlobalPoint(fold.line.GetPoint(1f)) - PercentPointToGlobalPoint(fold.line.GetPoint(0f))).normalized, fold.angle, RotateHandler.transform.position - new Vector3(0, 0, currentOrderIndex * 0.001f + 0.001f), .5f, false, finishAction));
