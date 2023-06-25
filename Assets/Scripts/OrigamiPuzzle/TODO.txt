@@ -1,0 +1,4 @@
+- Zastąpić kursor graczem podlatującym
+- linia color czerwony
+- linia cieńsza
+- linia 
