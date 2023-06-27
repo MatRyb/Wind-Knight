@@ -57,9 +57,10 @@ public class OrigamiPuzzleManager : MonoBehaviour
     [SerializeField] private FoldPaperClicker[] clickers;
     [SerializeField] private AnimationCurve rotCurve = new();
 
-    [Foldout("info")] [DisableIf("true")] [SerializeField] private FoldPaperBoundries paperBoundries = new();
-    [Foldout("info")] [DisableIf("true")] [SerializeField] private List<FoldMove> movesHistory = new();
-    [Foldout("info")] [DisableIf("true")] [SerializeField] private bool solved = false;
+    private bool True => true;
+    [Foldout("info")] [DisableIf("True")] [SerializeField] private FoldPaperBoundries paperBoundries = new();
+    [Foldout("info")] [DisableIf("True")] [SerializeField] private List<FoldMove> movesHistory = new();
+    [Foldout("info")] [DisableIf("True")] [SerializeField] private bool solved = false;
 
     public int CurrentOrderIndex { get; private set; } = 0;
     private bool clickBlocked = false;
@@ -354,7 +355,16 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
         foreach (var slice in currentPaperSlices)
         {
-            Mesh sliceMesh = slice.GetComponent<MeshFilter>().mesh;
+            Mesh sliceMesh;
+#if UNITY_EDITOR
+            //Only do this in the editor
+            MeshFilter mf = slice.GetComponent<MeshFilter>();
+            Mesh meshCopy = Instantiate<Mesh>(mf.sharedMesh) as Mesh;  //make a deep copy
+            sliceMesh = meshCopy;
+#else
+            //Do this in play mode
+            mesh = slice.GetComponent<MeshFilter>().mesh;
+#endif
             for (int i = 0; i < sliceMesh.vertices.Length; i++)
             {
                 Vector3 globalVertex = VertexPointToGlobal(sliceMesh.vertices[i], slice);
@@ -484,6 +494,8 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        RecalculateFoldPaperBoundries();
+
         foreach (var fold in folds)
         {
             if (movesHistory.Exists((m) => m.foldIndex == Array.IndexOf(folds, fold)))
@@ -496,12 +508,12 @@ public class OrigamiPuzzleManager : MonoBehaviour
             Vector3 pointA = PercentPointToGlobalPoint(line.GetPoint(0f));
             Vector3 midPoint = PercentPointToGlobalPoint(line.GetPoint(.5f));
             Vector3 pointB = PercentPointToGlobalPoint(line.GetPoint(1f));
-            Gizmos.DrawSphere(pointA, .2f);
-            Gizmos.DrawSphere(pointB, .2f);
+            Gizmos.DrawSphere(pointA, .4f);
+            Gizmos.DrawSphere(pointB, .4f);
             Gizmos.color = Color.green;
             Gizmos.DrawLine(pointA, pointB);
             Gizmos.color = Color.cyan;
-            Gizmos.DrawSphere(midPoint, .1f);
+            Gizmos.DrawSphere(midPoint, .3f);
 
             // Plane
             Vector3 side1 = PercentPointToGlobalPoint(line.GetPoint(1f)) - PercentPointToGlobalPoint(line.GetPoint(0f));
@@ -534,7 +546,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
             var vertices = mesh.vertices;
             for (int i = 0; i < vertices.Length; i++)
             {
-                Gizmos.DrawSphere(VertexPointToGlobal(vertices[i], slice), .1f);
+                Gizmos.DrawSphere(VertexPointToGlobal(vertices[i], slice), .3f);
             }
         }
     }
