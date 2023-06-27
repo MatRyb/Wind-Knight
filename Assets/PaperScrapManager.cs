@@ -27,6 +27,7 @@ public class PaperScrapManager : MonoBehaviour
     [SerializeField] private int collected = 0;
     [SerializeField] private int allPaperScraps = 0;
     [SerializeField] private TMP_Text text;
+    [SerializeField] private IPuzzleSolvedEvent puzzleSolvedEvent;
 
     private List<Scrap> scraps;
     private bool restart;
@@ -192,6 +193,11 @@ public class PaperScrapManager : MonoBehaviour
         collected += 1;
         scraps[paper.GetId()].collected = true;
         text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+
+        if (AreAllCollected())
+        {
+            puzzleSolvedEvent.Solved();
+        }
     }
 
     public void Restart()

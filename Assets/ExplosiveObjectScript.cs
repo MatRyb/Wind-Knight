@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using NaughtyAttributes;
 
 public class ExplosiveObjectScript : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class ExplosiveObjectScript : MonoBehaviour
     [SerializeField] private SpriteRenderer renderer;
     [SerializeField] private ParticleSystem destroyParticle;
     [SerializeField] private LayerMask nonActivatingLayers;
-    [SerializeField] private string[] nonActivatingTags = { "Object" };
+    [SerializeField] [Tag] private string[] nonActivatingTags = { "Object" };
 
     [SerializeField] private Color deafultColor = new((87f / 255f), 0, 0, 100);
     [SerializeField] private Color blinkColor = new(100, 0, 0, 100);
