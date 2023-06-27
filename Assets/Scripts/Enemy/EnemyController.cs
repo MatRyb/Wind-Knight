@@ -3,6 +3,7 @@ using NaughtyAttributes;
 
 public abstract class EnemyController : ObjectHealth
 {
+    [HideInInspector] public bool attacking = false;
     [SerializeField] private bool isPaperScrap = false;
     [SerializeField][ShowIf("isPaperScrap")] private GameObject paperScrap;
     private int paperScrapId = 0;
