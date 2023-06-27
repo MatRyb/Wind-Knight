@@ -293,6 +293,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 99357057, guid: c5dc2def10327e54ab25abdd1846021a, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1244794210149225916, guid: c5dc2def10327e54ab25abdd1846021a, type: 3}
       propertyPath: m_Name
       value: Enemy_Ranged 1

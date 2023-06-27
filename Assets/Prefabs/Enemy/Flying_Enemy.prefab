@@ -69,6 +69,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 0
+  isPaperScrap: 0
+  paperScrap: {fileID: 0}
   bodySprite: {fileID: 1808458351645184598}
   deathParticle: {fileID: 840825463644067242, guid: 72c3b48529f8a104ca028811d4684334, type: 3}
   objectToDestroy: {fileID: 2435575188841906576}
@@ -637,7 +639,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &363266237726616564
 MonoBehaviour:

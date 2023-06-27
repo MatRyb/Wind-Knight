@@ -12,7 +12,7 @@ public class ObjectScript : ObjectHealth
 
     [Header("Damage:")]
     [SerializeField] private float factor = 1.0f;
-    private SpriteRenderer image;
+    [SerializeField] private SpriteRenderer crackRenderer;
     [SerializeField] private List<Sprite> states;
     [SerializeField] private float minSpeed = 2.0f;
     [SerializeField] private ParticleSystem destroyParticle;
@@ -41,12 +41,17 @@ public class ObjectScript : ObjectHealth
 
         if (gameObject.GetComponent<Collider2D>() == null)
         {
-            Debug.LogError("ObjectScript -> NO COLLIDER ATTACHED");
+            Debug.LogError("ObjectScript[ " + gameObject.name + " ] -> NO COLLIDER ATTACHED");
+        }
+
+        if (crackRenderer == null)
+        {
+            Debug.LogError("ObjectScript[ " + gameObject.name + " ] -> NO CRACK RENDERER ATTACHED");
         }
 
         if (states.Count == 0)
         {
-            Debug.LogError("ObjectScript -> ADD AT LEAST ONE STATE");
+            Debug.LogError("ObjectScript[" + gameObject.name + "] -> ADD AT LEAST ONE STATE");
         }
 
         minDealtDamage = minSpeed * (mass / 10) * factor;
@@ -56,12 +61,14 @@ public class ObjectScript : ObjectHealth
 
     void Awake()
     {
-        image = gameObject.GetComponent<SpriteRenderer>();
-        image.sprite = states[0];
+        crackRenderer.sprite = states[0];
         rb.mass = mass;
         rb.drag = linearDrag;
         gravityScale = rb.gravityScale;
         StartHealth();
+
+        GameTimer.OnStart += StartGameTime;
+        GameTimer.OnStopped += StopGameTime;
     }
 
     void Update()
@@ -77,15 +84,16 @@ public class ObjectScript : ObjectHealth
 
         rb.velocity *= GameTimer.TimeMultiplier;
         rb.gravityScale = gravityScale * GameTimer.TimeMultiplier;
+    }
 
-        if (GameTimer.TimeMultiplier == GameTimer.STOPPED)
-        {
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
-        }
-        else
-        {
-            rb.constraints = RigidbodyConstraints2D.None;
-        }
+    public void StartGameTime()
+    {
+        rb.constraints = RigidbodyConstraints2D.None;
+    }
+
+    public void StopGameTime()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
     public override void OnDead()
@@ -125,11 +133,11 @@ public class ObjectScript : ObjectHealth
     {
         if (GetHealth() == GetMaxHealth())
         {
-            image.sprite = states[0];
+            crackRenderer.sprite = states[0];
         }
         else
         {
-            image.sprite = states[states.Count-1-Mathf.FloorToInt((states.Count/GetMaxHealth())*GetHealth())];
+            crackRenderer.sprite = states[states.Count - 1 - Mathf.FloorToInt((states.Count / GetMaxHealth()) * GetHealth())];
         }
     }
 
@@ -145,7 +153,7 @@ public class ObjectScript : ObjectHealth
 
             TakeDamage(damage);
 
-            if (!collision.collider.gameObject.TryGetComponent(out PlayerControler _)) 
+            if (!collision.collider.gameObject.TryGetComponent(out PlayerControler _))
             {
                 if (collision.collider.gameObject.TryGetComponent(out IDamageTaker damageTaker))
                 {
@@ -153,5 +161,19 @@ public class ObjectScript : ObjectHealth
                 }
             }
         }
+
+        /*
+        if (collision.collider.gameObject.TryGetComponent(out PlayerControler _))
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        */
     }
+
+    /*
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        rb.constraints = RigidbodyConstraints2D.None;
+    }
+    */
 }
