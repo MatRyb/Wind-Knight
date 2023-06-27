@@ -7,26 +7,6 @@ using System;
 public class OrigamiPuzzleManager : MonoBehaviour
 {
     // STRUCTS:
-
-    [System.Serializable]
-    public struct FoldLine
-    {
-        [SerializeField] private Vector2 pointA;
-        [SerializeField] private Vector2 pointB;
-
-        public Vector3 GetPoint(float t)
-        {
-            return pointA + (pointB - pointA) * t;
-        }
-    }
-
-    [System.Serializable]
-    public struct FoldData
-    {
-        public FoldLine line;
-        public float angle;
-    }
-
     [System.Serializable]
     public struct FoldMove
     {
@@ -35,7 +15,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
         public Vector3 rotateHandlerPos;
         public Vector3 rotateAxis;
         public float rotateAngle;
-        public int foldIndex;
+        public FoldPaperClicker foldButton;
     }
 
     [System.Serializable]
@@ -53,14 +33,21 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
     [Header("Main Objects:")]
     [SerializeField] private List<GameObject> currentPaperSlices = new();
-    [SerializeField] private FoldData[] folds;
-    [SerializeField] private FoldPaperClicker[] clickers;
+    [SerializeField] private FoldPaperClicker[] foldButtons;
     [SerializeField] private AnimationCurve rotCurve = new();
 
     private bool True => true;
     [Foldout("info")] [DisableIf("True")] [SerializeField] private FoldPaperBoundries paperBoundries = new();
     [Foldout("info")] [DisableIf("True")] [SerializeField] private List<FoldMove> movesHistory = new();
     [Foldout("info")] [DisableIf("True")] [SerializeField] private bool solved = false;
+
+    public FoldPaperBoundries boundries {
+        get 
+        {
+            RecalculateFoldPaperBoundries();
+            return paperBoundries; 
+        } 
+    }
 
     public int CurrentOrderIndex { get; private set; } = 0;
     private bool clickBlocked = false;
@@ -74,17 +61,17 @@ public class OrigamiPuzzleManager : MonoBehaviour
         SpriteHandler.SetActive(false);
     }
 
-    public void HighlightFoldLine(int foldIndex, bool enable)
+    public void HighlightFoldLine(FoldPaperClicker button, bool enable)
     {
         if (enable)
         {
-            if (!movesHistory.Exists((m) => m.foldIndex == foldIndex))
+            if (!movesHistory.Exists((m) => m.foldButton == button))
             {
                 // Enable Fold Line Highlight
                 LineHandler.SetActive(true);
                 var line = LineHandler.GetComponent<LineRenderer>();
-                line.SetPosition(0, PercentPointToGlobalPoint(folds[foldIndex].line.GetPoint(0f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
-                line.SetPosition(1, PercentPointToGlobalPoint(folds[foldIndex].line.GetPoint(1f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
+                line.SetPosition(0, PercentPointToGlobalPoint(button.fold.line.GetPoint(0f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
+                line.SetPosition(1, PercentPointToGlobalPoint(button.fold.line.GetPoint(1f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
             }
         }
         else
@@ -94,17 +81,17 @@ public class OrigamiPuzzleManager : MonoBehaviour
         }
     }
 
-    public void FoldButtonClicked(int foldIndex)
+    public void FoldButtonClicked(FoldPaperClicker button)
     {
         if (!clickBlocked)
         {
-            if (!movesHistory.Exists((m) => m.foldIndex == foldIndex))
+            if (!movesHistory.Exists((m) => m.foldButton == button))
             {
-                FoldPaper(foldIndex);
+                FoldPaper(button);
             }
             else
             {
-                var moveIndex = movesHistory.IndexOf(movesHistory.Find((m) => m.foldIndex == foldIndex));
+                var moveIndex = movesHistory.IndexOf(movesHistory.Find((m) => m.foldButton == button));
                 if (moveIndex < CurrentOrderIndex - 1)
                 {
                     StartCoroutine(FoldPaperBackToIndex(moveIndex));
@@ -132,15 +119,15 @@ public class OrigamiPuzzleManager : MonoBehaviour
         yield return null;
     }
 
-    private void FoldPaper(int foldIndex)
+    private void FoldPaper(FoldPaperClicker button)
     {
-        GetClicker(foldIndex).OrderIndex = CurrentOrderIndex;
+        button.OrderIndex = CurrentOrderIndex;
         List<GameObject> toRotateSlices = new();
         List<GameObject> newSlices = new();
-        var fold = folds[foldIndex];
+        var fold = button.fold;
         foreach (var c in currentPaperSlices)
         {
-            Plane p = GetPlaneForObjectFromLine(fold.line, c);
+            Plane p = GetPlaneForObjectFromLine(fold.line.GetPoint(0f), fold.line.GetPoint(1f), c);
             GameObject[] slices = Slicer.Slice(p, c);
 
             // Check Slices (if one is empty don't create new)
@@ -176,7 +163,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
             rotateHandlerPos = PercentPointToGlobalPoint(fold.line.GetPoint(.5f)),
             rotateAxis = (PercentPointToGlobalPoint(fold.line.GetPoint(1f)) - PercentPointToGlobalPoint(fold.line.GetPoint(0f))).normalized,
             rotateAngle = fold.angle,
-            foldIndex = foldIndex
+            foldButton = button
         };
         movesHistory.Add(move);
 
@@ -196,11 +183,14 @@ public class OrigamiPuzzleManager : MonoBehaviour
             if (CheckIsSolved())
             {
                 GenerateSprite();
-                SpriteHandler.AddComponent<Rigidbody2D>();
                 // Particle (Konfetii czy coœ)
                 foreach (var slice in currentPaperSlices)
                 {
                     slice.SetActive(false);
+                }
+                foreach (var button in foldButtons)
+                {
+                    button.enabled = false;
                 }
                 SpriteHandler.SetActive(true);
             }
@@ -249,17 +239,17 @@ public class OrigamiPuzzleManager : MonoBehaviour
             // Move Fold Lines to new Mesh Coordinates
             RecalculateFoldPaperBoundries();
 
-            GetClicker(move.foldIndex).OrderIndex = -1;
+            move.foldButton.OrderIndex = -1;
         };
 
         StartCoroutine(FoldAroundAxis(RotateHandler.transform, move.rotateAxis, -move.rotateAngle, RotateHandler.transform.position - new Vector3(0, 0, CurrentOrderIndex * 0.001f - 0.001f), .5f, true, finishAction));
         LineHandler.transform.position += new Vector3(0, 0, 0.001f);
     }
 
-    private Vector3 PercentPointToGlobalPoint(Vector2 point)
+    public Vector3 PercentPointToGlobalPoint(Vector2 point)
     {
-        float x = (point.x / 100f) * (paperBoundries.max.x - paperBoundries.min.x) + paperBoundries.min.x;
-        float y = (point.y / 100f) * (paperBoundries.max.y - paperBoundries.min.y) + paperBoundries.min.y;
+        float x = (point.x / 100f) * (boundries.max.x - boundries.min.x) + boundries.min.x;
+        float y = (point.y / 100f) * (boundries.max.y - boundries.min.y) + boundries.min.y;
         return new Vector3(x, y, PaperObject.transform.position.z);
     }
 
@@ -269,10 +259,10 @@ public class OrigamiPuzzleManager : MonoBehaviour
         return trs.MultiplyPoint3x4(point);
     }
 
-    private Plane GetPlaneForObjectFromLine(FoldLine line, GameObject other)
+    private Plane GetPlaneForObjectFromLine(Vector3 pointA, Vector3 pointB, GameObject other)
     {
         // Create a triangle between the tip and base so that we can get the normal
-        Vector3 side1 = PercentPointToGlobalPoint(line.GetPoint(1f)) - PercentPointToGlobalPoint(line.GetPoint(0f));
+        Vector3 side1 = PercentPointToGlobalPoint(pointB) - PercentPointToGlobalPoint(pointA);
 
         //Get the point perpendicular to the triangle above which is the normal
         //https://docs.unity3d.com/Manual/ComputingNormalPerpendicularVector.html
@@ -282,17 +272,9 @@ public class OrigamiPuzzleManager : MonoBehaviour
         Vector3 transformedNormal = ((Vector3)(other.transform.localToWorldMatrix.transpose * normal)).normalized;
 
         //Get the enter position relative to the object we're cutting's local transform
-        Vector3 transformedStartingPoint = other.transform.InverseTransformPoint(PercentPointToGlobalPoint(line.GetPoint(0f)));
+        Vector3 transformedStartingPoint = other.transform.InverseTransformPoint(PercentPointToGlobalPoint(pointA));
 
         Plane plane = new(transformedNormal, transformedStartingPoint);
-
-        /*var direction = Vector3.Dot(Vector3.up, normal);
-
-        //Flip the plane so that we always know which side the positive mesh is on
-        if (direction < 0)
-        {
-            plane.Flip();
-        }*/
 
         return plane;
     }
@@ -331,14 +313,15 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
     private bool CheckIsSolved()
     {
-        if (movesHistory.Count != folds.Length)
+        if (movesHistory.Count != foldButtons.Length)
         {
             return false;
         }
 
         for (int i = 0; i < movesHistory.Count; i++)
         {
-            if (movesHistory[i].foldIndex != i)
+            var foldIndex = Array.IndexOf(foldButtons, movesHistory[i].foldButton);
+            if (foldIndex != i)
             {
                 return false;
             }
@@ -487,45 +470,29 @@ public class OrigamiPuzzleManager : MonoBehaviour
         }
     }
 
-    private FoldPaperClicker GetClicker(int foldIndex)
-    {
-        return Array.Find(clickers, (cl) => cl.foldIndex == foldIndex);
-    }
-
     private void OnDrawGizmosSelected()
     {
-        RecalculateFoldPaperBoundries();
-
-        foreach (var fold in folds)
+        foreach (var button in foldButtons)
         {
-            if (movesHistory.Exists((m) => m.foldIndex == Array.IndexOf(folds, fold)))
+            if (movesHistory.Exists((m) => m.foldButton == button))
             {
                 continue;
             }
 
-            var line = fold.line;
-            Gizmos.color = Color.red;
-            Vector3 pointA = PercentPointToGlobalPoint(line.GetPoint(0f));
-            Vector3 midPoint = PercentPointToGlobalPoint(line.GetPoint(.5f));
-            Vector3 pointB = PercentPointToGlobalPoint(line.GetPoint(1f));
-            Gizmos.DrawSphere(pointA, .4f);
-            Gizmos.DrawSphere(pointB, .4f);
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(pointA, pointB);
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawSphere(midPoint, .3f);
+            button.OnDrawGizmosSelected();
+            var line = button.fold.line;
 
             // Plane
             Vector3 side1 = PercentPointToGlobalPoint(line.GetPoint(1f)) - PercentPointToGlobalPoint(line.GetPoint(0f));
             Vector3 normal = Vector3.Cross(side1, Vector3.forward).normalized;
             Quaternion rotation = Quaternion.LookRotation(PaperObject.transform.TransformDirection(normal));
             Vector3 planePos = PercentPointToGlobalPoint(line.GetPoint(.5f));
-            Matrix4x4 trs = Matrix4x4.TRS(planePos, rotation, Vector3.one);
+            Matrix4x4 trs = Matrix4x4.TRS(planePos, rotation, new Vector3(2f, 10f, 0.0001f));
             Gizmos.matrix = trs;
             Color color = Color.blue;
             color.a = 125;
             Gizmos.color = color;
-            Gizmos.DrawCube(Vector3.zero, new Vector3(2f, 10f, 0.0001f));
+            Gizmos.DrawCube(Vector3.zero, Vector3.one);
 
             Gizmos.matrix = Matrix4x4.identity;
         }

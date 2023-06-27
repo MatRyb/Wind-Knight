@@ -246,24 +246,7 @@ MonoBehaviour:
   SpriteHandler: {fileID: 7701394291187255139}
   currentPaperSlices:
   - {fileID: 8540967181219629661}
-  folds:
-  - line:
-      pointA: {x: 100, y: 80}
-      pointB: {x: 0, y: 100}
-    angle: 180
-  - line:
-      pointA: {x: 75, y: 0}
-      pointB: {x: 75, y: 100}
-    angle: 180
-  - line:
-      pointA: {x: 30, y: 0}
-      pointB: {x: 100, y: 100}
-    angle: 180
-  - line:
-      pointA: {x: 100, y: 60}
-      pointB: {x: 0, y: 60}
-    angle: 180
-  clickers:
+  foldButtons:
   - {fileID: 7701394291229982171}
   - {fileID: 7600044990852395107}
   - {fileID: 7600044992703270508}
@@ -293,8 +276,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   paperBoundries:
-    min: {x: -3.4246705, y: -3.4246576}
-    max: {x: 3.4246576, y: 3.4246576}
+    min: {x: 178.72598, y: -427.014}
+    max: {x: 199.27397, y: -406.46603}
   movesHistory: []
   solved: 0
 --- !u!1 &7701394291187255139
@@ -308,6 +291,7 @@ GameObject:
   - component: {fileID: 7701394291187255149}
   - component: {fileID: 7701394291187255148}
   - component: {fileID: 964696617841960678}
+  - component: {fileID: 7440413757375013510}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -411,6 +395,27 @@ PolygonCollider2D:
       - {x: -2.615, y: -2.615}
       - {x: 2.615, y: -2.615}
       - {x: 2.615, y: 2.615}
+--- !u!50 &7440413757375013510
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7701394291187255139}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7701394291702843831
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,6 +627,22 @@ PrefabInstance:
       propertyPath: foldIndex
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.angle
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointA.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointB.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointB.y
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7600044992773561500, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
       propertyPath: m_Name
       value: FoldButton (Bottom-Right)
@@ -766,6 +787,22 @@ PrefabInstance:
     - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
       propertyPath: foldIndex
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.angle
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointA.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointA.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointB.y
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 7600044992773561500, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
       propertyPath: m_Name
@@ -912,6 +949,22 @@ PrefabInstance:
       propertyPath: foldIndex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.angle
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointA.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointB.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointB.y
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7600044992773561500, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
       propertyPath: m_Name
       value: FoldButton (Right)
@@ -1037,6 +1090,22 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 7701394290925839233}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.angle
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointA.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointA.y
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600044992773561498, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
+      propertyPath: fold.line.pointB.y
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7600044992773561500, guid: e94f7935e18df1948821472ddc7d28da, type: 3}
       propertyPath: m_Name
       value: FoldButton (Top-Right)

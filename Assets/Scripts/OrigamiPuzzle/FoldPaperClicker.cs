@@ -7,8 +7,28 @@ using TMPro;
 [RequireComponent(typeof(Collider2D))]
 public class FoldPaperClicker : MonoBehaviour
 {
+    // Structs:
+    [System.Serializable]
+    public struct FoldLine
+    {
+        [SerializeField] private Vector2 pointA;
+        [SerializeField] private Vector2 pointB;
+
+        public Vector3 GetPoint(float t)
+        {
+            return pointA + (pointB - pointA) * t;
+        }
+    }
+
+    [System.Serializable]
+    public struct FoldData
+    {
+        public FoldLine line;
+        public float angle;
+    }
+
     public OrigamiPuzzleManager manager;
-    public int foldIndex;
+    public FoldData fold;
     private int orderIndex = -1;
     public int OrderIndex
     {
@@ -22,10 +42,13 @@ public class FoldPaperClicker : MonoBehaviour
             OrderChanged();
         }
     }
+    public bool enabled = true;
 
+    [Header("Canvas:")]
     public GameObject orderCanvas;
     public TextMeshProUGUI orderText;
 
+    [Header("Sprite:")]
     public SpriteRenderer spriteRenderer;
     public Color buttonEnableColor;
     public Color buttonDisableColor;
@@ -55,7 +78,7 @@ public class FoldPaperClicker : MonoBehaviour
     {
         if (OrderIndex == -1)
         {
-            manager.HighlightFoldLine(foldIndex, true);
+            manager.HighlightFoldLine(this, true);
         }
     }
 
@@ -63,19 +86,19 @@ public class FoldPaperClicker : MonoBehaviour
     {
         if (OrderIndex == -1)
         {
-            manager.HighlightFoldLine(foldIndex, true);
+            manager.HighlightFoldLine(this, true);
         }
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && enabled)
         {
             if (OrderIndex != -1)
             {
-                manager.HighlightFoldLine(foldIndex, true);
+                manager.HighlightFoldLine(this, true);
             }
             else
             {
-                manager.HighlightFoldLine(foldIndex, false);
+                manager.HighlightFoldLine(this, false);
             }
-            manager.FoldButtonClicked(foldIndex);
+            manager.FoldButtonClicked(this);
         }
     }
 
@@ -83,7 +106,22 @@ public class FoldPaperClicker : MonoBehaviour
     {
         if (OrderIndex == -1)
         {
-            manager.HighlightFoldLine(foldIndex, false);
+            manager.HighlightFoldLine(this, false);
         }
+    }
+
+    public void OnDrawGizmosSelected()
+    {
+        var line = fold.line;
+        Gizmos.color = Color.red;
+        Vector3 pointA = manager.PercentPointToGlobalPoint(line.GetPoint(0f));
+        Vector3 midPoint = manager.PercentPointToGlobalPoint(line.GetPoint(.5f));
+        Vector3 pointB = manager.PercentPointToGlobalPoint(line.GetPoint(1f));
+        Gizmos.DrawSphere(pointA, .4f);
+        Gizmos.DrawSphere(pointB, .4f);
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(pointA, pointB);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawSphere(midPoint, .3f);
     }
 }
