@@ -295,6 +295,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: eca20e7f552f64e40a22610851266d90, type: 3}
   - {fileID: 21300000, guid: d0aed6d7e9617ca4db1331a4e158bfaa, type: 3}
   minSpeed: 5
+  destroyColor1: {r: 0.8980393, g: 0.8705883, b: 0.36862746, a: 1}
+  destroyColor2: {r: 0.2509804, g: 0.7568628, b: 0.36078432, a: 1}
   destroyParticle: {fileID: 840825463644067242, guid: 100b305cb1e473c4fbfb611c43b5e377, type: 3}
   velocity: {x: 0, y: 0}
   percent: 0

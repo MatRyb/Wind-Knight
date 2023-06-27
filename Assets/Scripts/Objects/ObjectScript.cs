@@ -15,6 +15,10 @@ public class ObjectScript : ObjectHealth
     [SerializeField] private SpriteRenderer crackRenderer;
     [SerializeField] private List<Sprite> states;
     [SerializeField] private float minSpeed = 2.0f;
+
+    [Header("Particle:")]
+    [SerializeField] private Color destroyColor1;
+    [SerializeField] private Color destroyColor2;
     [SerializeField] private ParticleSystem destroyParticle;
 
     [Foldout("Info")]
@@ -99,9 +103,17 @@ public class ObjectScript : ObjectHealth
     public override void OnDead()
     {
         ParticleSystem particle = Instantiate(destroyParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        var mainModule = particle.main;
+        mainModule.startColor = new ParticleSystem.MinMaxGradient(destroyColor1, destroyColor2);
         particle.Play();
         Destroy(particle.gameObject, 3);
         Destroy(gameObject);
+    }
+
+    public void OnDestroy()
+    {
+        GameTimer.OnStart -= StartGameTime;
+        GameTimer.OnStopped -= StopGameTime;
     }
 
     public float GetMass()
