@@ -246,7 +246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2877000682629189593}
   - component: {fileID: 3351527090889832628}
-  - component: {fileID: 1059568524612386107}
+  - component: {fileID: 4484454671733872897}
   - component: {fileID: 7600044992773561498}
   m_Layer: 0
   m_Name: FoldButton
@@ -323,8 +323,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &1059568524612386107
-BoxCollider2D:
+--- !u!58 &4484454671733872897
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -337,18 +337,8 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Radius: 0.5
 --- !u!114 &7600044992773561498
 MonoBehaviour:
   m_ObjectHideFlags: 0

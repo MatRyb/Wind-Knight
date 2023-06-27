@@ -53,7 +53,10 @@ public class FoldPaperClicker : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        manager.HighlightFoldLine(foldIndex, true);
+        if (OrderIndex == -1)
+        {
+            manager.HighlightFoldLine(foldIndex, true);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -66,12 +69,10 @@ public class FoldPaperClicker : MonoBehaviour
         {
             if (OrderIndex != -1)
             {
-                OrderIndex = -1;
                 manager.HighlightFoldLine(foldIndex, true);
             }
             else
             {
-                OrderIndex = manager.currentOrderIndex;
                 manager.HighlightFoldLine(foldIndex, false);
             }
             manager.FoldButtonClicked(foldIndex);
@@ -80,6 +81,9 @@ public class FoldPaperClicker : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        manager.HighlightFoldLine(foldIndex, false);
+        if (OrderIndex == -1)
+        {
+            manager.HighlightFoldLine(foldIndex, false);
+        }
     }
 }

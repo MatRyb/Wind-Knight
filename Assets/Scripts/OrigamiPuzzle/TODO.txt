@@ -1,3 +1,1 @@
-- Zastąpić kursor graczem podlatującym
-- Oznaczyć wciśnięte przyciski
-- Podpisać kolejność wciśnięcia
+- Obiekt (Sprite) przed strzałkami

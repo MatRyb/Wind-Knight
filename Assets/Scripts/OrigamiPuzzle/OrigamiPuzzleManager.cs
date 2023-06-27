@@ -30,8 +30,8 @@ public class OrigamiPuzzleManager : MonoBehaviour
     [System.Serializable]
     public struct FoldMove
     {
-        public List<GameObject> oldState;
-        public List<GameObject> rotatedObjects;
+        public GameObject[] oldState;
+        public GameObject[] rotatedObjects;
         public Vector3 rotateHandlerPos;
         public Vector3 rotateAxis;
         public float rotateAngle;
@@ -49,20 +49,20 @@ public class OrigamiPuzzleManager : MonoBehaviour
     [SerializeField] private GameObject PaperObject = null;
     [SerializeField] private GameObject RotateHandler = null;
     [SerializeField] private GameObject LineHandler = null;
-    [SerializeField] private GameObject SpriteObject = null;
     [SerializeField] private GameObject SpriteHandler = null;
 
     [Header("Main Objects:")]
     [SerializeField] private List<GameObject> currentPaperSlices = new();
-    [SerializeField] private List<FoldData> folds = new();
+    [SerializeField] private FoldData[] folds;
+    [SerializeField] private FoldPaperClicker[] clickers;
     [SerializeField] private AnimationCurve rotCurve = new();
 
     [Foldout("info")] [DisableIf("true")] [SerializeField] private FoldPaperBoundries paperBoundries = new();
     [Foldout("info")] [DisableIf("true")] [SerializeField] private List<FoldMove> movesHistory = new();
     [Foldout("info")] [DisableIf("true")] [SerializeField] private bool solved = false;
 
-    public int currentOrderIndex { get; private set; } = 0;
-    private bool clickeBlocked = false;
+    public int CurrentOrderIndex { get; private set; } = 0;
+    private bool clickBlocked = false;
 
     private void Start()
     {
@@ -95,7 +95,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
     public void FoldButtonClicked(int foldIndex)
     {
-        if (!clickeBlocked)
+        if (!clickBlocked)
         {
             if (!movesHistory.Exists((m) => m.foldIndex == foldIndex))
             {
@@ -104,7 +104,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
             else
             {
                 var moveIndex = movesHistory.IndexOf(movesHistory.Find((m) => m.foldIndex == foldIndex));
-                if (moveIndex < currentOrderIndex - 1)
+                if (moveIndex < CurrentOrderIndex - 1)
                 {
                     StartCoroutine(FoldPaperBackToIndex(moveIndex));
                 }
@@ -118,10 +118,10 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
     IEnumerator FoldPaperBackToIndex(int index)
     {
-        int tmpIndex = currentOrderIndex;
-        while (currentOrderIndex != index)
+        int tmpIndex = CurrentOrderIndex;
+        while (CurrentOrderIndex != index)
         {
-            if (tmpIndex == currentOrderIndex)
+            if (tmpIndex == CurrentOrderIndex)
             {
                 FoldPaperBack();
                 tmpIndex--;
@@ -133,6 +133,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
     private void FoldPaper(int foldIndex)
     {
+        GetClicker(foldIndex).OrderIndex = CurrentOrderIndex;
         List<GameObject> toRotateSlices = new();
         List<GameObject> newSlices = new();
         var fold = folds[foldIndex];
@@ -169,8 +170,8 @@ public class OrigamiPuzzleManager : MonoBehaviour
         // Make History
         FoldMove move = new()
         {
-            oldState = oldSlices,
-            rotatedObjects = toRotateSlices,
+            oldState = oldSlices.ToArray(),
+            rotatedObjects = toRotateSlices.ToArray(),
             rotateHandlerPos = PercentPointToGlobalPoint(fold.line.GetPoint(.5f)),
             rotateAxis = (PercentPointToGlobalPoint(fold.line.GetPoint(1f)) - PercentPointToGlobalPoint(fold.line.GetPoint(0f))).normalized,
             rotateAngle = fold.angle,
@@ -204,7 +205,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
             }
         };
 
-        StartCoroutine(FoldAroundAxis(RotateHandler.transform, (PercentPointToGlobalPoint(fold.line.GetPoint(1f)) - PercentPointToGlobalPoint(fold.line.GetPoint(0f))).normalized, fold.angle, RotateHandler.transform.position - new Vector3(0, 0, currentOrderIndex * 0.001f + 0.001f), .5f, false, finishAction));
+        StartCoroutine(FoldAroundAxis(RotateHandler.transform, (PercentPointToGlobalPoint(fold.line.GetPoint(1f)) - PercentPointToGlobalPoint(fold.line.GetPoint(0f))).normalized, fold.angle, RotateHandler.transform.position - new Vector3(0, 0, CurrentOrderIndex * 0.001f + 0.001f), .5f, false, finishAction));
         LineHandler.transform.position += new Vector3(0, 0, -0.001f);
     }
 
@@ -231,7 +232,8 @@ public class OrigamiPuzzleManager : MonoBehaviour
             {
                 obj.SetActive(true);
             }
-            currentPaperSlices = move.oldState;
+            currentPaperSlices.Clear();
+            currentPaperSlices.AddRange(move.oldState);
 
             movesHistory.Remove(move);
 
@@ -245,9 +247,11 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
             // Move Fold Lines to new Mesh Coordinates
             RecalculateFoldPaperBoundries();
+
+            GetClicker(move.foldIndex).OrderIndex = -1;
         };
 
-        StartCoroutine(FoldAroundAxis(RotateHandler.transform, move.rotateAxis, -move.rotateAngle, RotateHandler.transform.position - new Vector3(0, 0, currentOrderIndex * 0.001f - 0.001f), .5f, true, finishAction));
+        StartCoroutine(FoldAroundAxis(RotateHandler.transform, move.rotateAxis, -move.rotateAngle, RotateHandler.transform.position - new Vector3(0, 0, CurrentOrderIndex * 0.001f - 0.001f), .5f, true, finishAction));
         LineHandler.transform.position += new Vector3(0, 0, 0.001f);
     }
 
@@ -294,7 +298,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
     IEnumerator FoldAroundAxis(Transform paperTransform, Vector3 axis, float angleChange, Vector3 endPosition, float duration, bool back, Action onFinish)
     {
-        clickeBlocked = true;
+        clickBlocked = true;
 
         Quaternion startRotation = paperTransform.rotation;
         Vector3 startPosition = paperTransform.position;
@@ -313,20 +317,20 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
         if (back)
         {
-            currentOrderIndex--;
+            CurrentOrderIndex--;
         }
         else
         {
-            currentOrderIndex++;
+            CurrentOrderIndex++;
         }
 
         onFinish.Invoke();
-        clickeBlocked = false;
+        clickBlocked = false;
     }
 
     private bool CheckIsSolved()
     {
-        if (movesHistory.Count != folds.Count)
+        if (movesHistory.Count != folds.Length)
         {
             return false;
         }
@@ -379,7 +383,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
     private void GenerateSprite()
     {
-        SpriteRenderer renderer = SpriteObject.GetComponent<SpriteRenderer>();
+        SpriteRenderer renderer = SpriteHandler.GetComponent<SpriteRenderer>();
         Sprite sprite = renderer.sprite;
         List<Vector3> verticies = new();
         List<int> triangles = new();
@@ -409,29 +413,38 @@ public class OrigamiPuzzleManager : MonoBehaviour
         Vector2 spriteMin = Vector2.zero;
         Vector2 spriteMax = Vector2.zero;
         GetMaxAndMinCoordinates(sprite.vertices, ref spriteMin, ref spriteMax);
-        spriteMin = VertexPointToGlobal(spriteMin, SpriteObject);
-        spriteMax = VertexPointToGlobal(spriteMax, SpriteObject);
+        spriteMin = VertexPointToGlobal(spriteMin, SpriteHandler);
+        spriteMax = VertexPointToGlobal(spriteMax, SpriteHandler);
 
         float widthRatio = (paperBoundries.max.x - paperBoundries.min.x) / (spriteMax.x - spriteMin.x);
         float heightRatio = (paperBoundries.max.y - paperBoundries.min.y) / (spriteMax.y - spriteMin.y);
 
-        SpriteObject.transform.localScale = new Vector3(widthRatio, heightRatio, 1f);
+        SpriteHandler.transform.localScale = new Vector3(SpriteHandler.transform.localScale.x * widthRatio, SpriteHandler.transform.localScale.y * heightRatio, 1f);
 
         // Transform Sprite
         GetMaxAndMinCoordinates(sprite.vertices, ref spriteMin, ref spriteMax);
-        spriteMin = VertexPointToGlobal(spriteMin, SpriteObject);
-        spriteMax = VertexPointToGlobal(spriteMax, SpriteObject);
+        spriteMin = VertexPointToGlobal(spriteMin, SpriteHandler);
+        spriteMax = VertexPointToGlobal(spriteMax, SpriteHandler);
 
         SpriteHandler.transform.position += new Vector3(paperBoundries.max.x - spriteMax.x, paperBoundries.max.y - spriteMax.y, 0f);
 
-        //SpriteObject.transform.localScale = new Vector3(1f, (paperBoundries.max.y - paperBoundries.min.y) / (paperBoundries.max.x - paperBoundries.min.x), 1f);
-
-        // Update Polygon Collider (Przy kwadracie nie dzia³a XD, B£AD: nie dzielê na ró¿ne pathy wzglêdem submeshy - na kiedy indziej w tym przypadku na razie dzia³a git :) )
-        List<Vector2> points = new();
-        List<Vector2> simplifiedPoints = new();
-        points.AddRange(sprite.vertices);
-        LineUtility.Simplify(points, 0.05f, simplifiedPoints);
-        SpriteObject.GetComponent<PolygonCollider2D>().SetPath(0, simplifiedPoints);
+        // Update Polygon Collider
+        SpriteHandler.GetComponent<PolygonCollider2D>().pathCount = currentPaperSlices.Count;
+        for (int i = 0; i < currentPaperSlices.Count; i++)
+        {
+            Mesh tempMesh = currentPaperSlices[i].GetComponent<MeshFilter>().mesh;
+            List<Vector2> points = new();
+            List<Vector2> simplifiedPoints = new();
+            for (int v = 0; v < tempMesh.vertices.Length; v++)
+            {
+                Vector3 global = VertexPointToGlobal(tempMesh.vertices[v], currentPaperSlices[i]);
+                Vector3 normalized = new((global.x - paperBoundries.min.x) / (paperBoundries.max.x - paperBoundries.min.x), (global.y - paperBoundries.min.y) / (paperBoundries.max.y - paperBoundries.min.y));
+                Vector2 imageVert = new(normalized.x * (sprite.bounds.max.x - sprite.bounds.min.x) + sprite.bounds.min.x, normalized.y * (sprite.bounds.max.y - sprite.bounds.min.y) + sprite.bounds.min.y);
+                points.Add(imageVert);
+            }
+            LineUtility.Simplify(points, 0.05f, simplifiedPoints);
+            SpriteHandler.GetComponent<PolygonCollider2D>().SetPath(i, simplifiedPoints);
+        }
     }
 
     private void GetMaxAndMinCoordinates(Vector2[] coordinates, ref Vector2 min, ref Vector2 max)
@@ -464,11 +477,16 @@ public class OrigamiPuzzleManager : MonoBehaviour
         }
     }
 
+    private FoldPaperClicker GetClicker(int foldIndex)
+    {
+        return Array.Find(clickers, (cl) => cl.foldIndex == foldIndex);
+    }
+
     private void OnDrawGizmosSelected()
     {
         foreach (var fold in folds)
         {
-            if (movesHistory.Exists((m) => m.foldIndex == folds.IndexOf(fold)))
+            if (movesHistory.Exists((m) => m.foldIndex == Array.IndexOf(folds, fold)))
             {
                 continue;
             }
