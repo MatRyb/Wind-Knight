@@ -52,6 +52,8 @@ public class PlayerControler : ObjectHealth
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 positionChange = Vector2.zero;
     private Vector2 lastPosition;
+    [DisableIf("true")] public int objectHits = 0;
+    [SerializeField] public int maxObjectHits = 100;
 
     private void OnValidate()
     {
@@ -99,6 +101,8 @@ public class PlayerControler : ObjectHealth
         }
 
         StartHealth();
+
+        objectHits = maxObjectHits;
     }
 
     public void mouseInit()
@@ -333,5 +337,17 @@ public class PlayerControler : ObjectHealth
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(lowerBound, 2f);
         Gizmos.DrawWireSphere(upperBound, 2f);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent(out ObjectScript obj))
+        {
+            if (--objectHits <= 0)
+            {
+                OnDead();
+            }
+        }
+
     }
 }

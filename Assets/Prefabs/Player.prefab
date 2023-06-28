@@ -670,12 +670,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 552a4ef34407ee1429f5bd175e13f2e2, type: 3}
   source: {fileID: 7528295684267653842}
   damageClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
-  virtualMousePosition: {x: 110, y: -410}
+  virtualMousePosition: {x: 1.02, y: -0.06}
   velocity: {x: 0, y: 0}
   minSpeed: 0
   speed: 0
   maxSpeed: 0
   positionChange: {x: 0, y: 0}
+  objectHits: 0
+  maxObjectHits: 100
 --- !u!114 &3933951556066273430
 MonoBehaviour:
   m_ObjectHideFlags: 0
