@@ -11,16 +11,13 @@ public class PaperScrap : MonoBehaviour
     private float volume = 0f;
     private bool mute = false;
 
-    private void Awake()
+    private void Start()
     {
         if (manager == null)
         {
             manager = FindObjectOfType<PaperScrapManager>();
         }
-    }
 
-    private void Start()
-    {
         volume = OptionsLevelManager.instance.GetSFXVolume();
         mute = OptionsLevelManager.instance.GetSFXMute();
     }
@@ -61,7 +58,12 @@ public class PaperScrap : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out PlayerControler _))
         {
-            manager.Collected(this);
+            if (manager == null)
+            {
+                manager = FindObjectOfType<PaperScrapManager>();
+            }
+
+            manager?.Collected(this);
             Destroy(gameObject);
         }
     }
