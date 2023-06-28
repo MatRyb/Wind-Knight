@@ -4234,7 +4234,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 43f7ae028a15b73469116174647721c9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5021,6 +5021,7 @@ MonoBehaviour:
   collectedClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   text: {fileID: 1323854834}
   puzzleSolvedEvent: {fileID: 725558424}
+  ThisLevelName: Level2_Objects
 --- !u!4 &626103899
 Transform:
   m_ObjectHideFlags: 0
@@ -9084,7 +9085,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 43f7ae028a15b73469116174647721c9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12737,6 +12738,7 @@ MonoBehaviour:
   checkpointClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   isNextLevel: 1
   nextLevelSceneName: Level3_Enemy
+  ThisLevelName: Level2_Objects
 --- !u!4 &1657273554
 Transform:
   m_ObjectHideFlags: 0

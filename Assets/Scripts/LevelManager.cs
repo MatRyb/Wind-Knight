@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
         }
     };
 
-    private static LevelManager instance = null;
+    public static LevelManager instance = null;
 
     private bool waitingForStart = false;
     private GameObject startText = null;
@@ -32,16 +32,17 @@ public class LevelManager : MonoBehaviour
 
     private bool start;
 
-    private RespawnPoint startResp;
+    private RespawnPoint startResp = null;
     private RespawnPoint resp = null;
 
     [SerializeField] private AudioClip checkpointClip;
     [SerializeField] private bool isNextLevel = false;
     [SerializeField] [ShowIf("isNextLevel")] private string nextLevelSceneName;
+    public string ThisLevelName = "";
 
     void OnLevelWasLoaded(int level)
     {
-        if (level == 0)
+        if (level != SceneManager.GetSceneByName(ThisLevelName).buildIndex)
         {
             Destroy(gameObject);
             return;
@@ -56,8 +57,15 @@ public class LevelManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(gameObject);
-            return;
+            if (instance.ThisLevelName != SceneManager.GetActiveScene().name && ThisLevelName == SceneManager.GetActiveScene().name)
+            {
+                Destroy(instance.gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
 
         instance = this;
@@ -228,7 +236,7 @@ public class LevelManager : MonoBehaviour
             }
             else if (buttons[i].name == "NextLevelBtn")
             {
-                if (instance.isNextLevel)
+                if (!instance.isNextLevel)
                 {
                     buttons[i].gameObject.SetActive(false);
                 }

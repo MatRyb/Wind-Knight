@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using System;
 using NaughtyAttributes;
+using UnityEngine.SceneManagement;
 
 public class PaperScrapManager : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class PaperScrapManager : MonoBehaviour
         }
     };
 
-    private static PaperScrapManager instance = null;
+    public static PaperScrapManager instance = null;
 
     [SerializeField] private bool lessThanAll = false;
     [SerializeField] [ShowIf("lessThanAll")] private int minCollectedScraps;
@@ -32,6 +33,7 @@ public class PaperScrapManager : MonoBehaviour
     [SerializeField] private AudioClip collectedClip;
     [SerializeField] private TMP_Text text;
     [SerializeField] private IPuzzleSolvedEvent puzzleSolvedEvent;
+    public string ThisLevelName = "";
 
     private List<Scrap> scraps;
     private bool restart;
@@ -39,7 +41,7 @@ public class PaperScrapManager : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
-        if (level == 0)
+        if (level != SceneManager.GetSceneByName(ThisLevelName).buildIndex)
         {
             Destroy(gameObject);
             return;
@@ -47,7 +49,6 @@ public class PaperScrapManager : MonoBehaviour
         else
         {
             instance.start = true;
-            return;
         }
     }
 
@@ -55,8 +56,15 @@ public class PaperScrapManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(gameObject);
-            return;
+            if (instance.ThisLevelName != SceneManager.GetActiveScene().name && ThisLevelName == SceneManager.GetActiveScene().name)
+            {
+                Destroy(instance.gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
 
         instance = this;

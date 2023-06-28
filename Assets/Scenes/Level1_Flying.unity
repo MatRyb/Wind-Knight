@@ -4726,6 +4726,7 @@ MonoBehaviour:
   collectedClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   text: {fileID: 2123639967}
   puzzleSolvedEvent: {fileID: 1309587820}
+  ThisLevelName: Level1_Flying
 --- !u!4 &799181955
 Transform:
   m_ObjectHideFlags: 0
@@ -11744,7 +11745,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 43f7ae028a15b73469116174647721c9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -13041,7 +13042,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 43f7ae028a15b73469116174647721c9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15720,6 +15721,7 @@ MonoBehaviour:
   checkpointClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   isNextLevel: 1
   nextLevelSceneName: Level2_Objects
+  ThisLevelName: Level1_Flying
 --- !u!4 &2124707771
 Transform:
   m_ObjectHideFlags: 0
