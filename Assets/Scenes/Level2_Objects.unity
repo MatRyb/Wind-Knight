@@ -9446,7 +9446,7 @@ GameObject:
   - component: {fileID: 1138521408}
   - component: {fileID: 1138521407}
   m_Layer: 5
-  m_Name: BG
+  m_Name: HealthBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11895,7 +11895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9381e2076ebb3842bc8aa867ebd1d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manaMonitor: {fileID: 398743038}
+  manaToMonitor: {fileID: 398743038}
   image: {fileID: 745087351}
 --- !u!1 &1440202096
 GameObject:
