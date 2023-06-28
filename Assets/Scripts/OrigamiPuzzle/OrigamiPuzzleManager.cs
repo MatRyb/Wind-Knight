@@ -61,17 +61,20 @@ public class OrigamiPuzzleManager : MonoBehaviour
         SpriteHandler.SetActive(false);
     }
 
-    public void HighlightFoldLine(FoldPaperClicker button, bool enable)
+    public void HighlightFoldLine(FoldPaperClicker.FoldLine foldLine, bool enable)
     {
         if (enable)
         {
-            if (!movesHistory.Exists((m) => m.foldButton == button))
+            // Enable Fold Line Highlight
+            LineHandler.SetActive(true);
+            var line = LineHandler.GetComponent<LineRenderer>();
+            if (line.GetPosition(0) != PercentPointToGlobalPoint(foldLine.GetPoint(0f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z))
             {
-                // Enable Fold Line Highlight
-                LineHandler.SetActive(true);
-                var line = LineHandler.GetComponent<LineRenderer>();
-                line.SetPosition(0, PercentPointToGlobalPoint(button.fold.line.GetPoint(0f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
-                line.SetPosition(1, PercentPointToGlobalPoint(button.fold.line.GetPoint(1f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
+                line.SetPosition(0, PercentPointToGlobalPoint(foldLine.GetPoint(0f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
+            }
+            if (line.GetPosition(1) != PercentPointToGlobalPoint(foldLine.GetPoint(1f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z))
+            {
+                line.SetPosition(1, PercentPointToGlobalPoint(foldLine.GetPoint(1f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
             }
         }
         else

@@ -42,9 +42,10 @@ public class OrigamiHammerAnimation : IPuzzleSolvedEvent
     {
         StartCoroutine(Checker());
         hammer.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-        hammer.GetComponent<PolygonCollider2D>().isTrigger = true;
+        //hammer.GetComponent<PolygonCollider2D>().isTrigger = true;
         hammer.GetComponent<SpriteRenderer>().sortingOrder = 0;
         hammer.GetComponent<ObjectScript>().enabled = false;
+        hammer.GetComponent<SpriteMask>().enabled = false;
         animator.enabled = false;
         tween = hammer.LeanMoveLocal(endPos, toEndPosTime).setDelay(startDelay).setOnComplete(() =>
         {
@@ -64,9 +65,10 @@ public class OrigamiHammerAnimation : IPuzzleSolvedEvent
         {
             animator.enabled = false;
             hammer.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-            hammer.GetComponent<PolygonCollider2D>().isTrigger = false;
+            //hammer.GetComponent<PolygonCollider2D>().isTrigger = false;
             hammer.GetComponent<SpriteRenderer>().sortingOrder = 1;
             hammer.GetComponent<ObjectScript>().enabled = true;
+            hammer.GetComponent<SpriteMask>().enabled = true;
             Destroy(wall);
             ended = true;
         }

@@ -76,7 +76,23 @@ public class FoldPaperClicker : MonoBehaviour
     {
         if (OrderIndex == -1)
         {
-            manager.HighlightFoldLine(this, true);
+            manager.HighlightFoldLine(fold.line, true);
+        }
+        else
+        {
+            manager.HighlightFoldLine(fold.line, false);
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (OrderIndex != -1)
+            {
+                manager.HighlightFoldLine(fold.line, true);
+            }
+            else
+            {
+                manager.HighlightFoldLine(fold.line, false);
+            }
+            manager.FoldButtonClicked(this);
         }
     }
 
@@ -84,17 +100,21 @@ public class FoldPaperClicker : MonoBehaviour
     {
         if (OrderIndex == -1)
         {
-            manager.HighlightFoldLine(this, true);
+            manager.HighlightFoldLine(fold.line, true);
+        }
+        else
+        {
+            manager.HighlightFoldLine(fold.line, false);
         }
         if (Input.GetMouseButtonDown(0))
         {
             if (OrderIndex != -1)
             {
-                manager.HighlightFoldLine(this, true);
+                manager.HighlightFoldLine(fold.line, true);
             }
             else
             {
-                manager.HighlightFoldLine(this, false);
+                manager.HighlightFoldLine(fold.line, false);
             }
             manager.FoldButtonClicked(this);
         }
@@ -104,7 +124,7 @@ public class FoldPaperClicker : MonoBehaviour
     {
         if (OrderIndex == -1)
         {
-            manager.HighlightFoldLine(this, false);
+            manager.HighlightFoldLine(fold.line, false);
         }
     }
 
