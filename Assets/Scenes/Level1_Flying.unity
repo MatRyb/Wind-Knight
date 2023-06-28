@@ -9594,6 +9594,30 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3396079323542733756, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
+      propertyPath: openScale.x
+      value: 12.72267
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396079323542733756, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
+      propertyPath: closedScale.x
+      value: 12.72267
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396079323542733756, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
+      propertyPath: openPosition.x
+      value: 214.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396079323542733756, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
+      propertyPath: openPosition.y
+      value: -156.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396079323542733756, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
+      propertyPath: closedPosition.x
+      value: 214.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396079323542733756, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
+      propertyPath: closedPosition.y
+      value: -168.8163
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
 --- !u!114 &1309587820 stripped
