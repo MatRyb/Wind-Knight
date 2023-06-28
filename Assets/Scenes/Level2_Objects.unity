@@ -10539,11 +10539,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5771464816270400374, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_Name
-      value: Paper Scrap 2
+      value: Paper Scrap 0
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12843,11 +12843,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5771464816270400374, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_Name
-      value: Paper Scrap 0
+      value: Paper Scrap 2
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15966,9 +15966,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 730386038}
-  - {fileID: 1463060330}
   - {fileID: 1446139624}
+  - {fileID: 1463060330}
+  - {fileID: 730386038}
   m_Father: {fileID: 807392128}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -39,6 +39,9 @@ public class PlayerControler : ObjectHealth
     [SerializeField] private AudioSource source;
     [SerializeField] private AudioClip damageClip;
 
+    [Header("Mana:")]
+    [SerializeField] private int maxObjectHits = 100;
+
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 virtualMousePosition;
     [Foldout("info")]
@@ -51,9 +54,9 @@ public class PlayerControler : ObjectHealth
     [DisableIf("true")] public float maxSpeed = 0f;
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 positionChange = Vector2.zero;
-    private Vector2 lastPosition;
+    [Foldout("info")]
     [DisableIf("true")] [SerializeField] private int objectHits = 0;
-    [SerializeField] private int maxObjectHits = 100;
+    private Vector2 lastPosition;
 
     private void OnValidate()
     {
