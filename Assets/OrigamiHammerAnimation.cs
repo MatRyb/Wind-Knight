@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OrigamiHammerAnimation : IPuzzleSolvedEvent
@@ -20,9 +19,28 @@ public class OrigamiHammerAnimation : IPuzzleSolvedEvent
     [SerializeField] private Color destroyColor2;
     [SerializeField] private ParticleSystem destroyParticle;
 
+    [Header("Audio:")]
+    [SerializeField] private GameObject source;
+    [SerializeField] private AudioClip breakClip;
+    private float volume = 0f;
+    private bool mute = false;
+
     private LTDescr tween;
 
     private bool ended = false;
+
+    private void Start()
+    {
+        if (OptionsLevelManager.instance != null)
+        {
+            volume = OptionsLevelManager.instance.GetSFXVolume();
+            mute = OptionsLevelManager.instance.GetSFXMute();
+        }
+        else
+        {
+            mute = true;
+        }
+    }
 
     private IEnumerator Checker()
     {
@@ -75,6 +93,12 @@ public class OrigamiHammerAnimation : IPuzzleSolvedEvent
             var mainModule = particle.main;
             mainModule.startColor = new ParticleSystem.MinMaxGradient(destroyColor1, destroyColor2);
             Destroy(wall);
+            AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+            s.clip = breakClip;
+            s.volume = volume;
+            s.mute = mute;
+            s.Play();
+            Destroy(s.gameObject, 2f);
             particle.Play();
             ended = true;
         }

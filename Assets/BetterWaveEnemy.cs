@@ -13,6 +13,9 @@ public class BetterWaveEnemy : EnemyController
     [SerializeField] private ParticleSystem portalIn;
     [SerializeField] private AudioClip teleportClip;
 
+    [Header("Animation:")]
+    [SerializeField] private Animator animator;
+
     private bool canAttack = true;
     private bool moved = false;
 
@@ -130,7 +133,9 @@ public class BetterWaveEnemy : EnemyController
 
     public override void Attack()
     {
-        LocalTimersManager.CreateNewTimer(attackRecharge).DoAfter(() =>
+        animator.speed = attackRecharge;
+        animator.Play("Base Layer.Attack");
+        LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
         {
             wg.SpawnWave();
             AudioSource s = Instantiate(source, transform.parent.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
@@ -139,7 +144,10 @@ public class BetterWaveEnemy : EnemyController
             s.mute = mute;
             s.Play();
             Destroy(s.gameObject, 2f);
-            canAttack = true;
+            LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
+            {
+                canAttack = true;
+            }).Start();
         }).Start();
     }
 

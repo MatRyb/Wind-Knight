@@ -52,8 +52,8 @@ public class PlayerControler : ObjectHealth
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 positionChange = Vector2.zero;
     private Vector2 lastPosition;
-    [DisableIf("true")] public int objectHits = 0;
-    [SerializeField] public int maxObjectHits = 100;
+    [DisableIf("true")] [SerializeField] private int objectHits = 0;
+    [SerializeField] private int maxObjectHits = 100;
 
     private void OnValidate()
     {
@@ -348,5 +348,15 @@ public class PlayerControler : ObjectHealth
                 OnDead();
             }
         }
+    }
+
+    public int GetMana()
+    {
+        return objectHits;
+    }
+
+    public int GetMaxMana()
+    {
+        return maxObjectHits;
     }
 }
