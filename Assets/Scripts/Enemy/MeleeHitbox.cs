@@ -12,8 +12,8 @@ public class MeleeHitbox : MonoBehaviour
     private LocalTimerContainer timer2;
     private LocalTimerContainer timer3;
 
-    [SerializeField] private Color deafultColor = new((87f / 255f), 0, 0, 100);
-    [SerializeField] private Color blinkColor = new(100, 0, 0, 100);
+    [SerializeField] private Color deafultColor = new((87f / 255f), 0, 0, 10);
+    [SerializeField] private Color blinkColor = new(100, 0, 0, 10);
 
     private void OnValidate()
     {

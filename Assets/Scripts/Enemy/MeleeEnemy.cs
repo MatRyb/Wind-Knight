@@ -39,7 +39,7 @@ public class MeleeEnemy : EnemyController
             if (canAttack && isDoneCooldown)
             {
                 Attack();
-                StartCoroutine(ChangeSpriteForAttack(1.3f));
+                StartCoroutine(ChangeSpriteForAttack(0.2f));
                 isDoneCooldown = false;
                 StartCoroutine(WaitCooldown(attackRecharge));
             }
@@ -63,7 +63,7 @@ public class MeleeEnemy : EnemyController
         hpBar.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
         hpBar.transform.position = new Vector2(transform.position.x, transform.position.y + 4f);
 
-        StartCoroutine(RevertSpriteToNormal(0.2f));
+        StartCoroutine(RevertSpriteToNormal(0.1f));
     }
 
     private IEnumerator RevertSpriteToNormal(float waitTime)

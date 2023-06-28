@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 819498047283956124}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -36,7 +36,7 @@ Transform:
   - {fileID: 8171348241704415311}
   m_Father: {fileID: 7336270318660727246}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!212 &4892355701123708475
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -233,7 +233,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2761737501788284197}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.979931, y: -15.659172, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
@@ -359,8 +359,8 @@ MonoBehaviour:
   gravityScale: 10
   enemyController: {fileID: 5209816240133236623}
   player: {fileID: 0}
-  frontGroundCheckerPosition: {fileID: 6193453442526225084}
-  backGroundCheckerPosition: {fileID: 2560621725650520423}
+  frontGroundCheckerPosition: {fileID: 2560621725650520423}
+  backGroundCheckerPosition: {fileID: 6193453442526225084}
   rb: {fileID: 1610669047753384738}
   groundLayer:
     serializedVersion: 2
@@ -399,13 +399,13 @@ MonoBehaviour:
   viewRayBlockingLayers:
     serializedVersion: 2
     m_Bits: 193
+  source: {fileID: 8114178880373141220, guid: 1f40bea01fdfed04fa39ebd57cace20f, type: 3}
+  attackClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
+  dieClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   currentSprite: {fileID: 4892355701123708475}
   colliderNormalSprite: {fileID: 6531602994979070044}
   colliderAttackSprite: {fileID: 5065086813912699537}
   hpBar: {fileID: 2940796644657627581}
-  source: {fileID: 8114178880373141220, guid: 1f40bea01fdfed04fa39ebd57cace20f, type: 3}
-  attackClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
-  dieClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   attackPrefab: {fileID: 6481746782879414969, guid: e66b8dea33e3dd644af93ef924676506, type: 3}
   attackPrefabHitBox: {fileID: 6481746782879414969, guid: e66b8dea33e3dd644af93ef924676506, type: 3}
   moveSprite: {fileID: 21300000, guid: 6670340842177774bb24f0951f100e56, type: 3}
@@ -597,7 +597,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3410700660270689037}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.469, y: -0.388, z: 0}
+  m_LocalPosition: {x: -0.376, y: -0.413, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
