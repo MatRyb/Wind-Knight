@@ -83,8 +83,15 @@ public class ObjectScript : ObjectHealth
 
     private void Start()
     {
-        volume = OptionsLevelManager.instance.GetSFXVolume();
-        mute = OptionsLevelManager.instance.GetSFXMute();
+        if (OptionsLevelManager.instance != null)
+        {
+            volume = OptionsLevelManager.instance.GetSFXVolume();
+            mute = OptionsLevelManager.instance.GetSFXMute();
+        }
+        else
+        {
+            mute = true;
+        }
     }
 
     void Update()
@@ -192,18 +199,14 @@ public class ObjectScript : ObjectHealth
             }
         }
 
-        /*
         if (collision.collider.gameObject.TryGetComponent(out PlayerControler _))
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
         }
-        */
     }
 
-    /*
     private void OnCollisionExit2D(Collision2D collision)
     {
         rb.constraints = RigidbodyConstraints2D.None;
     }
-    */
 }
