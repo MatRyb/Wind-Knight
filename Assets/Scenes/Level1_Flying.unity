@@ -6787,11 +6787,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8334941568176324034, guid: 84e74646fb1c63b4e8afdd18c338399d, type: 3}
       propertyPath: m_text
-      value: 'This Paper Scraps
+      value: 'These paper scraps
 
         |
 
         \/'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8334941568176324034, guid: 84e74646fb1c63b4e8afdd18c338399d, type: 3}
+      propertyPath: m_fontSize
+      value: 18.8
       objectReference: {fileID: 0}
     - target: {fileID: 8334941568271554128, guid: 84e74646fb1c63b4e8afdd18c338399d, type: 3}
       propertyPath: m_Name
@@ -13180,7 +13184,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8334941568176324034, guid: 84e74646fb1c63b4e8afdd18c338399d, type: 3}
       propertyPath: m_text
-      value: 'will allow you to open this door to complete the level
+      value: 'will allow You to open this door to complete the level
 
         ->'
       objectReference: {fileID: 0}
