@@ -182,17 +182,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
 
             if (CheckIsSolved())
             {
-                GenerateSprite();
-                // Particle (Konfetii czy coœ)
-                foreach (var slice in currentPaperSlices)
-                {
-                    slice.SetActive(false);
-                }
-                foreach (var button in foldButtons)
-                {
-                    button.enabled = false;
-                }
-                SpriteHandler.SetActive(true);
+                Solved();
             }
         };
 
@@ -328,6 +318,22 @@ public class OrigamiPuzzleManager : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void Solved()
+    {
+        GenerateSprite();
+        // Particle (Konfetii czy coœ)
+        foreach (var slice in currentPaperSlices)
+        {
+            slice.SetActive(false);
+        }
+        foreach (var button in foldButtons)
+        {
+            button.gameObject.SetActive(false);
+        }
+        SpriteHandler.SetActive(true);
+        SpriteHandler.GetComponent<IPuzzleSolvedEvent>().Solved();
     }
 
     private void RecalculateFoldPaperBoundries() {

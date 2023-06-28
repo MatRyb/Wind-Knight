@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 [RequireComponent(typeof(Collider2D))]
@@ -42,7 +41,6 @@ public class FoldPaperClicker : MonoBehaviour
             OrderChanged();
         }
     }
-    public bool enabled = true;
 
     [Header("Canvas:")]
     public GameObject orderCanvas;
@@ -88,7 +86,7 @@ public class FoldPaperClicker : MonoBehaviour
         {
             manager.HighlightFoldLine(this, true);
         }
-        if (Input.GetMouseButtonDown(0) && enabled)
+        if (Input.GetMouseButtonDown(0))
         {
             if (OrderIndex != -1)
             {

@@ -1,1 +1,0 @@
-- Obiekt (Sprite) przed strzałkami
