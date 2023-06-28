@@ -338,7 +338,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.75
 --- !u!114 &7600044992773561498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,7 +352,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 0}
-  foldIndex: 0
+  fold:
+    line:
+      pointA: {x: 0, y: 0}
+      pointB: {x: 0, y: 0}
+    angle: 0
   orderCanvas: {fileID: 4112459075513683048}
   orderText: {fileID: 6174231735691957038}
   spriteRenderer: {fileID: 3351527090889832628}
