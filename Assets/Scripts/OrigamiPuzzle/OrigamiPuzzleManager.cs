@@ -355,7 +355,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
             sliceMesh = meshCopy;
 #else
             //Do this in play mode
-            mesh = slice.GetComponent<MeshFilter>().mesh;
+            sliceMesh = slice.GetComponent<MeshFilter>().mesh;
 #endif
             for (int i = 0; i < sliceMesh.vertices.Length; i++)
             {
