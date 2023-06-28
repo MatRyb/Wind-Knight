@@ -677,7 +677,7 @@ MonoBehaviour:
   maxSpeed: 0
   positionChange: {x: 0, y: 0}
   objectHits: 0
-  maxObjectHits: 100
+  maxObjectHits: 20
 --- !u!114 &3933951556066273430
 MonoBehaviour:
   m_ObjectHideFlags: 0
