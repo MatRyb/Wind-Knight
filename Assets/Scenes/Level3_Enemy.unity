@@ -814,7 +814,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collected: 0
   allPaperScraps: 0
-  collectedClip: {fileID: 0}
+  collectedClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   text: {fileID: 2123639967}
   puzzleSolvedEvent: {fileID: 1309587820}
 --- !u!4 &799181955
@@ -2542,7 +2542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01186bf60ced4a54f9e5c08dca1a66a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpointClip: {fileID: 0}
+  checkpointClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   isNextLevel: 1
   nextLevelSceneName: Level4_All
 --- !u!4 &2124707771

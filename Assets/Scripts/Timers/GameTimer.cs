@@ -10,20 +10,20 @@ public class GameTimer : MonoBehaviour
 
     public static float TimeMultiplier { get; private set; } = PLAYING;
 
-    public static event GameTimeChanged OnStopped;
-    public static event GameTimeChanged OnStart;
+    public static event GameTimeChanged OnStopped = null;
+    public static event GameTimeChanged OnStart = null;
 
     [Button]
     public static void StopTime()
     {
         TimeMultiplier = STOPPED;
-        OnStopped.Invoke();
+        OnStopped?.Invoke();
     }
 
     [Button]
     public static void StartTime()
     {
         TimeMultiplier = PLAYING;
-        OnStart.Invoke();
+        OnStart?.Invoke();
     }
 }

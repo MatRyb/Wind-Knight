@@ -30,14 +30,25 @@ public class WaveParticle : MonoBehaviour
             return;
         }
 
-        dieTime -= Time.deltaTime;
+        dieTime -= Time.deltaTime * GameTimer.TimeMultiplier;
 
-        if (left == null && right == null)
+        if (GameTimer.TimeMultiplier == GameTimer.PLAYING)
         {
-            _pool.Release(this);
-        }
+            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+            float radian = angle * Mathf.PI / 180f;
+            GetComponent<Rigidbody2D>().velocity = new Vector2(speed * Mathf.Cos(radian), speed * Mathf.Sin(radian));
 
-        CheckRight();
+            if (left == null && right == null)
+            {
+                _pool.Release(this);
+            }
+
+            CheckRight();
+        }
+        else 
+        {
+            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+        }
     }
 
     public WaveParticle SetAngle(float value)
@@ -137,7 +148,7 @@ public class WaveParticle : MonoBehaviour
 
             obj.transform.eulerAngles = new Vector3(0, 0, angleCalculated);
 
-            if (obj.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+            if (obj.TryGetComponent(out Rigidbody2D rb))
             {
                 rb.velocity = new Vector2(speed * Mathf.Cos(radian), speed * Mathf.Sin(radian));
             }
@@ -194,12 +205,12 @@ public class WaveParticle : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
+        if (collision.gameObject.TryGetComponent(out IDamageTaker damageTaker))
         {
             damageTaker.TakeDamage(damage);
         }
 
-        if (!collision.gameObject.TryGetComponent<WaveParticle>(out WaveParticle _))
+        if (!collision.gameObject.TryGetComponent(out WaveParticle _))
         {
             left?.RightDied();
             right?.LeftDied();
