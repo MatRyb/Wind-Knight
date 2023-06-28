@@ -9446,7 +9446,7 @@ GameObject:
   - component: {fileID: 1138521408}
   - component: {fileID: 1138521407}
   m_Layer: 5
-  m_Name: BG
+  m_Name: HealthBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10539,11 +10539,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5771464816270400374, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_Name
-      value: Paper Scrap 2
+      value: Paper Scrap 0
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11895,7 +11895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9381e2076ebb3842bc8aa867ebd1d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manaMonitor: {fileID: 398743038}
+  manaToMonitor: {fileID: 398743038}
   image: {fileID: 745087351}
 --- !u!1 &1440202096
 GameObject:
@@ -12843,11 +12843,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5771464816270400374, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_Name
-      value: Paper Scrap 0
+      value: Paper Scrap 2
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15966,9 +15966,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 730386038}
-  - {fileID: 1463060330}
   - {fileID: 1446139624}
+  - {fileID: 1463060330}
+  - {fileID: 730386038}
   m_Father: {fileID: 807392128}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

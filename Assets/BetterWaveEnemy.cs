@@ -133,7 +133,7 @@ public class BetterWaveEnemy : EnemyController
 
     public override void Attack()
     {
-        animator.speed = attackRecharge;
+        animator.speed = 1f / attackRecharge;
         animator.Play("Base Layer.Attack");
         LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
         {
