@@ -2084,11 +2084,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 787269825349021897, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 112.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 787269825349021897, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -415.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 787269825349021897, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12524,7 +12524,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7701394291717309938, guid: 154bfa285c4a9b341a0efce7265efcf3, type: 3}
       propertyPath: m_Name
-      value: OrigamiPuzzle (1)
+      value: OrigamiPuzzle
       objectReference: {fileID: 0}
     - target: {fileID: 7701394291717309939, guid: 154bfa285c4a9b341a0efce7265efcf3, type: 3}
       propertyPath: m_RootOrder
@@ -12646,6 +12646,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0ed83c8248bee9341a38e67d66383201, type: 3}
   - {fileID: 21300000, guid: eca20e7f552f64e40a22610851266d90, type: 3}
   - {fileID: 21300000, guid: d0aed6d7e9617ca4db1331a4e158bfaa, type: 3}
+  destroyColor1: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
+  destroyColor2: {r: 0, g: 0.24528301, b: 0.21071295, a: 1}
+  destroyParticle: {fileID: 840825463644067242, guid: 100b305cb1e473c4fbfb611c43b5e377, type: 3}
 --- !u!95 &708982026
 Animator:
   serializedVersion: 4

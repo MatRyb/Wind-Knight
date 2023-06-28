@@ -88,7 +88,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
     {
         if (!clickBlocked)
         {
-            if (!movesHistory.Exists((m) => m.foldButton == button))
+            if (button.OrderIndex == -1)
             {
                 FoldPaper(button);
             }
@@ -483,7 +483,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
     {
         foreach (var button in foldButtons)
         {
-            if (movesHistory.Exists((m) => m.foldButton == button))
+            if (button.OrderIndex != -1)
             {
                 continue;
             }

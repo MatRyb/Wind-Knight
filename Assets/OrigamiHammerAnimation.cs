@@ -16,6 +16,10 @@ public class OrigamiHammerAnimation : IPuzzleSolvedEvent
     [SerializeField] private SpriteRenderer wallStateHandler;
     [SerializeField] private Sprite[] wallStates;
 
+    [SerializeField] private Color destroyColor1;
+    [SerializeField] private Color destroyColor2;
+    [SerializeField] private ParticleSystem destroyParticle;
+
     private LTDescr tween;
 
     private bool ended = false;
@@ -42,7 +46,6 @@ public class OrigamiHammerAnimation : IPuzzleSolvedEvent
     {
         StartCoroutine(Checker());
         hammer.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-        //hammer.GetComponent<PolygonCollider2D>().isTrigger = true;
         hammer.GetComponent<SpriteRenderer>().sortingOrder = 0;
         hammer.GetComponent<ObjectScript>().enabled = false;
         hammer.GetComponent<SpriteMask>().enabled = false;
@@ -65,11 +68,14 @@ public class OrigamiHammerAnimation : IPuzzleSolvedEvent
         {
             animator.enabled = false;
             hammer.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-            //hammer.GetComponent<PolygonCollider2D>().isTrigger = false;
             hammer.GetComponent<SpriteRenderer>().sortingOrder = 1;
             hammer.GetComponent<ObjectScript>().enabled = true;
             hammer.GetComponent<SpriteMask>().enabled = true;
+            ParticleSystem particle = Instantiate(destroyParticle, wall.transform.position, new Quaternion(0, 0, 0, 0));
+            var mainModule = particle.main;
+            mainModule.startColor = new ParticleSystem.MinMaxGradient(destroyColor1, destroyColor2);
             Destroy(wall);
+            particle.Play();
             ended = true;
         }
         else
