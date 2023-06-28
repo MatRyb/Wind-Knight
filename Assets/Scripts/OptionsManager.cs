@@ -39,6 +39,7 @@ public class OptionsManager : MonoBehaviour
 
         //sfx
         sfx.onValueChanged.AddListener(delegate { ChangeVolume(sfx.value, sfxText, changeTextColorSFXValue); PlayerPrefs.SetFloat("SFXVolume", sfx.value); });
+        sfx.value = PlayerPrefs.GetFloat("SFXVolume", 40f);
         sfxMute = PlayerPrefs.GetInt("MuteSFXVolume", 0) != 0;
         CheckAudioMute(sfxMute, muteSFXIcon);
     }

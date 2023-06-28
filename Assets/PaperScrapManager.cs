@@ -126,6 +126,14 @@ public class PaperScrapManager : MonoBehaviour
             puzzleSolvedEvent = FindObjectOfType<IPuzzleSolvedEvent>();
             text = GameObject.FindGameObjectWithTag("PaperScarpCounterText").GetComponent<TMP_Text>();
             text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+
+            if (AreAllCollected())
+            {
+                if (puzzleSolvedEvent != null)
+                {
+                    puzzleSolvedEvent.Solved();
+                }
+            }
         }
         else if (instance.start)
         {
@@ -162,6 +170,14 @@ public class PaperScrapManager : MonoBehaviour
                 else
                 {
                     SetProperId(new Scrap(0, false, pss[i].gameObject.transform.position), pss[i].SetId);
+                }
+            }
+
+            if (AreAllCollected())
+            {
+                if (puzzleSolvedEvent != null)
+                {
+                    puzzleSolvedEvent.Solved();
                 }
             }
         }
