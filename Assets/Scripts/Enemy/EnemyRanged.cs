@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class EnemyRanged : EnemyController
 {
+    [SerializeField] private SpriteRenderer moveSprite;
+    [SerializeField] private SpriteRenderer attackSprite;
+
+
     [SerializeField] private float shootSpeed = 2f;
     [Range(0,100f)][SerializeField] private float aim = 50.0f;
     private bool canShoot = true;
@@ -62,8 +66,36 @@ public class EnemyRanged : EnemyController
         GameObject newBullet = Instantiate(bullet, shootPosition.position, Quaternion.identity);
         newBullet.transform.localScale = transform.localScale / scaleFactor;
         newBullet.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x, direction.y - UnityEngine.Random.Range(-0.2f, 0.15f) * aim) * shootSpeed;
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = attackClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
+        StartCoroutine(ChangeSpriteForAttack(0.2f));
         yield return new WaitForSeconds(attackRecharge);
         canShoot = true;
+    }
+
+    private IEnumerator ChangeSpriteForAttack(float waitTime)
+    {
+        yield return new WaitForSeconds(0.1f);
+        moveSprite.enabled = false;
+        attackSprite.enabled = true;
+        yield return new WaitForSeconds(waitTime);
+        /*transform.localScale = new Vector3(1f, 1f, 1f);
+        transform.position = new Vector2(transform.position.x, transform.position.y - 1.0f);
+        */
+        StartCoroutine(RevertSpriteToNormal(0.1f));
+    }
+
+    private IEnumerator RevertSpriteToNormal(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        moveSprite.enabled = true;
+        attackSprite.enabled = false;
+       /* transform.localScale = new Vector3(4f, 4, 4f);
+        transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);*/
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

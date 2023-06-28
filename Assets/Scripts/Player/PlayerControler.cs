@@ -35,6 +35,10 @@ public class PlayerControler : ObjectHealth
     [SerializeField] private Vector2 mouseBoundryOffset = Vector2.zero;
     [SerializeField] private List<Sprite> mouseStates;
 
+    [Header("Audio:")]
+    [SerializeField] private AudioSource source;
+    [SerializeField] private AudioClip damageClip;
+
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 virtualMousePosition;
     [Foldout("info")]
@@ -157,6 +161,8 @@ public class PlayerControler : ObjectHealth
         LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, damageColor, 0.15f).setOnComplete(() => {
             LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, normalColor, 0.15f);
         });
+        source.clip = damageClip;
+        source.Play();
         base.TakeDamage(value);
     }
 

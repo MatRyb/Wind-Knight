@@ -1,4 +1,5 @@
 using UnityEngine;
+using NaughtyAttributes;
 using System.Collections.Generic;
 
 public class OptionsLevelManager : MonoBehaviour
@@ -13,7 +14,9 @@ public class OptionsLevelManager : MonoBehaviour
 
     [Header("SFX:")]
     [SerializeField] private List<AudioSource> sfxSources;
-    [SerializeField] private string sfxTag = "SFX";
+    [SerializeField] [Tag] private string sfxTag = "SFX";
+
+    private bool start;
 
     void OnLevelWasLoaded(int level)
     {
@@ -21,6 +24,10 @@ public class OptionsLevelManager : MonoBehaviour
         {
             Destroy(gameObject);
             return;
+        }
+        else
+        {
+            instance.start = true;
         }
     }
 
@@ -34,6 +41,7 @@ public class OptionsLevelManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+        instance.start = false;
 
         player = FindObjectOfType<PlayerControler>();
 
@@ -58,8 +66,47 @@ public class OptionsLevelManager : MonoBehaviour
         musicSource.mute = PlayerPrefs.GetInt("MuteMusicVolume", 0) != 0;
     }
 
+    public float GetSFXVolume()
+    {
+        return PlayerPrefs.GetFloat("SFXVolume", 40f) / 100f;
+    }
+
+    public bool GetSFXMute()
+    {
+        return PlayerPrefs.GetInt("MuteSFXVolume", 0) != 0;
+    }
+
     void Update()
     {
+        if (instance.start)
+        {
+            instance.start = false;
+
+            player = FindObjectOfType<PlayerControler>();
+
+            var arr = GameObject.FindGameObjectsWithTag(sfxTag);
+
+            sfxSources.Clear();
+
+            for (int i = 0; i < arr.Length; ++i)
+            {
+                if (arr[i].TryGetComponent(out AudioSource s))
+                {
+                    sfxSources.Add(s);
+                }
+            }
+
+            foreach (var item in sfxSources)
+            {
+                item.volume = PlayerPrefs.GetFloat("SFXVolume", 40f) / 100f;
+                item.mute = PlayerPrefs.GetInt("MuteSFXVolume", 0) != 0;
+            }
+
+            musicSource.volume = PlayerPrefs.GetFloat("MinMusicVolume", 60f) / 100f;
+
+            musicSource.mute = PlayerPrefs.GetInt("MuteMusicVolume", 0) != 0;
+        }
+
         float x = (player.speed - player.minSpeed) / (player.maxSpeed - player.minSpeed);
         float min = PlayerPrefs.GetFloat("MinMusicVolume", 60f);
         float max = PlayerPrefs.GetFloat("MaxMusicVolume", 80f);

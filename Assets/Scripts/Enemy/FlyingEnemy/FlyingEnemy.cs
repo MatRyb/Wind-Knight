@@ -66,7 +66,7 @@ public class FlyingEnemy : EnemyController
         {
             foreach (var collider in collidersInExplosion)
             {
-                if (collider.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
+                if (collider.TryGetComponent(out IDamageTaker damageTaker))
                 {
                     if ((Object)damageTaker == this)
                     {
@@ -79,6 +79,13 @@ public class FlyingEnemy : EnemyController
                 }
             }
         }
+
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = attackClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
         TakeDamage(GetMaxHealth());
     }
 
