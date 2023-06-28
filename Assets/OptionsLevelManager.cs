@@ -1,6 +1,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class OptionsLevelManager : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class OptionsLevelManager : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
-        if (level == 0)
+        if (level != SceneManager.GetSceneByName(LevelManager.instance.ThisLevelName).buildIndex)
         {
             Destroy(gameObject);
             return;
