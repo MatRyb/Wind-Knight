@@ -242,7 +242,7 @@ MonoBehaviour:
   maxHealth: 1000
   health: 0
   rb: {fileID: 8776821380493041886}
-  mass: 82
+  mass: 20
   linearDrag: 0.3
   factor: 1
   crackRenderer: {fileID: 1290745989233472727}
