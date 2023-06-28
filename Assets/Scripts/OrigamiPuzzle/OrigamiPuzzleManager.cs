@@ -36,6 +36,9 @@ public class OrigamiPuzzleManager : MonoBehaviour
     [SerializeField] private FoldPaperClicker[] foldButtons;
     [SerializeField] private AnimationCurve rotCurve = new();
 
+    [Header("Particle System:")]
+    [SerializeField] private ParticleSystem confettiParticle;
+
     private bool True => true;
     [Foldout("info")] [DisableIf("True")] [SerializeField] private FoldPaperBoundries paperBoundries = new();
     [Foldout("info")] [DisableIf("True")] [SerializeField] private List<FoldMove> movesHistory = new();
@@ -326,7 +329,8 @@ public class OrigamiPuzzleManager : MonoBehaviour
     private void Solved()
     {
         GenerateSprite();
-        // Particle (Konfetii czy coœ)
+        ParticleSystem particle = Instantiate(confettiParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        particle.Play();
         foreach (var slice in currentPaperSlices)
         {
             slice.SetActive(false);

@@ -278,7 +278,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &306488177
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -586,7 +586,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1346144583298858836, guid: a2e2b90fc7874dc42973c7947d9394e5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 66.54001
+      value: 48.95
       objectReference: {fileID: 0}
     - target: {fileID: 1346144583298858836, guid: a2e2b90fc7874dc42973c7947d9394e5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -965,6 +965,7 @@ MonoBehaviour:
   musicSource: {fileID: 862250700}
   sfxSources: []
   sfxTag: SFX
+  ThisLevelName: Level3_Enemy
 --- !u!4 &862250702
 Transform:
   m_ObjectHideFlags: 0
@@ -1374,11 +1375,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2701308014148251011, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 32.7
+      value: 13.81
       objectReference: {fileID: 0}
     - target: {fileID: 2701308014148251011, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.9
+      value: 1.38
       objectReference: {fileID: 0}
     - target: {fileID: 2701308014148251011, guid: f08dab6c36d93544c8ff72ad977ff260, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1592,7 +1593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1655025395561005089, guid: e6c2b032b2325d54c89c83189150505f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.030006
+      value: 22.48
       objectReference: {fileID: 0}
     - target: {fileID: 1655025395561005089, guid: e6c2b032b2325d54c89c83189150505f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2032,7 +2033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 44.8
+      value: 27.95
       objectReference: {fileID: 0}
     - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
       propertyPath: m_LocalPosition.y

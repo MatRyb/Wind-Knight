@@ -16,12 +16,13 @@ public class OptionsLevelManager : MonoBehaviour
     [Header("SFX:")]
     [SerializeField] private List<AudioSource> sfxSources;
     [SerializeField] [Tag] private string sfxTag = "SFX";
+    public string ThisLevelName = "";
 
     private bool start;
 
     void OnLevelWasLoaded(int level)
     {
-        if (level != SceneManager.GetSceneByName(LevelManager.instance.ThisLevelName).buildIndex)
+        if (level != SceneManager.GetSceneByName(ThisLevelName).buildIndex)
         {
             Destroy(gameObject);
             return;
@@ -36,8 +37,15 @@ public class OptionsLevelManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(gameObject);
-            return;
+            if (instance.ThisLevelName != SceneManager.GetActiveScene().name && ThisLevelName == SceneManager.GetActiveScene().name)
+            {
+                Destroy(instance.gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
 
         instance = this;

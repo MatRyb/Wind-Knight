@@ -2400,6 +2400,7 @@ MonoBehaviour:
   musicSource: {fileID: 237160004}
   sfxSources: []
   sfxTag: SFX
+  ThisLevelName: Level2_Objects
 --- !u!4 &237160006
 Transform:
   m_ObjectHideFlags: 0

@@ -5583,6 +5583,7 @@ MonoBehaviour:
   musicSource: {fileID: 862250700}
   sfxSources: []
   sfxTag: SFX
+  ThisLevelName: Level1_Flying
 --- !u!4 &862250702
 Transform:
   m_ObjectHideFlags: 0
