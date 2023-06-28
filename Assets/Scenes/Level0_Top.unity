@@ -2074,6 +2074,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 426906029, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
+      propertyPath: maxObjectHits
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 426906029, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
+      propertyPath: virtualMousePosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 426906029, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
+      propertyPath: virtualMousePosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 787269825349021895, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2427,11 +2439,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e87afb4e092c7045bde62de7922a2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lessThanAll: 0
+  minCollectedScraps: 0
   collected: 0
   allPaperScraps: 0
   collectedClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   text: {fileID: 1602288016}
   puzzleSolvedEvent: {fileID: 0}
+  ThisLevelName: 
 --- !u!4 &168991071
 Transform:
   m_ObjectHideFlags: 0
@@ -4578,8 +4593,8 @@ Transform:
   - {fileID: 707159951}
   - {fileID: 1852311683}
   - {fileID: 1235798940}
-  - {fileID: 2117577022}
   - {fileID: 1530298664}
+  - {fileID: 2117577022}
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19050,7 +19065,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 43f7ae028a15b73469116174647721c9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -33428,7 +33443,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 43f7ae028a15b73469116174647721c9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -34988,6 +35003,7 @@ MonoBehaviour:
   checkpointClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   isNextLevel: 0
   nextLevelSceneName: 
+  ThisLevelName: 
 --- !u!1001 &1873079741
 PrefabInstance:
   m_ObjectHideFlags: 0
