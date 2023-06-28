@@ -5014,6 +5014,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e87afb4e092c7045bde62de7922a2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lessThanAll: 0
+  minCollectedScraps: 0
   collected: 0
   allPaperScraps: 0
   collectedClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}

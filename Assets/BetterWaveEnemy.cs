@@ -53,7 +53,7 @@ public class BetterWaveEnemy : EnemyController
 
     private void FixedUpdate()
     {
-        Vector3 dir = player.position - transform.position;
+        Vector3 dir = player.position - transform.parent.position;
         float distance = Mathf.Abs(Vector3.Distance(Vector3.zero, dir));
 
         if (IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers) || distance > range + rangeOffset)
@@ -65,7 +65,7 @@ public class BetterWaveEnemy : EnemyController
         {
             if (GameTimer.TimeMultiplier == GameTimer.PLAYING)
             {
-                float degreeToAdd = AdvancedMath.GetAngleBetweenPoints(transform.position, player.position, Vector3.right + transform.position);
+                float degreeToAdd = AdvancedMath.GetAngleBetweenPoints(transform.parent.position, player.position, Vector3.right + transform.parent.position);
 
                 transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, degreeToAdd));
 
@@ -80,42 +80,42 @@ public class BetterWaveEnemy : EnemyController
         {
             if (GameTimer.TimeMultiplier == GameTimer.PLAYING && !moved)
             {
-                float degree = AdvancedMath.GetAngleBetweenPoints(transform.position, player.position, Vector3.right + transform.position);
+                float degree = AdvancedMath.GetAngleBetweenPoints(transform.parent.position, player.position, Vector3.right + transform.parent.position);
 
                 factorX = -Mathf.Cos(degree * Mathf.PI / 180);
 
                 factorY = -Mathf.Sin(degree * Mathf.PI / 180);
 
                 moved = true;
-                if (Physics2D.Raycast(transform.position, new Vector2(factorX, factorY), moveDist, rayCastLayer))
+                if (Physics2D.Raycast(transform.parent.position, new Vector2(factorX, factorY), moveDist, rayCastLayer))
                 {
-                    GameObject particleIn = Instantiate(portalIn.gameObject, transform.position, transform.rotation);
+                    GameObject particleIn = Instantiate(portalIn.gameObject, transform.parent.position, transform.rotation);
                     particleIn.GetComponent<ParticleSystem>().Play();
-                    AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+                    AudioSource s = Instantiate(source, transform.parent.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
                     s.clip = teleportClip;
                     s.volume = volume;
                     s.mute = mute;
                     s.Play();
                     Destroy(s.gameObject, 2f);
                     Destroy(particleIn.gameObject, 2f);
-                    transform.position += new Vector3(moveDist * -factorX, moveDist * -factorY, 0);
-                    GameObject particleOut = Instantiate(portalOut.gameObject, transform.position, transform.rotation);
+                    transform.parent.position += new Vector3(moveDist * -factorX, moveDist * -factorY, 0);
+                    GameObject particleOut = Instantiate(portalOut.gameObject, transform.parent.position, transform.rotation);
                     particleOut.GetComponent<ParticleSystem>().Play();
                     Destroy(particleOut.gameObject, 2f);
                 }
                 else
                 {
-                    GameObject particleIn = Instantiate(portalIn.gameObject, transform.position, transform.rotation);
+                    GameObject particleIn = Instantiate(portalIn.gameObject, transform.parent.position, transform.rotation);
                     particleIn.GetComponent<ParticleSystem>().Play();
-                    AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+                    AudioSource s = Instantiate(source, transform.parent.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
                     s.clip = teleportClip;
                     s.volume = volume;
                     s.mute = mute;
                     s.Play();
                     Destroy(s.gameObject, 2f);
                     Destroy(particleIn.gameObject, 2f);
-                    transform.position += new Vector3(moveDist * factorX, moveDist * factorY, 0);
-                    GameObject particleOut = Instantiate(portalOut.gameObject, transform.position, transform.rotation);
+                    transform.parent.position += new Vector3(moveDist * factorX, moveDist * factorY, 0);
+                    GameObject particleOut = Instantiate(portalOut.gameObject, transform.parent.position, transform.rotation);
                     particleOut.GetComponent<ParticleSystem>().Play();
                     Destroy(particleOut.gameObject, 2f);
                 }
@@ -133,7 +133,7 @@ public class BetterWaveEnemy : EnemyController
         LocalTimersManager.CreateNewTimer(attackRecharge).DoAfter(() =>
         {
             wg.SpawnWave();
-            AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+            AudioSource s = Instantiate(source, transform.parent.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
             s.clip = attackClip;
             s.volume = volume;
             s.mute = mute;
@@ -146,16 +146,16 @@ public class BetterWaveEnemy : EnemyController
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, range);
+        Gizmos.DrawWireSphere(transform.parent.position, range);
 
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, escapeRange);
+        Gizmos.DrawWireSphere(transform.parent.position, escapeRange);
         if (player != null)
         {
-            Gizmos.DrawLine(transform.position, player.position);
+            Gizmos.DrawLine(transform.parent.position, player.position);
         }
 
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + moveDist * factorX, transform.position.y + moveDist * factorY));
+        Gizmos.DrawLine(transform.parent.position, new Vector3(transform.parent.position.x + moveDist * factorX, transform.parent.position.y + moveDist * factorY));
     }
 }

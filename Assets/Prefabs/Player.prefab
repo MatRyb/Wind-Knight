@@ -670,7 +670,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 552a4ef34407ee1429f5bd175e13f2e2, type: 3}
   source: {fileID: 7528295684267653842}
   damageClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
-  virtualMousePosition: {x: 1.7, y: -1}
+  virtualMousePosition: {x: 110, y: -410}
   velocity: {x: 0, y: 0}
   minSpeed: 0
   speed: 0
@@ -697,6 +697,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 193
   windBubble: {fileID: 5401348134195849030}
+  notMovingObjects:
+  - Enemy
+  - WaveParticle
   objectsInRange: []
 --- !u!1 &6297462287964603809
 GameObject:

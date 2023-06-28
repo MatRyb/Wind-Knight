@@ -3,6 +3,7 @@ using TMPro;
 using System.Text;
 using System.Collections.Generic;
 using System;
+using NaughtyAttributes;
 
 public class PaperScrapManager : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class PaperScrapManager : MonoBehaviour
 
     private static PaperScrapManager instance = null;
 
+    [SerializeField] private bool lessThanAll = false;
+    [SerializeField] [ShowIf("lessThanAll")] private int minCollectedScraps;
     [SerializeField] private int collected = 0;
     [SerializeField] private int allPaperScraps = 0;
     [SerializeField] private AudioClip collectedClip;
@@ -87,7 +90,22 @@ public class PaperScrapManager : MonoBehaviour
 
         allPaperScraps += pss.Length;
 
-        text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+        if (lessThanAll)
+        {
+            text.text = new StringBuilder("").Append(collected).Append('/').Append(minCollectedScraps).ToString();
+        }
+        else
+        {
+            text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+        }
+
+        if (AreAllCollected())
+        {
+            if (puzzleSolvedEvent != null)
+            {
+                puzzleSolvedEvent.Solved();
+            }
+        }
     }
 
     private void Update()
@@ -125,7 +143,15 @@ public class PaperScrapManager : MonoBehaviour
 
             puzzleSolvedEvent = FindObjectOfType<IPuzzleSolvedEvent>();
             text = GameObject.FindGameObjectWithTag("PaperScarpCounterText").GetComponent<TMP_Text>();
-            text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+
+            if (lessThanAll)
+            {
+                text.text = new StringBuilder("").Append(collected).Append('/').Append(minCollectedScraps).ToString();
+            }
+            else
+            {
+                text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+            }
 
             if (AreAllCollected())
             {
@@ -140,7 +166,15 @@ public class PaperScrapManager : MonoBehaviour
             instance.start = false;
             puzzleSolvedEvent = FindObjectOfType<IPuzzleSolvedEvent>();
             text = GameObject.FindGameObjectWithTag("PaperScarpCounterText").GetComponent<TMP_Text>();
-            text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+
+            if (lessThanAll)
+            {
+                text.text = new StringBuilder("").Append(collected).Append('/').Append(minCollectedScraps).ToString();
+            }
+            else
+            {
+                text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+            }
 
             EnemyController[] arr = FindObjectsOfType<EnemyController>();
 
@@ -212,7 +246,16 @@ public class PaperScrapManager : MonoBehaviour
     {
         collected += 1;
         scraps[paper.GetId()].collected = true;
-        text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+
+        if (lessThanAll)
+        {
+            text.text = new StringBuilder("").Append(collected).Append('/').Append(minCollectedScraps).ToString();
+        }
+        else
+        {
+            text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+        }
+
         paper.PlayAudio(collectedClip);
 
         if (AreAllCollected())
@@ -231,6 +274,13 @@ public class PaperScrapManager : MonoBehaviour
 
     public bool AreAllCollected()
     {
-        return collected == allPaperScraps;
+        if (lessThanAll)
+        {
+            return collected == minCollectedScraps;
+        }
+        else
+        {
+            return collected == allPaperScraps;
+        }
     }
 }

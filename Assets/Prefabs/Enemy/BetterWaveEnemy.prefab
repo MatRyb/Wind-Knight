@@ -227,11 +227,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amount: 3
-  dieTime: 4
-  thickness: 0.5
-  offset: 3
+  dieTime: 2.5
+  thickness: 0.2
+  offset: 2
   speed: 10
   angle: 45
+  color: {r: 0.69803923, g: 0, b: 0.20392157, a: 1}
+  tag: WaveParticle
 --- !u!1 &1778478429733571939
 GameObject:
   m_ObjectHideFlags: 0

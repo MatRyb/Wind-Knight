@@ -199,14 +199,23 @@ public class ObjectScript : ObjectHealth
             }
         }
 
+        /*if (collision.collider.gameObject.TryGetComponent(out PlayerControler _))
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+        }*/
+    }
+    /*
+    private void OnCollisionStay2D(Collision2D collision)
+    {
         if (collision.collider.gameObject.TryGetComponent(out PlayerControler _))
         {
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            rb.bodyType = RigidbodyType2D.Static;
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        rb.constraints = RigidbodyConstraints2D.None;
+        rb.bodyType = RigidbodyType2D.Dynamic;
     }
+    */
 }

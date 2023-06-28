@@ -14,6 +14,8 @@ public class WindControl : BaseEntityBehaviour
 
     [SerializeField] private GameObject windBubble = null;
 
+    [SerializeField] [Tag] private string[] notMovingObjects;
+
     [DisableIf("true")] [SerializeField] private List<ObjectInRange> objectsInRange;
 
     [System.Serializable]
@@ -113,9 +115,9 @@ public class WindControl : BaseEntityBehaviour
         {
             foreach (var collider in collidersInRange)
             {
-                if (collider.TryGetComponent<Rigidbody2D>(out Rigidbody2D rigid))
+                if (collider.TryGetComponent(out Rigidbody2D rigid))
                 {
-                    if (IsObjectBlockedByOtherObject(rigid.gameObject, blockingLayers) || rigid.gameObject.CompareTag("Enemy"))
+                    if (IsObjectBlockedByOtherObject(rigid.gameObject, blockingLayers) || CheckTags(rigid.gameObject))
                     {
                         continue;
                     }
@@ -132,6 +134,18 @@ public class WindControl : BaseEntityBehaviour
                 }
             }
         }
+    }
+
+    private bool CheckTags(GameObject obj)
+    {
+        bool res = false;
+
+        foreach (var tag in notMovingObjects)
+        {
+            res = res || obj.CompareTag(tag);
+        }
+
+        return res;
     }
 
     private void MoveObjects()

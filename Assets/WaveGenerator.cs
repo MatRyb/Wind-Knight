@@ -16,6 +16,10 @@ public class WaveGenerator : MonoBehaviour
 
     [SerializeField] [Range(0, 180)] private float angle = 45f;
 
+    [SerializeField] private Color color;
+
+    [SerializeField] [Tag] private string tag;
+
     [Button]
     public void SpawnWave()
     {
@@ -34,9 +38,16 @@ public class WaveGenerator : MonoBehaviour
 
             obj.transform.SetPositionAndRotation(gameObject.transform.position + new Vector3(offset * Mathf.Cos(lookRadian), offset * Mathf.Sin(lookRadian)), new Quaternion(0, 0, 0, 0));
 
-            left = obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetRadius(thickness).SetLeft(left).SetDieTime(dieTime).SetLocalTimer(dieTime);
+            left = obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetRadius(thickness).SetColor(color).SetLeft(left).SetDieTime(dieTime).SetLocalTimer(dieTime);
 
-            if (obj.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+            obj.tag = tag;
+
+            if (obj.TryGetComponent(out SpriteRenderer s))
+            {
+                s.color = color;
+            }
+
+            if (obj.TryGetComponent(out Rigidbody2D rb))
             {
                 rb.velocity = new Vector2(speed * Mathf.Cos(radian), speed * Mathf.Sin(radian));
             }

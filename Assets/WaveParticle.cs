@@ -13,6 +13,7 @@ public class WaveParticle : MonoBehaviour
     [Foldout("Info")][DisableIf("true")][SerializeField] private float angle;
     [Foldout("Info")][DisableIf("true")][SerializeField] private float speed;
     [Foldout("Info")][DisableIf("true")][SerializeField] private float radius;
+    [Foldout("Info")] [DisableIf("true")] [SerializeField] private Color color;
 
     private WaveParticle right = null;
     private WaveParticle left = null;
@@ -60,6 +61,12 @@ public class WaveParticle : MonoBehaviour
     public WaveParticle SetSpeed(float value)
     {
         speed = value;
+        return this;
+    }
+
+    public WaveParticle SetColor(Color value)
+    {
+        color = value;
         return this;
     }
 
@@ -144,9 +151,16 @@ public class WaveParticle : MonoBehaviour
 
             right.SetLeft(obj.GetComponent<WaveParticle>());
 
-            obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetLocalTimer(dieTime).SetDieTime(dieTime).SetRadius(radius).SetLeft(this);
+            obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetLocalTimer(dieTime).SetDieTime(dieTime).SetRadius(radius).SetColor(color).SetLeft(this);
 
             obj.transform.eulerAngles = new Vector3(0, 0, angleCalculated);
+
+            obj.tag = gameObject.tag;
+
+            if (obj.TryGetComponent(out SpriteRenderer s))
+            {
+                s.color = color;
+            }
 
             if (obj.TryGetComponent(out Rigidbody2D rb))
             {
@@ -197,7 +211,7 @@ public class WaveParticle : MonoBehaviour
         left = null;
         right = null;
 
-        if (TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+        if (TryGetComponent(out Rigidbody2D rb))
         {
             rb.velocity = Vector2.zero;
         }
