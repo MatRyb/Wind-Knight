@@ -231,7 +231,7 @@ MonoBehaviour:
   amount: 3
   dieTime: 2.5
   thickness: 0.2
-  offset: 2
+  offset: 2.5
   speed: 10
   angle: 45
   color: {r: 0.69803923, g: 0, b: 0.20392157, a: 1}
@@ -360,7 +360,7 @@ Transform:
   m_GameObject: {fileID: 5134007151201672458}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.8507323, y: -4.418187, z: -1.6277909}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4748208709420504356}
