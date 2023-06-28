@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BetterWaveEnemy : EnemyController
 {
-    private Rigidbody2D rb;
+    [SerializeField] private Rigidbody2D rb;
     private WaveGenerator wg;
     [SerializeField] private float escapeRange;
     [SerializeField] private float rangeOffset = 50f;
@@ -21,7 +21,7 @@ public class BetterWaveEnemy : EnemyController
 
     void Awake()
     {
-        if (rb == null && TryGetComponent(out rb))
+        if (rb == null && (rb = gameObject.GetComponentInParent<Rigidbody2D>()) != null)
         {
             rb.gravityScale = 0f;
         }
@@ -37,6 +37,11 @@ public class BetterWaveEnemy : EnemyController
         if (wg == null && !TryGetComponent(out wg))
         {
             Debug.LogError("Wave Enemy needs WaveGenerator");
+        }
+
+        if (FindObjectOfType<PlayerControler>() != null)
+        {
+            player = FindObjectOfType<PlayerControler>().transform;
         }
     }
 
@@ -145,7 +150,10 @@ public class BetterWaveEnemy : EnemyController
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, escapeRange);
-        Gizmos.DrawLine(transform.position, player.position);
+        if (player != null)
+        {
+            Gizmos.DrawLine(transform.position, player.position);
+        }
 
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + moveDist * factorX, transform.position.y + moveDist * factorY));

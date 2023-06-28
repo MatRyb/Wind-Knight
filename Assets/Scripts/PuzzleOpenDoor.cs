@@ -1,5 +1,4 @@
 using UnityEngine;
-using NaughtyAttributes;
 
 public class PuzzleOpenDoor : IPuzzleSolvedEvent
 {
