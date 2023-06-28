@@ -11,6 +11,7 @@ public class BetterWaveEnemy : EnemyController
     [SerializeField] private LayerMask rayCastLayer;
     [SerializeField] private ParticleSystem portalOut;
     [SerializeField] private ParticleSystem portalIn;
+    [SerializeField] private AudioClip teleportClip;
 
     private bool canAttack = true;
     private bool moved = false;
@@ -85,6 +86,12 @@ public class BetterWaveEnemy : EnemyController
                 {
                     GameObject particleIn = Instantiate(portalIn.gameObject, transform.position, transform.rotation);
                     particleIn.GetComponent<ParticleSystem>().Play();
+                    AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+                    s.clip = teleportClip;
+                    s.volume = volume;
+                    s.mute = mute;
+                    s.Play();
+                    Destroy(s.gameObject, 2f);
                     Destroy(particleIn.gameObject, 2f);
                     transform.position += new Vector3(moveDist * -factorX, moveDist * -factorY, 0);
                     GameObject particleOut = Instantiate(portalOut.gameObject, transform.position, transform.rotation);
@@ -95,6 +102,12 @@ public class BetterWaveEnemy : EnemyController
                 {
                     GameObject particleIn = Instantiate(portalIn.gameObject, transform.position, transform.rotation);
                     particleIn.GetComponent<ParticleSystem>().Play();
+                    AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+                    s.clip = teleportClip;
+                    s.volume = volume;
+                    s.mute = mute;
+                    s.Play();
+                    Destroy(s.gameObject, 2f);
                     Destroy(particleIn.gameObject, 2f);
                     transform.position += new Vector3(moveDist * factorX, moveDist * factorY, 0);
                     GameObject particleOut = Instantiate(portalOut.gameObject, transform.position, transform.rotation);
@@ -115,6 +128,12 @@ public class BetterWaveEnemy : EnemyController
         LocalTimersManager.CreateNewTimer(attackRecharge).DoAfter(() =>
         {
             wg.SpawnWave();
+            AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+            s.clip = attackClip;
+            s.volume = volume;
+            s.mute = mute;
+            s.Play();
+            Destroy(s.gameObject, 2f);
             canAttack = true;
         }).Start();
     }

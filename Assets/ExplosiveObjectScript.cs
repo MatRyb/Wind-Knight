@@ -3,15 +3,24 @@ using NaughtyAttributes;
 
 public class ExplosiveObjectScript : MonoBehaviour
 {
+    [Header("Audio:")]
+    [SerializeField] private GameObject source;
+    [SerializeField] private AudioClip activateClip;
+    [SerializeField] private AudioClip destroyClip;
+    private float volume = 0f;
+    private bool mute = false;
+
+    [Header("Explosion:")]
     [SerializeField] private int time = 3;
     [SerializeField] private float explosionPower = 400f;
     [SerializeField] private float explosionDamage = 40f;
     [SerializeField] private float range = 15f;
-    [SerializeField] private SpriteRenderer renderer;
     [SerializeField] private ParticleSystem destroyParticle;
     [SerializeField] private LayerMask nonActivatingLayers;
     [SerializeField] [Tag] private string[] nonActivatingTags = { "Object" };
 
+    [Header("Sprite:")]
+    [SerializeField] private SpriteRenderer renderer;
     [SerializeField] private Color deafultColor = new((87f / 255f), 0, 0, 100);
     [SerializeField] private Color blinkColor = new(100, 0, 0, 100);
 
@@ -32,11 +41,23 @@ public class ExplosiveObjectScript : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        volume = OptionsLevelManager.instance.GetSFXVolume();
+        mute = OptionsLevelManager.instance.GetSFXMute();
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!start && !CheckTags(collision.gameObject) && !CheckLayers(collision.gameObject))
         {
             start = true;
+            AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+            s.clip = activateClip;
+            s.volume = volume;
+            s.mute = mute;
+            s.Play();
+            Destroy(s.gameObject, 2f);
             LeanTween.value(renderer.gameObject, SetSpriteColor, renderer.color, blinkColor, 0.15f).setOnComplete(() => {
                 LeanTween.value(renderer.gameObject, SetSpriteColor, renderer.color, deafultColor, 0.15f);
             });
@@ -108,6 +129,12 @@ public class ExplosiveObjectScript : MonoBehaviour
     {
         ParticleSystem particle = Instantiate(destroyParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
         particle.Play();
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = destroyClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
         Destroy(particle.gameObject, 3);
         Destroy(gameObject);
     }

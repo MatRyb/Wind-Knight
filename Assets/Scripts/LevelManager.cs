@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using NaughtyAttributes;
 
 public class LevelManager : MonoBehaviour
 {
@@ -33,6 +34,10 @@ public class LevelManager : MonoBehaviour
 
     private RespawnPoint startResp;
     private RespawnPoint resp = null;
+
+    [SerializeField] private AudioClip checkpointClip;
+    [SerializeField] private bool isNextLevel = false;
+    [SerializeField] [ShowIf("isNextLevel")] private string nextLevelSceneName;
 
     void OnLevelWasLoaded(int level)
     {
@@ -203,7 +208,6 @@ public class LevelManager : MonoBehaviour
     {
         if (isScreen)
         {
-            Debug.Log("hello");
             GUIManager.HideRestartQuestionScreen();
         }
     }
@@ -221,6 +225,17 @@ public class LevelManager : MonoBehaviour
             if (buttons[i].name == "RestartBtn")
             {
                 buttons[i].onClick.AddListener(() => instance.RestartLevelJob(true));
+            }
+            else if (buttons[i].name == "NextLevelBtn")
+            {
+                if (instance.isNextLevel)
+                {
+                    buttons[i].gameObject.SetActive(false);
+                }
+                else
+                {
+                    buttons[i].onClick.AddListener(() => SceneManager.LoadScene(instance.nextLevelSceneName));
+                }
             }
             else if (buttons[i].name == "MenuBtn")
             {
@@ -308,7 +323,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void SetRespawnPoint(int id, Vector3 pos, Action action)
+    public void SetRespawnPoint(int id, Vector3 pos, Action<AudioClip, bool> action)
     {
         if (instance.resp == null || (id >= instance.resp.id && instance.resp.position != pos))
         {
@@ -352,7 +367,8 @@ public class LevelManager : MonoBehaviour
                 instance.resp.id = id;
                 instance.resp.position = pos;
             }
-            action.Invoke();
+            action.Invoke(checkpointClip, false);
+            
         }
         else if (id == instance.resp.id && instance.resp.position == pos)
         {
@@ -366,7 +382,7 @@ public class LevelManager : MonoBehaviour
                 }
             }
 
-            action.Invoke();
+            action.Invoke(checkpointClip, true);
         }
     }
 }

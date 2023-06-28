@@ -62,6 +62,12 @@ public class EnemyRanged : EnemyController
         GameObject newBullet = Instantiate(bullet, shootPosition.position, Quaternion.identity);
         newBullet.transform.localScale = transform.localScale / scaleFactor;
         newBullet.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x, direction.y - UnityEngine.Random.Range(-0.2f, 0.15f) * aim) * shootSpeed;
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = attackClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
         yield return new WaitForSeconds(attackRecharge);
         canShoot = true;
     }

@@ -109,6 +109,12 @@ private void OnCollisionEnter2D(Collision2D collision)
 
         GameObject mainHitBox = Instantiate(attackPrefab, tailPos.position, Quaternion.identity);
         AttackAngleVisualisation(player.transform.position, mainHitBox);
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = attackClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
         canAttack = true;
     }
 

@@ -80,6 +80,9 @@ MonoBehaviour:
   viewRayBlockingLayers:
     serializedVersion: 2
     m_Bits: 193
+  source: {fileID: 8114178880373141220, guid: 1f40bea01fdfed04fa39ebd57cace20f, type: 3}
+  attackClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
+  dieClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   patrol: {fileID: 2435575188841906586}
   enemyRigidbody: {fileID: 2435575188841906589}
   body: {fileID: 4473339957538727347}

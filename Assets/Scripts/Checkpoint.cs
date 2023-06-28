@@ -3,6 +3,7 @@ using UnityEngine;
 public class Checkpoint : MonoBehaviour
 {
     [SerializeField] private int id;
+    [SerializeField] private AudioSource source;
     private LevelManager lvl;
     private SpriteRenderer sprite;
 
@@ -22,10 +23,17 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler _))
+        if (collision.gameObject.TryGetComponent(out PlayerControler _))
         {
-            lvl.SetRespawnPoint(id, gameObject.transform.position, SetActive);
+            lvl.SetRespawnPoint(id, gameObject.transform.position, SetAsCheckpoint);
         }
+    }
+
+    public void SetAsCheckpoint(AudioClip clip, bool me)
+    {
+        SetActive();
+        if (!me)
+            PlayAudio(clip);
     }
 
     public void SetActive()
@@ -46,5 +54,11 @@ public class Checkpoint : MonoBehaviour
     public int GetId()
     {
         return id;
+    }
+
+    public void PlayAudio(AudioClip clip)
+    {
+        source.clip = clip;
+        source.Play();
     }
 }

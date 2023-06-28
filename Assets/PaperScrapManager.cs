@@ -26,6 +26,7 @@ public class PaperScrapManager : MonoBehaviour
 
     [SerializeField] private int collected = 0;
     [SerializeField] private int allPaperScraps = 0;
+    [SerializeField] private AudioClip collectedClip;
     [SerializeField] private TMP_Text text;
     [SerializeField] private IPuzzleSolvedEvent puzzleSolvedEvent;
 
@@ -122,11 +123,14 @@ public class PaperScrapManager : MonoBehaviour
 
             allPaperScraps += pss.Length;
 
+            puzzleSolvedEvent = FindObjectOfType<IPuzzleSolvedEvent>();
+            text = GameObject.FindGameObjectWithTag("PaperScarpCounterText").GetComponent<TMP_Text>();
             text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
         }
         else if (instance.start)
         {
             instance.start = false;
+            puzzleSolvedEvent = FindObjectOfType<IPuzzleSolvedEvent>();
             text = GameObject.FindGameObjectWithTag("PaperScarpCounterText").GetComponent<TMP_Text>();
             text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
 
@@ -193,10 +197,14 @@ public class PaperScrapManager : MonoBehaviour
         collected += 1;
         scraps[paper.GetId()].collected = true;
         text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+        paper.PlayAudio(collectedClip);
 
         if (AreAllCollected())
         {
-            puzzleSolvedEvent.Solved();
+            if (puzzleSolvedEvent != null)
+            {
+                puzzleSolvedEvent.Solved();
+            }
         }
     }
 

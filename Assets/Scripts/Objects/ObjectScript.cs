@@ -16,6 +16,12 @@ public class ObjectScript : ObjectHealth
     [SerializeField] private List<Sprite> states;
     [SerializeField] private float minSpeed = 2.0f;
 
+    [Header("Audio:")]
+    [SerializeField] private GameObject source;
+    [SerializeField] private AudioClip destroyClip;
+    private float volume = 0f;
+    private bool mute = false;
+
     [Header("Particle:")]
     [SerializeField] private Color destroyColor1;
     [SerializeField] private Color destroyColor2;
@@ -75,6 +81,12 @@ public class ObjectScript : ObjectHealth
         GameTimer.OnStopped += StopGameTime;
     }
 
+    private void Start()
+    {
+        volume = OptionsLevelManager.instance.GetSFXVolume();
+        mute = OptionsLevelManager.instance.GetSFXMute();
+    }
+
     void Update()
     {
         ChangeSprite();
@@ -106,7 +118,13 @@ public class ObjectScript : ObjectHealth
         var mainModule = particle.main;
         mainModule.startColor = new ParticleSystem.MinMaxGradient(destroyColor1, destroyColor2);
         particle.Play();
-        Destroy(particle.gameObject, 3);
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = destroyClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
+        Destroy(particle.gameObject, 3f);
         Destroy(gameObject);
     }
 
