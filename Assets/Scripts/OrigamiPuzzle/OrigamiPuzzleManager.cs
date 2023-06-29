@@ -55,6 +55,9 @@ public class OrigamiPuzzleManager : MonoBehaviour
     public int CurrentOrderIndex { get; private set; } = 0;
     private bool clickBlocked = false;
 
+    private FoldPaperClicker highlightedFoldLineHandler;
+    private bool resetHighlight = false;
+
     private void Start()
     {
         RecalculateFoldPaperBoundries();
@@ -64,11 +67,22 @@ public class OrigamiPuzzleManager : MonoBehaviour
         SpriteHandler.SetActive(false);
     }
 
-    public void HighlightFoldLine(FoldPaperClicker.FoldLine foldLine, bool enable)
+    private void Update()
     {
-        if (enable)
+        if (LineHandler.activeSelf && resetHighlight)
+        {
+            HighlightFoldLine(highlightedFoldLineHandler, true);
+        }
+    }
+
+    public void HighlightFoldLine(FoldPaperClicker clicker, bool enable)
+    {
+        var foldLine = clicker.fold.line;
+        if (enable && (clicker != highlightedFoldLineHandler || resetHighlight))
         {
             // Enable Fold Line Highlight
+            resetHighlight = false;
+            highlightedFoldLineHandler = clicker;
             LineHandler.SetActive(true);
             var line = LineHandler.GetComponent<LineRenderer>();
             if (line.GetPosition(0) != PercentPointToGlobalPoint(foldLine.GetPoint(0f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z))
@@ -80,10 +94,11 @@ public class OrigamiPuzzleManager : MonoBehaviour
                 line.SetPosition(1, PercentPointToGlobalPoint(foldLine.GetPoint(1f)) + new Vector3(0, 0, LineHandler.transform.localPosition.z));
             }
         }
-        else
+        else if (clicker == highlightedFoldLineHandler)
         {
             // Disable Fold Line Highlight
             LineHandler.SetActive(false);
+            resetHighlight = true;
         }
     }
 
@@ -190,6 +205,8 @@ public class OrigamiPuzzleManager : MonoBehaviour
             {
                 Solved();
             }
+
+            resetHighlight = true;
         };
 
         StartCoroutine(FoldAroundAxis(RotateHandler.transform, (PercentPointToGlobalPoint(fold.line.GetPoint(1f)) - PercentPointToGlobalPoint(fold.line.GetPoint(0f))).normalized, fold.angle, RotateHandler.transform.position - new Vector3(0, 0, CurrentOrderIndex * 0.001f + 0.001f), .5f, false, finishAction));
@@ -236,6 +253,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
             RecalculateFoldPaperBoundries();
 
             move.foldButton.OrderIndex = -1;
+            resetHighlight = true;
         };
 
         StartCoroutine(FoldAroundAxis(RotateHandler.transform, move.rotateAxis, -move.rotateAngle, RotateHandler.transform.position - new Vector3(0, 0, CurrentOrderIndex * 0.001f - 0.001f), .5f, true, finishAction));

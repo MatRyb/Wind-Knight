@@ -17,6 +17,16 @@ public class FoldPaperClicker : MonoBehaviour
         {
             return pointA + (pointB - pointA) * t;
         }
+
+        public static bool operator==(FoldLine a, FoldLine b)
+        {
+            return a.pointA == b.pointA && a.pointB == b.pointB;
+        }
+
+        public static bool operator !=(FoldLine a, FoldLine b)
+        {
+            return !(a == b);
+        }
     }
 
     [System.Serializable]
@@ -51,10 +61,66 @@ public class FoldPaperClicker : MonoBehaviour
     public Color buttonEnableColor;
     public Color buttonDisableColor;
 
+    private bool playerInTrigger = false;
+    private bool PlayerInTrigger 
+    { 
+        get
+        {
+            return playerInTrigger;
+        }
+
+        set
+        {
+            if (playerInTrigger != value)
+            {
+                playerInTrigger = value;
+                UpdateHighlight();
+            }
+        }
+    }
+
     private void Start()
     {
         orderCanvas.SetActive(false);
         spriteRenderer.color = buttonEnableColor;
+    }
+
+    private void Update()
+    {
+        if (PlayerInTrigger)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (OrderIndex != -1)
+                {
+                    manager.HighlightFoldLine(this, true);
+                }
+                else
+                {
+                    manager.HighlightFoldLine(this, false);
+                }
+                manager.FoldButtonClicked(this);
+            }
+        }
+    }
+
+    private void UpdateHighlight()
+    {
+        if (PlayerInTrigger)
+        {
+            if (OrderIndex == -1)
+            {
+                manager.HighlightFoldLine(this, true);
+            }
+            else
+            {
+                manager.HighlightFoldLine(this, false);
+            }
+        }
+        else
+        {
+            manager.HighlightFoldLine(this, false);
+        }
     }
 
     private void OrderChanged()
@@ -74,57 +140,26 @@ public class FoldPaperClicker : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (OrderIndex == -1)
+        // Nie mo¿e byæ: collision.CompareTag("Player")
+        if (collision.TryGetComponent<PlayerControler>(out var controler))
         {
-            manager.HighlightFoldLine(fold.line, true);
-        }
-        else
-        {
-            manager.HighlightFoldLine(fold.line, false);
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (OrderIndex != -1)
-            {
-                manager.HighlightFoldLine(fold.line, true);
-            }
-            else
-            {
-                manager.HighlightFoldLine(fold.line, false);
-            }
-            manager.FoldButtonClicked(this);
+            PlayerInTrigger = true;
         }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (OrderIndex == -1)
+        if (collision.TryGetComponent<PlayerControler>(out var controler))
         {
-            manager.HighlightFoldLine(fold.line, true);
-        }
-        else
-        {
-            manager.HighlightFoldLine(fold.line, false);
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (OrderIndex != -1)
-            {
-                manager.HighlightFoldLine(fold.line, true);
-            }
-            else
-            {
-                manager.HighlightFoldLine(fold.line, false);
-            }
-            manager.FoldButtonClicked(this);
+            PlayerInTrigger = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (OrderIndex == -1)
+        if (collision.TryGetComponent<PlayerControler>(out var controler))
         {
-            manager.HighlightFoldLine(fold.line, false);
+            PlayerInTrigger = false;
         }
     }
 
