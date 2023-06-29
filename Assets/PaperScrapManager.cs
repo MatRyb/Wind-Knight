@@ -35,7 +35,7 @@ public class PaperScrapManager : MonoBehaviour
     [SerializeField] private IPuzzleSolvedEvent puzzleSolvedEvent;
     public string ThisLevelName = "";
 
-    private List<Scrap> scraps;
+    [SerializeField] private List<Scrap> scraps;
     private bool restart;
     private bool start;
 

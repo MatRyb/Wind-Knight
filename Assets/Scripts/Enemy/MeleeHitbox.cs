@@ -72,6 +72,8 @@ public class MeleeHitbox : MonoBehaviour
     private void OnDestroy()
     {
         timer.Stop();
+        timer2.Stop();
+        timer3.Stop();
     }
 
     public void SetSpriteColor(Color val)

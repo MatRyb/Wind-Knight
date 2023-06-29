@@ -64,6 +64,8 @@ public class PatrolFlying : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        localToWorld = transform.localToWorldMatrix;
+
         if (points.Count > 0)
         {
             Gizmos.color = Color.red;

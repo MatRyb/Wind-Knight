@@ -22,6 +22,9 @@ public class BetterWaveEnemy : EnemyController
     private float factorX;
     private float factorY;
 
+    private LocalTimerContainer timer;
+    private LocalTimerContainer timer2;
+
     void Awake()
     {
         if (rb == null && (rb = gameObject.GetComponentInParent<Rigidbody2D>()) != null)
@@ -135,7 +138,7 @@ public class BetterWaveEnemy : EnemyController
     {
         animator.speed = 1f / attackRecharge;
         animator.Play("Base Layer.Attack");
-        LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
+        timer = LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
         {
             wg.SpawnWave();
             AudioSource s = Instantiate(source, transform.parent.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
@@ -144,11 +147,17 @@ public class BetterWaveEnemy : EnemyController
             s.mute = mute;
             s.Play();
             Destroy(s.gameObject, 2f);
-            LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
+            timer2 = LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
             {
                 canAttack = true;
             }).Start();
         }).Start();
+    }
+
+    private void OnDestroy()
+    {
+        timer.Stop();
+        timer2.Stop();
     }
 
     private void OnDrawGizmosSelected()

@@ -13,6 +13,8 @@ public class FlyingEnemy : EnemyController
     [SerializeField] private float setOffTime = 2f;
     [SerializeField] private float explosionPower = 2f;
 
+    private LocalTimerContainer timer;
+
     private void Start()
     {
         StartHealth();
@@ -53,7 +55,7 @@ public class FlyingEnemy : EnemyController
     public override void Attack()
     {
         settingOff = true;
-        LocalTimersManager.CreateNewTimer(setOffTime).DoAfter(() =>
+        timer = LocalTimersManager.CreateNewTimer(setOffTime).DoAfter(() =>
         {
             Explode();
         }).Start();
@@ -112,6 +114,10 @@ public class FlyingEnemy : EnemyController
         }
     }
 
+    private void OnDestroy()
+    {
+        timer.Stop();
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
