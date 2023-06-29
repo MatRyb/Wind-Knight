@@ -128,10 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 4473339957538727347}
   points:
-  - {x: 4.44, y: -1.07}
-  - {x: 13.53, y: 7.4}
-  - {x: 26.1, y: -0.2}
-  - {x: 16.5, y: 2.17}
+  - {x: 15.79, y: 12.11}
+  - {x: 15.79, y: 12.11}
   speed: 10
 --- !u!60 &800837283619394712
 PolygonCollider2D:

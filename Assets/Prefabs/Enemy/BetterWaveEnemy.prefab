@@ -203,8 +203,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 193
   source: {fileID: 8114178880373141220, guid: 1f40bea01fdfed04fa39ebd57cace20f, type: 3}
-  attackClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
-  dieClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
+  attackClip: {fileID: 8300000, guid: 979d5759496da3e469a8c33276fd1f47, type: 3}
+  dieClip: {fileID: 8300000, guid: bc78cc66ccf3db14bb81efc6a4205aa6, type: 3}
   rb: {fileID: 5134007151201672456}
   escapeRange: 6
   rangeOffset: 50
@@ -214,7 +214,7 @@ MonoBehaviour:
     m_Bits: 192
   portalOut: {fileID: 1323925819306358218, guid: f220678eea873b9468d626c5fec93f16, type: 3}
   portalIn: {fileID: 4443271603967911528, guid: f5093f9bcd2aac6428e3fe20b65e2d46, type: 3}
-  teleportClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
+  teleportClip: {fileID: 8300000, guid: 2027e8cc8f5e4eb44a936ae2f0eb4a64, type: 3}
   animator: {fileID: 2205324142948381541}
 --- !u!114 &2942732936853592689
 MonoBehaviour:

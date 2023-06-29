@@ -181,10 +181,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   source: {fileID: 8114178880373141220, guid: 1f40bea01fdfed04fa39ebd57cace20f, type: 3}
-  activateClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
-  destroyClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
+  activateClip: {fileID: 8300000, guid: 20d3cc9079c25a84aa85742ad7266379, type: 3}
+  destroyClip: {fileID: 8300000, guid: 6061c059ab9ef354da63b5a681f3f759, type: 3}
   time: 5
-  explosionPower: 1000
+  explosionPower: 1500
   explosionDamage: 40
   range: 15
   destroyParticle: {fileID: 840825463644067242, guid: 100b305cb1e473c4fbfb611c43b5e377, type: 3}

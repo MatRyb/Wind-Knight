@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level3_Enemy.unity
     guid: a46cb476078d08148bae7df3cf3aa22a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Level4_All.unity
     guid: 353e637e2c157f24b8095b64e45b31d8
   m_configObjects: {}

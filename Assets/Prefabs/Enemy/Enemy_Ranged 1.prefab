@@ -378,7 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfae1005304789944857a61fbe27dc51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 30
   health: 0
   attacking: 0
   isPaperScrap: 0
@@ -393,8 +393,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 193
   source: {fileID: 8114178880373141220, guid: 1f40bea01fdfed04fa39ebd57cace20f, type: 3}
-  attackClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
-  dieClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
+  attackClip: {fileID: 8300000, guid: 979d5759496da3e469a8c33276fd1f47, type: 3}
+  dieClip: {fileID: 8300000, guid: bc78cc66ccf3db14bb81efc6a4205aa6, type: 3}
   moveSprite: {fileID: 580585821}
   attackSprite: {fileID: 3450433709167416688}
   shootSpeed: 20

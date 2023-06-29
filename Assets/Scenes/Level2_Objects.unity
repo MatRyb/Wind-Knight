@@ -1513,8 +1513,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Touch the bomb to activate it!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 87570fe231f86524db180dbad196c9e3, type: 2}
+  m_sharedMaterial: {fileID: -248006249483105560, guid: 87570fe231f86524db180dbad196c9e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7904,8 +7904,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Warning! Touching objects reduces durability!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 87570fe231f86524db180dbad196c9e3, type: 2}
+  m_sharedMaterial: {fileID: -248006249483105560, guid: 87570fe231f86524db180dbad196c9e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -15863,8 +15863,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Use LMB to control objects in your range!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 87570fe231f86524db180dbad196c9e3, type: 2}
+  m_sharedMaterial: {fileID: -248006249483105560, guid: 87570fe231f86524db180dbad196c9e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
