@@ -1234,7 +1234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5209816240133236623, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
       propertyPath: maxHealth
-      value: 75
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7336270318660727246, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
       propertyPath: m_RootOrder
@@ -2152,6 +2152,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f137ce04bc8c9a541acafb1fe0dbf156, type: 3}
+--- !u!4 &301162478 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+  m_PrefabInstance: {fileID: 1961585515}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &303218756
 GameObject:
   m_ObjectHideFlags: 0
@@ -5375,6 +5380,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1806434590}
+  - {fileID: 301162478}
   m_Father: {fileID: 1025990726}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5955,11 +5961,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e87afb4e092c7045bde62de7922a2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lessThanAll: 0
-  minCollectedScraps: 0
+  lessThanAll: 1
+  minCollectedScraps: 3
   collected: 0
-  allPaperScraps: 0
-  collectedClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
+  allPaperScraps: 4
+  collectedClip: {fileID: 8300000, guid: 207184569f62d054ea977badd4076583, type: 3}
   text: {fileID: 2123639967}
   puzzleSolvedEvent: {fileID: 1309587820}
   ThisLevelName: Level3_Enemy
@@ -6244,7 +6250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5209816240133236623, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
       propertyPath: maxHealth
-      value: 75
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7336270318660727246, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
       propertyPath: m_RootOrder
@@ -13910,6 +13916,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f604e71200c69442937756c441ba8bb, type: 3}
+--- !u!1001 &1961585515
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 725205366}
+    m_Modifications:
+    - target: {fileID: 5771464816270400374, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_Name
+      value: Paper Scrap (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 116.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 30.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771464816270400381, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
 --- !u!1001 &1975866970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14981,7 +15044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01186bf60ced4a54f9e5c08dca1a66a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpointClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
+  checkpointClip: {fileID: 8300000, guid: 207184569f62d054ea977badd4076583, type: 3}
   isNextLevel: 1
   nextLevelSceneName: Level4_All
   ThisLevelName: Level3_Enemy
