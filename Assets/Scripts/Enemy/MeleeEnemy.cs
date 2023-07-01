@@ -78,7 +78,7 @@ public class MeleeEnemy : EnemyController
         attacking = false;
     }
 
-private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 vel = ComputeIncidentVelocity(collision);
 

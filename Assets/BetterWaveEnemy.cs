@@ -156,8 +156,8 @@ public class BetterWaveEnemy : EnemyController
 
     private void OnDestroy()
     {
-        timer.Stop();
-        timer2.Stop();
+        timer?.Stop();
+        timer2?.Stop();
     }
 
     private void OnDrawGizmosSelected()

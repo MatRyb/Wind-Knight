@@ -1,22 +1,23 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-[System.Serializable]
-struct Triangle
-{
-    public Transform vert1;
-    public Transform vert2;
-    public Transform vert3;
-}
-
 public class InsideTextureMesh : MonoBehaviour
-{   
+{
+    [System.Serializable]
+    struct Triangle
+    {
+        public Transform vert1;
+        public Transform vert2;
+        public Transform vert3;
+    }
+
     private Vector3[] Verticles;
     private Mesh mesh;
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     [SerializeField] private Material material;
-    //[SerializeField] private Vector2 tilling;
+    [SerializeField] private string meshName;
+    [SerializeField] private float zPos;
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private float height;
     [Foldout("Info")]
@@ -76,8 +77,8 @@ public class InsideTextureMesh : MonoBehaviour
             uvs[i] = new Vector2(Verticles[i].x / maxCoords.x, Verticles[i].y / maxCoords.y);
         }
 
-        GameObject renderer = new("Background");
-        renderer.transform.position += new Vector3(0, 0, 10);
+        GameObject renderer = new(meshName);
+        renderer.transform.position += new Vector3(0, 0, zPos);
         meshFilter = renderer.AddComponent<MeshFilter>();
         meshRenderer = renderer.AddComponent<MeshRenderer>();
 
@@ -89,7 +90,6 @@ public class InsideTextureMesh : MonoBehaviour
 
         meshFilter.mesh = mesh;
         meshRenderer.material = material;
-        //meshRenderer.material.mainTextureScale = tilling;
 
         height = maxCoords.y - minCoords.y;
         width = maxCoords.x - minCoords.x;

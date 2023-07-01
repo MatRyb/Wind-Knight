@@ -48,7 +48,7 @@ public class MeleeHitbox : MonoBehaviour
     }
 
     void Deploy() {
-        this.GetComponent<Collider2D>().enabled = true;
+        GetComponent<Collider2D>().enabled = true;
         GetComponent<SpriteRenderer>().color = Color.red;
 
         if (gameObject != null)
@@ -59,9 +59,9 @@ public class MeleeHitbox : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler _))
+        if (collision.gameObject.TryGetComponent(out PlayerControler _))
         {
-            if (collision.transform.gameObject.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
+            if (collision.transform.gameObject.TryGetComponent(out IDamageTaker damageTaker))
             {
                 damageTaker.TakeDamage(damage);
             }
@@ -71,9 +71,9 @@ public class MeleeHitbox : MonoBehaviour
 
     private void OnDestroy()
     {
-        timer.Stop();
-        timer2.Stop();
-        timer3.Stop();
+        timer?.Stop();
+        timer2?.Stop();
+        timer3?.Stop();
     }
 
     public void SetSpriteColor(Color val)

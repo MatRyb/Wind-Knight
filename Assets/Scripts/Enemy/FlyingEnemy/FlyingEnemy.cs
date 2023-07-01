@@ -116,7 +116,7 @@ public class FlyingEnemy : EnemyController
 
     private void OnDestroy()
     {
-        timer.Stop();
+        timer?.Stop();
     }
     private void OnDrawGizmosSelected()
     {
