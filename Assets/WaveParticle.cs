@@ -226,12 +226,15 @@ public class WaveParticle : MonoBehaviour
 
         if (!collision.gameObject.TryGetComponent(out WaveParticle _))
         {
-            left?.RightDied();
-            right?.LeftDied();
-
-            if (_pool != null && !inPool)
+            if (collision.gameObject.tag != "Checkpoint")
             {
-                _pool.Release(this);
+                left?.RightDied();
+                right?.LeftDied();
+
+                if (_pool != null && !inPool)
+                {
+                    _pool.Release(this);
+                }
             }
         }
     }

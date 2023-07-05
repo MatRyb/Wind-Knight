@@ -24,6 +24,9 @@ public class MenuManager : MonoBehaviour
     {
         menuState = MenuWindow.Title;
         TitleScreen.SetActive(true);
+        LevelSelectScreen.SetActive(false);
+        OptionsScreen.SetActive(false);
+        CreditsScreen.SetActive(false);
     }
 
     public void OpenLevel(string level)

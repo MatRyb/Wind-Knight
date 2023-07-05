@@ -39,6 +39,9 @@ public class OrigamiPuzzleManager : MonoBehaviour
     [Header("Particle System:")]
     [SerializeField] private ParticleSystem confettiParticle;
 
+    [Header("ViewCameraCollider:")]
+    [SerializeField] private GameObject camCollider;
+
     private bool True => true;
     [Foldout("info")] [DisableIf("True")] [SerializeField] private FoldPaperBoundries paperBoundries = new();
     [Foldout("info")] [DisableIf("True")] [SerializeField] private List<FoldMove> movesHistory = new();
@@ -357,6 +360,7 @@ public class OrigamiPuzzleManager : MonoBehaviour
         {
             button.gameObject.SetActive(false);
         }
+        camCollider.SetActive(false);
         SpriteHandler.SetActive(true);
         SpriteHandler.GetComponent<IPuzzleSolvedEvent>().Solved();
     }

@@ -92,7 +92,16 @@ public class AiPatrol : MonoBehaviour
         rb.gravityScale = gravityScale * GameTimer.TimeMultiplier;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    /*private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if ((collision.gameObject.CompareTag("Object") || collision.gameObject.CompareTag("Enemy")) && fliped)
+        {
+            Flip();
+        }
+    }
+    */
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if ((collision.gameObject.CompareTag("Object") || collision.gameObject.CompareTag("Enemy")) && fliped)
         {

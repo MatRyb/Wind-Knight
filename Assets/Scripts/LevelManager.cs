@@ -97,7 +97,7 @@ public class LevelManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             waitingForStart = true;
-            startText = GUIManager.ShowText("Press 'Left Mouse Button' to start");
+            startText = GUIManager.ShowText("Press [Left Mouse Button] to Start");
         }
 
         if (waitingForStart && Input.GetMouseButtonDown(0))

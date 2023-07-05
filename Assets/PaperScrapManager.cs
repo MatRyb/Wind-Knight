@@ -279,6 +279,23 @@ public class PaperScrapManager : MonoBehaviour
     {
         instance.restart = true;
     }
+    
+    public int GetCollectedNumber()
+    {
+        return collected;
+    }
+
+    public int GetNeededCollectedNumber()
+    {
+        if (lessThanAll)
+        {
+            return minCollectedScraps;
+        }
+        else
+        {
+            return allPaperScraps;
+        }
+    }
 
     public bool AreAllCollected()
     {

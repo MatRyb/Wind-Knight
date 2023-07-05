@@ -13,13 +13,13 @@ public class CameraChanger : MonoBehaviour
     private bool outside = true;
 
     [Foldout("Info:")]
-    [DisableIf("true")][SerializeField] private List<BoxCollider2D> staticColliders = new List<BoxCollider2D>();
+    [DisableIf("true")][SerializeField] private List<BoxCollider2D> staticColliders = new();
 
     private void Awake()
     {
-        foreach (GameObject item in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
+        foreach (GameObject item in FindObjectsOfType<GameObject>())
         {
-            if(item.layer == LayerMask.NameToLayer("CameraViewCollider"))
+            if (item.layer == LayerMask.NameToLayer("CameraViewCollider"))
             {
                 staticColliders.Add(item.GetComponent<BoxCollider2D>());
             }

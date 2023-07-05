@@ -108,7 +108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7701394289945380181}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 0.017123288, y: 0.017123288, z: 0.017123288}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -360,9 +360,10 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   confettiParticle: {fileID: 5407093337690854948, guid: 0866b663f1073d340a83a928da9ad723, type: 3}
+  camCollider: {fileID: 0}
   paperBoundries:
-    min: {x: 140.72598, y: -313.774}
-    max: {x: 161.27397, y: -293.226}
+    min: {x: 310.78598, y: 83.36603}
+    max: {x: 331.33398, y: 103.91397}
   movesHistory: []
   solved: 0
 --- !u!1 &7701394291187255139

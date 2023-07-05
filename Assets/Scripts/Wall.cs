@@ -51,4 +51,23 @@ public class Wall : MonoBehaviour
             }
         }
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.collider.gameObject.TryGetComponent(out PlayerControler damageTaker) && time <= 0f)
+        {
+            switch (type)
+            {
+                case Type.Zero:
+                    break;
+                case Type.Deadly:
+                    damageTaker.TakeDamage(damageTaker.GetMaxHealth());
+                    break;
+                case Type.Damage:
+                    damageTaker.TakeDamage(damage);
+                    time = cooldown;
+                    break;
+            }
+        }
+    }
 }

@@ -213,12 +213,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7336270318660727246}
-  - component: {fileID: 7834633356005780645}
   - component: {fileID: 1610669047753384738}
-  - component: {fileID: 1800486532198368510}
   - component: {fileID: 7777130442347837359}
   - component: {fileID: 5209816240133236623}
-  - component: {fileID: 804644915268053856}
+  - component: {fileID: 3482522765279657792}
   m_Layer: 0
   m_Name: MeleeEnemy
   m_TagString: Enemy
@@ -243,58 +241,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7834633356005780645
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2761737501788284197}
-  m_Enabled: 0
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6670340842177774bb24f0951f100e56, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!50 &1610669047753384738
 Rigidbody2D:
   serializedVersion: 4
@@ -315,33 +261,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!61 &1800486532198368510
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2761737501788284197}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.02061218, y: 0.10258061}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.911111, y: 2.1222222}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.0996703, y: 1.2175056}
-  m_EdgeRadius: 0
+  m_Constraints: 4
 --- !u!114 &7777130442347837359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,7 +291,7 @@ MonoBehaviour:
   viewBlockingLayers:
     serializedVersion: 2
     m_Bits: 0
-  collider: {fileID: 6531602994979070044}
+  collider: {fileID: 3482522765279657792}
   body: {fileID: 819498047283956124}
 --- !u!114 &5209816240133236623
 MonoBehaviour:
@@ -412,17 +332,17 @@ MonoBehaviour:
   attackSprite: {fileID: 21300000, guid: 907cd625706538748bfe70d52a5f3fa3, type: 3}
   tailPos: {fileID: 6175306864618714598}
   minSpeed: 2
---- !u!60 &804644915268053856
-PolygonCollider2D:
+--- !u!61 &3482522765279657792
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2761737501788284197}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -435,67 +355,9 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.40315366, y: -1.0755591}
-      - {x: 0.47294068, y: -1.0745552}
-      - {x: 0.8290328, y: -1.0756845}
-      - {x: 1.0150535, y: -1.0755062}
-      - {x: 1.0500001, y: -0.46111113}
-      - {x: 1.1055555, y: -0.35555556}
-      - {x: 1.1666667, y: -0.23888889}
-      - {x: 1.2333333, y: -0.11111111}
-      - {x: 1.3111111, y: 0.03888889}
-      - {x: 1.3444445, y: 0.022222223}
-      - {x: 1.3944445, y: -0.06666667}
-      - {x: 1.4111111, y: -0.16111112}
-      - {x: 1.4388889, y: -0.17222223}
-      - {x: 1.4555556, y: -0.14444445}
-      - {x: 1.4555556, y: -0.044444446}
-      - {x: 1.4166667, y: 0.16666667}
-      - {x: 1.4055556, y: 0.17222223}
-      - {x: 1.2722223, y: 0.17222223}
-      - {x: 1.2111112, y: 0.1}
-      - {x: 1.1611111, y: 0.033333335}
-      - {x: 1.0222223, y: -0.12222222}
-      - {x: 0.90000004, y: -0.28333333}
-      - {x: 0.56666666, y: -0.30555555}
-      - {x: 0.55, y: -0.2888889}
-      - {x: 0.5, y: -0.2888889}
-      - {x: 0.31111112, y: -0.3}
-      - {x: 0.22222222, y: -0.30555555}
-      - {x: 0.033333335, y: -0.31666666}
-      - {x: -0.033333335, y: -0.32222223}
-      - {x: -0.06666667, y: -0.35}
-      - {x: -0.14444445, y: -0.35}
-      - {x: -0.30555555, y: -0.36111113}
-      - {x: -0.31111112, y: -0.33888888}
-      - {x: -0.36111113, y: -0.27222222}
-      - {x: -0.78888893, y: 0.41111112}
-      - {x: -0.98333335, y: 0.72222227}
-      - {x: -1.1444445, y: 0.9888889}
-      - {x: -1.1944444, y: 1.0333333}
-      - {x: -1.2555556, y: 1.0388889}
-      - {x: -1.3555555, y: 1.0611111}
-      - {x: -1.4555556, y: 1.0611111}
-      - {x: -1.4555556, y: 1.0444444}
-      - {x: -1.388889, y: 0.9777778}
-      - {x: -1.2555556, y: 0.87222224}
-      - {x: -1.1, y: 0.73333335}
-      - {x: -1.0555556, y: 0.6388889}
-      - {x: -0.50555557, y: -0.5222222}
-      - {x: -0.4888889, y: -0.6111111}
-      - {x: -0.45592266, y: -1.074246}
-      - {x: -0.29631788, y: -1.075639}
-      - {x: -0.21461691, y: -1.0748851}
-      - {x: -0.15206218, y: -1.0756987}
-      - {x: -0.067051694, y: -1.0747708}
-      - {x: -0.04684635, y: -1.0752659}
-      - {x: -0.026640998, y: -1.0747524}
-      - {x: -0.0034103394, y: -1.0747524}
-      - {x: 0.18722233, y: -1.0750642}
-      - {x: 0.25601783, y: -1.0749358}
-      - {x: 0.3323066, y: -1.0746791}
+  serializedVersion: 2
+  m_Size: {x: 2.911111, y: 2.1222222}
+  m_EdgeRadius: 0
 --- !u!1 &2940796644657627581
 GameObject:
   m_ObjectHideFlags: 0

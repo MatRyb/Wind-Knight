@@ -28,6 +28,47 @@ public class InsideTextureSprite : MonoBehaviour
 
     void Start()
     {
+        GenerateSprite();
+    }
+
+    private Vector3 VertexPointToGlobal(Vector3 point, GameObject meshHandler)
+    {
+        Matrix4x4 trs = meshHandler.transform.localToWorldMatrix;
+        return trs.MultiplyPoint3x4(point);
+    }
+
+    private void GetMaxAndMinCoordinates(Vector2[] coordinates, ref Vector2 min, ref Vector2 max)
+    {
+        min.x = float.PositiveInfinity;
+        min.y = float.PositiveInfinity;
+        max.x = float.NegativeInfinity;
+        max.y = float.NegativeInfinity;
+        for (int i = 0; i < coordinates.Length; i++)
+        {
+            if (coordinates[i].x > max.x)
+            {
+                max.x = coordinates[i].x;
+            }
+
+            if (coordinates[i].y > max.y)
+            {
+                max.y = coordinates[i].y;
+            }
+
+            if (coordinates[i].x < min.x)
+            {
+                min.x = coordinates[i].x;
+            }
+
+            if (coordinates[i].y < min.y)
+            {
+                min.y = coordinates[i].y;
+            }
+        }
+    }
+
+    private void GenerateSprite()
+    {
         var transforms = gameObject.GetComponentsInChildren<Transform>();
         vertices = new Vector3[transforms.Length - 1];
         for (int i = 1; i < transforms.Length; i++)
@@ -125,41 +166,5 @@ public class InsideTextureSprite : MonoBehaviour
         width = maxCoords.x - minCoords.x;
 
         ratio = height / width;
-    }
-
-    private Vector3 VertexPointToGlobal(Vector3 point, GameObject meshHandler)
-    {
-        Matrix4x4 trs = meshHandler.transform.localToWorldMatrix;
-        return trs.MultiplyPoint3x4(point);
-    }
-
-    private void GetMaxAndMinCoordinates(Vector2[] coordinates, ref Vector2 min, ref Vector2 max)
-    {
-        min.x = float.PositiveInfinity;
-        min.y = float.PositiveInfinity;
-        max.x = float.NegativeInfinity;
-        max.y = float.NegativeInfinity;
-        for (int i = 0; i < coordinates.Length; i++)
-        {
-            if (coordinates[i].x > max.x)
-            {
-                max.x = coordinates[i].x;
-            }
-
-            if (coordinates[i].y > max.y)
-            {
-                max.y = coordinates[i].y;
-            }
-
-            if (coordinates[i].x < min.x)
-            {
-                min.x = coordinates[i].x;
-            }
-
-            if (coordinates[i].y < min.y)
-            {
-                min.y = coordinates[i].y;
-            }
-        }
     }
 }

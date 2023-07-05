@@ -140,17 +140,20 @@ public class BetterWaveEnemy : EnemyController
         animator.Play("Base Layer.Attack");
         timer = LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
         {
-            wg.SpawnWave();
-            AudioSource s = Instantiate(source, transform.parent.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
-            s.clip = attackClip;
-            s.volume = volume;
-            s.mute = mute;
-            s.Play();
-            Destroy(s.gameObject, 2f);
-            timer2 = LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
+            if (wg != null)
             {
-                canAttack = true;
-            }).Start();
+                wg.SpawnWave();
+                AudioSource s = Instantiate(source, transform.parent.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+                s.clip = attackClip;
+                s.volume = volume;
+                s.mute = mute;
+                s.Play();
+                Destroy(s.gameObject, 2f);
+                timer2 = LocalTimersManager.CreateNewTimer(attackRecharge / 2f).DoAfter(() =>
+                {
+                    canAttack = true;
+                }).Start();
+            }
         }).Start();
     }
 

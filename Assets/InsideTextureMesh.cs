@@ -25,7 +25,15 @@ public class InsideTextureMesh : MonoBehaviour
     [Foldout("Info")]
     [DisableIf("true")] [Tooltip("height / width")] [SerializeField] private float ratio;
 
-    void Awake()
+    private GameObject renderer = null;
+
+    void Start()
+    {
+        GenerateMesh();
+    }
+
+    [Button]
+    private void GenerateMesh()
     {
         var transforms = gameObject.GetComponentsInChildren<Transform>();
         Verticles = new Vector3[transforms.Length - 1];
@@ -36,14 +44,14 @@ public class InsideTextureMesh : MonoBehaviour
 
         int[] triangles = new int[(Verticles.Length / 4) * 6];
         int v = 0;
-        for (int t = 0; t < triangles.Length &&  v < Verticles.Length; v += 4, t += 6)
+        for (int t = 0; t < triangles.Length && v < Verticles.Length; v += 4, t += 6)
         {
             triangles[t] = v;
-            triangles[t+1] = v + 1;
-            triangles[t+2] = v + 2;
-            triangles[t+3] = v + 2;
-            triangles[t+4] = v + 1;
-            triangles[t+5] = v + 3;
+            triangles[t + 1] = v + 1;
+            triangles[t + 2] = v + 2;
+            triangles[t + 3] = v + 2;
+            triangles[t + 4] = v + 1;
+            triangles[t + 5] = v + 3;
         }
 
         Vector2 maxCoords = Vector2.zero;
@@ -77,7 +85,7 @@ public class InsideTextureMesh : MonoBehaviour
             uvs[i] = new Vector2(Verticles[i].x / maxCoords.x, Verticles[i].y / maxCoords.y);
         }
 
-        GameObject renderer = new(meshName);
+        renderer = new(meshName);
         renderer.transform.position += new Vector3(0, 0, zPos);
         meshFilter = renderer.AddComponent<MeshFilter>();
         meshRenderer = renderer.AddComponent<MeshRenderer>();
@@ -95,5 +103,21 @@ public class InsideTextureMesh : MonoBehaviour
         width = maxCoords.x - minCoords.x;
 
         ratio = height / width;
+    }
+
+    [Button]
+    private void DeleteMesh()
+    {
+        if (renderer != null)
+        {
+            DestroyImmediate(renderer);
+            height = 0;
+            width = 0;
+            ratio = 0;
+        }
+        else
+        {
+            Debug.LogError("Mesh wasn't created!");
+        }
     }
 }

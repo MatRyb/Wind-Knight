@@ -205,7 +205,7 @@ MonoBehaviour:
   source: {fileID: 8114178880373141220, guid: 1f40bea01fdfed04fa39ebd57cace20f, type: 3}
   attackClip: {fileID: 8300000, guid: 979d5759496da3e469a8c33276fd1f47, type: 3}
   dieClip: {fileID: 8300000, guid: bc78cc66ccf3db14bb81efc6a4205aa6, type: 3}
-  rb: {fileID: 5134007151201672456}
+  rb: {fileID: 2737157448553040420}
   escapeRange: 6
   rangeOffset: 50
   moveDist: 15
@@ -343,7 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5134007151201672453}
   - component: {fileID: 5134007151201672455}
-  - component: {fileID: 5134007151201672456}
+  - component: {fileID: 2737157448553040420}
   m_Layer: 0
   m_Name: BetterWaveEnemy
   m_TagString: Untagged
@@ -384,7 +384,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!50 &5134007151201672456
+--- !u!50 &2737157448553040420
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -399,12 +399,12 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &6290694379023523888
 GameObject:
   m_ObjectHideFlags: 0

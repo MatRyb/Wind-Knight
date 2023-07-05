@@ -256,6 +256,7 @@ public class PlayerControler : ObjectHealth
         }
 
         mouseObject.transform.position = finalMousePosition;
+        mouseObject.transform.localPosition = new Vector3(mouseObject.transform.localPosition.x, mouseObject.transform.localPosition.y, 0);
     }
 
     void MovementBasis(Vector2 playerPos)
