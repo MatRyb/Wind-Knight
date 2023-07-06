@@ -9048,7 +9048,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 787269825349021897, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 787269825349021897, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: m_LocalRotation.w
@@ -12704,6 +12704,10 @@ PrefabInstance:
       propertyPath: wallStateHandler
       value: 
       objectReference: {fileID: 188527583}
+    - target: {fileID: 7701394290399867570, guid: 154bfa285c4a9b341a0efce7265efcf3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7701394290925839233, guid: 154bfa285c4a9b341a0efce7265efcf3, type: 3}
       propertyPath: camCollider
       value: 

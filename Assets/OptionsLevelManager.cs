@@ -119,6 +119,17 @@ public class OptionsLevelManager : MonoBehaviour
         float x = (player.speed - player.minSpeed) / (player.maxSpeed - player.minSpeed);
         float min = PlayerPrefs.GetFloat("MinMusicVolume", 60f);
         float max = PlayerPrefs.GetFloat("MaxMusicVolume", 80f);
-        musicSource.volume = ((max - min) * x + min) / 100f;
+
+        if (GameTimer.TimeMultiplier == GameTimer.PLAYING)
+        {
+            musicSource.volume = ((max - min) * x + min) / 100f;
+        }
+        else
+        {
+            if (musicSource.volume != min / 100f)
+            {
+                musicSource.volume = min / 100f;
+            }
+        }
     }
 }

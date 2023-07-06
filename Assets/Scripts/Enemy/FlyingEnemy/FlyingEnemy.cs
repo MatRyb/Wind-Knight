@@ -91,9 +91,9 @@ public class FlyingEnemy : EnemyController
         TakeDamage(GetMaxHealth());
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<PlayerControler>(out PlayerControler _) && !attack)
+        if (collision.gameObject.TryGetComponent(out PlayerControler _) && !attack)
         {
             if (!IsObjectBlockedByOtherObject(collision.gameObject, viewRayBlockingLayers))
             {

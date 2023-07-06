@@ -89,6 +89,7 @@ public class BaseEntityBehaviour : MonoBehaviour
         }
 
         RaycastHit2D closestHit = allowedHits[0];
+
         float minDist = Mathf.Abs(Vector3.Distance(closestHit.point, transform.position));
         for (int i = 1; i < allowedHits.Count; i++)
         {
