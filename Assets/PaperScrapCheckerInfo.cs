@@ -24,8 +24,8 @@ public class PaperScrapCheckerInfo : MonoBehaviour
 
     [SerializeField] [ShowIf("checkOneSpecificScrap")] private Scrap toCheck;
     [SerializeField] private Transform spawn;
-    [SerializeField] [ShowIf("negativeCheck")] [Tooltip("%n - number of missing paper scraps, %N - number of needed paper scraps, %E - type 'Enter' symbol")] private string info_all;
-    [SerializeField] [ShowIf("checkOneSpecificScrap")] [Tooltip("%E - type 'Enter' symbol")] private string info_one;
+    [SerializeField] [ShowIf("negativeCheck")] [Tooltip("%n - number of missing paper scraps, %N - number of needed paper scraps, %E - type 'Enter' symbol, %% - type '%' symbol")] private string info_all;
+    [SerializeField] [ShowIf("checkOneSpecificScrap")] [Tooltip("%E - type 'Enter' symbol, %% - type '%' symbol")] private string info_one;
     [SerializeField] private GameObject notePrefab;
 
     private GameObject infoObj = null;
@@ -130,6 +130,11 @@ public class PaperScrapCheckerInfo : MonoBehaviour
             else if (temp == "%E")
             {
                 s.Append('\n');
+                buff = ' ';
+            }
+            else if (temp == "%%")
+            {
+                s.Append('%');
                 buff = ' ';
             }
             else
