@@ -13,7 +13,6 @@ public class MeleeEnemy : EnemyController
 
     [SerializeField] private GameObject hpBar;
     [SerializeField] private GameObject attackPrefab;
-    [SerializeField] private GameObject attackPrefabHitBox;
 
     [SerializeField] private Sprite moveSprite;
     [SerializeField] private Sprite attackSprite;

@@ -57,7 +57,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4340952173833381533}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 202.24, y: 90.96, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -77,8 +77,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 240d9e59346215f4d9577c2e332aa28c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkOneSpecificScrap: 0
+  toCheck:
+    fromEnemy: 0
+    position: {x: 0, y: 0, z: 0}
   spawn: {fileID: 4340952173002270317}
-  info: You need to find %n paper scrap(s) to open door
+  info_all: You need to find %n paper scrap(s) to open door
+  info_one: 
   notePrefab: {fileID: 8334941568271554128, guid: 84e74646fb1c63b4e8afdd18c338399d, type: 3}
 --- !u!61 &4340952173833381532
 BoxCollider2D:

@@ -696,10 +696,12 @@ MonoBehaviour:
   windPower: 50
   maxMovePower: 20
   throwForceConstant: 5
+  windBubble: {fileID: 5401348134195849030}
+  uiImages: WindBubbleUI
+  alpha: 154
   blockingLayers:
     serializedVersion: 2
     m_Bits: 193
-  windBubble: {fileID: 5401348134195849030}
   notMovingObjects:
   - Enemy
   - WaveParticle

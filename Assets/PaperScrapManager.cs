@@ -6,6 +6,8 @@ using System;
 using NaughtyAttributes;
 using UnityEngine.SceneManagement;
 
+public delegate void PaperScrapManagerEvent();
+
 public class PaperScrapManager : MonoBehaviour
 {
     [System.Serializable]
@@ -25,6 +27,7 @@ public class PaperScrapManager : MonoBehaviour
     };
 
     public static PaperScrapManager instance = null;
+    public event PaperScrapManagerEvent OnScrapCollected = null;
 
     [SerializeField] private bool lessThanAll = false;
     [SerializeField] [ShowIf("lessThanAll")] private int minCollectedScraps;
@@ -265,6 +268,7 @@ public class PaperScrapManager : MonoBehaviour
         }
 
         paper.PlayAudio(collectedClip);
+        OnScrapCollected?.Invoke();
 
         if (AreAllCollected())
         {
@@ -273,6 +277,11 @@ public class PaperScrapManager : MonoBehaviour
                 puzzleSolvedEvent.Solved();
             }
         }
+    }
+
+    public bool CheckIfCollected(Vector3 pos, bool fromEnemy)
+    {
+        return CheckIsCollected(new Scrap(0, fromEnemy, pos));
     }
 
     public void Restart()

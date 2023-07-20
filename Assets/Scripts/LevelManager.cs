@@ -84,12 +84,12 @@ public class LevelManager : MonoBehaviour
             if (instance.resp != null)
             {
                 Camera.main.transform.position = new Vector3(instance.resp.position.x, instance.resp.position.y, Camera.main.transform.position.z);
-                player.transform.position = instance.resp.position;
+                player.transform.position = new(instance.resp.position.x, instance.resp.position.y, player.transform.position.z);
             }
             else
             {
                 Camera.main.transform.position = new Vector3(instance.startResp.position.x, instance.startResp.position.y, Camera.main.transform.position.z);
-                player.transform.position = instance.startResp.position;
+                player.transform.position = new(instance.startResp.position.x, instance.startResp.position.y, player.transform.position.z);
             }
             player.GetComponentInChildren<PlayerControler>().mouseInit();
             player.GetComponentInChildren<TrailRenderer>().enabled = true;
@@ -97,7 +97,7 @@ public class LevelManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             waitingForStart = true;
-            startText = GUIManager.ShowText("Press [Left Mouse Button] to Start");
+            startText = GUIManager.ShowText("Press   to Start");
         }
 
         if (waitingForStart && Input.GetMouseButtonDown(0))

@@ -10,6 +10,7 @@ TagManager:
   - PaperScarpCounterText
   - WaveParticle
   - Checkpoint
+  - WindBubbleUI
   layers:
   - Default
   - TransparentFX

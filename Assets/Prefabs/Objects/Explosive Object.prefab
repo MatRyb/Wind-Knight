@@ -187,7 +187,7 @@ MonoBehaviour:
   explosionPower: 1500
   explosionDamage: 40
   range: 15
-  destroyParticle: {fileID: 840825463644067242, guid: 100b305cb1e473c4fbfb611c43b5e377, type: 3}
+  destroyParticle: {fileID: 5705979801049808173, guid: 03bac0b3e40281f48bbdb6d93e123dbf, type: 3}
   nonActivatingLayers:
     serializedVersion: 2
     m_Bits: 18934

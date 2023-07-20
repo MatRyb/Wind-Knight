@@ -128,6 +128,7 @@ public class ExplosiveObjectScript : MonoBehaviour
     public void OnDead()
     {
         ParticleSystem particle = Instantiate(destroyParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        particle.gameObject.transform.localScale = new Vector3(0.291f * range + 0.283f, 0.291f * range + 0.283f, 0.291f * range + 0.283f);
         particle.Play();
         AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
         s.clip = destroyClip;
@@ -146,7 +147,7 @@ public class ExplosiveObjectScript : MonoBehaviour
         {
             foreach (var collider in collidersInExplosion)
             {
-                if (collider.TryGetComponent<IDamageTaker>(out IDamageTaker damageTaker))
+                if (collider.TryGetComponent(out IDamageTaker damageTaker))
                 {
                     if ((Object)damageTaker == this)
                     {
@@ -158,7 +159,7 @@ public class ExplosiveObjectScript : MonoBehaviour
                     damageTaker.TakeDamage(damage);
                 }
 
-                if (collider.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb2D))
+                if (collider.TryGetComponent(out Rigidbody2D rb2D))
                 {
                     Vector2 xy = rb2D.gameObject.transform.position - transform.position;
 

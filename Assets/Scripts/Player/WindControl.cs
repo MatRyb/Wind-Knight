@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.UI;
 
 public class WindControl : BaseEntityBehaviour
 {
@@ -10,9 +11,15 @@ public class WindControl : BaseEntityBehaviour
     [SerializeField] private float maxMovePower = 20f;
     [SerializeField] private float throwForceConstant = 5f;
 
-    [SerializeField] private LayerMask blockingLayers;
-
     [SerializeField] private GameObject windBubble = null;
+
+    [Header("UI:")]
+    [SerializeField] [Tag] private string uiImages;
+    [SerializeField] [Range(0f, 255f)] private int alpha = 154;
+    private bool uiActive = false;
+
+    [Header("Objects:")]
+    [SerializeField] private LayerMask blockingLayers;
 
     [SerializeField] [Tag] private string[] notMovingObjects;
 
@@ -68,10 +75,12 @@ public class WindControl : BaseEntityBehaviour
             UpdateObjectsList();
             MoveObjects();
             DrawWindRange();
+            ChangeUI(false);
         }
         else
         {
             windBubble.SetActive(false);
+            ChangeUI(true);
             for (int i = 0; i < objectsInRange.Count; ++i)
             {
                 if (objectsInRange[i].rigidbody != null)
@@ -193,6 +202,56 @@ public class WindControl : BaseEntityBehaviour
         windBubble.transform.localScale = new Vector3(windBubbleRange * imageToRangeRatio, windBubbleRange * imageToRangeRatio, windBubble.transform.localScale.z);
 
         windBubble.SetActive(true);
+    }
+
+    [Button()]
+    private void UpdateUI()
+    {
+        if (uiActive)
+        {
+            ChangeUI(false);
+        }
+        else
+        {
+            ChangeUI(true);
+        }
+
+        uiActive = !uiActive;
+    }
+
+    private void ChangeUI(bool active)
+    {
+        GameObject[] arr = GameObject.FindGameObjectsWithTag(uiImages);
+
+        if (arr.Length == 0)
+        {
+            return;
+        }
+
+        if (active)
+        {
+            foreach (var item in arr)
+            {
+                Color c = item.GetComponent<Image>().color;
+
+                if (c.a != 1.0f)
+                {
+                    item.GetComponent<Image>().color = new(c.r, c.g, c.b, 1.0f);
+                }
+            }
+        }
+        else
+        {
+            foreach (var item in arr)
+            {
+                Color c = item.GetComponent<Image>().color;
+
+                if (c.a != (float)alpha / 255f)
+                {
+                    item.GetComponent<Image>().color = new(c.r, c.g, c.b, (float)alpha / 255f);
+                }
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()
