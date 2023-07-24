@@ -3,12 +3,13 @@ using UnityEngine;
 public class Checkpoint : MonoBehaviour
 {
     [SerializeField] private int id;
+    [SerializeField] private AudioSource source;
     private LevelManager lvl;
     private SpriteRenderer sprite;
 
-    private Color activeColor = new Color(117f / 255f, 205f / 255f, 94f / 255f);
-    private Color notActiveColor = new Color(106f / 255f, 106f / 255f, 106f / 255f);
-    private Color disabledColor = new Color(205f / 255f, 94f / 255f, 94f / 255f);
+    private Color activeColor = new(117f / 255f, 205f / 255f, 94f / 255f);
+    private Color notActiveColor = new(106f / 255f, 106f / 255f, 106f / 255f);
+    private Color disabledColor = new(205f / 255f, 94f / 255f, 94f / 255f);
 
     void Awake()
     {
@@ -22,26 +23,42 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        lvl.setRespawnPoint(id, gameObject.transform.position, setActive);
+        if (collision.gameObject.TryGetComponent(out PlayerControler _))
+        {
+            lvl.SetRespawnPoint(id, gameObject.transform.position, SetAsCheckpoint);
+        }
     }
 
-    public void setActive()
+    public void SetAsCheckpoint(AudioClip clip, bool me)
+    {
+        SetActive();
+        if (!me)
+            PlayAudio(clip);
+    }
+
+    public void SetActive()
     {
         sprite.color = activeColor;
     }
 
-    public void setNotActive()
+    public void SetNotActive()
     {
         sprite.color = notActiveColor;
     }
 
-    public void setDisabled()
+    public void SetDisabled()
     {
         sprite.color = disabledColor;
     }
 
-    public int getId()
+    public int GetId()
     {
         return id;
+    }
+
+    public void PlayAudio(AudioClip clip)
+    {
+        source.clip = clip;
+        source.Play();
     }
 }

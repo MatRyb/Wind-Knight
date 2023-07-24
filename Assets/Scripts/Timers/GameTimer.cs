@@ -1,25 +1,29 @@
 using UnityEngine;
 using NaughtyAttributes;
 
+public delegate void GameTimeChanged();
+
 public class GameTimer : MonoBehaviour
 {
-    public static float timeMultiplayer { get; private set; } = 1f;
-    [SerializeField] private float TimeMultiplayer;
+    public static readonly float STOPPED = 0f;
+    public static readonly float PLAYING = 1f;
 
-    private void Update()
-    {
-        TimeMultiplayer = timeMultiplayer;
-    }
+    public static float TimeMultiplier { get; private set; } = PLAYING;
+
+    public static event GameTimeChanged OnStopped = null;
+    public static event GameTimeChanged OnStart = null;
 
     [Button]
     public static void StopTime()
     {
-        timeMultiplayer = 0f;
+        TimeMultiplier = STOPPED;
+        OnStopped?.Invoke();
     }
 
     [Button]
     public static void StartTime()
     {
-        timeMultiplayer = 1f;
+        TimeMultiplier = PLAYING;
+        OnStart?.Invoke();
     }
 }

@@ -13,6 +13,7 @@ public class WaveParticle : MonoBehaviour
     [Foldout("Info")][DisableIf("true")][SerializeField] private float angle;
     [Foldout("Info")][DisableIf("true")][SerializeField] private float speed;
     [Foldout("Info")][DisableIf("true")][SerializeField] private float radius;
+    [Foldout("Info")] [DisableIf("true")] [SerializeField] private Color color;
 
     private WaveParticle right = null;
     private WaveParticle left = null;
@@ -30,14 +31,25 @@ public class WaveParticle : MonoBehaviour
             return;
         }
 
-        dieTime -= Time.deltaTime;
+        dieTime -= Time.deltaTime * GameTimer.TimeMultiplier;
 
-        if (left == null && right == null)
+        if (GameTimer.TimeMultiplier == GameTimer.PLAYING)
         {
-            _pool.Release(this);
-        }
+            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+            float radian = angle * Mathf.PI / 180f;
+            GetComponent<Rigidbody2D>().velocity = new Vector2(speed * Mathf.Cos(radian), speed * Mathf.Sin(radian));
 
-        CheckRight();
+            if (left == null && right == null)
+            {
+                _pool.Release(this);
+            }
+
+            CheckRight();
+        }
+        else 
+        {
+            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+        }
     }
 
     public WaveParticle SetAngle(float value)
@@ -49,6 +61,12 @@ public class WaveParticle : MonoBehaviour
     public WaveParticle SetSpeed(float value)
     {
         speed = value;
+        return this;
+    }
+
+    public WaveParticle SetColor(Color value)
+    {
+        color = value;
         return this;
     }
 
@@ -133,11 +151,18 @@ public class WaveParticle : MonoBehaviour
 
             right.SetLeft(obj.GetComponent<WaveParticle>());
 
-            obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetLocalTimer(dieTime).SetDieTime(dieTime).SetRadius(radius).SetLeft(this);
+            obj.GetComponent<WaveParticle>().SetSpeed(speed).SetAngle(angleCalculated).SetLocalTimer(dieTime).SetDieTime(dieTime).SetRadius(radius).SetColor(color).SetLeft(this);
 
             obj.transform.eulerAngles = new Vector3(0, 0, angleCalculated);
 
-            if (obj.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+            obj.tag = gameObject.tag;
+
+            if (obj.TryGetComponent(out SpriteRenderer s))
+            {
+                s.color = color;
+            }
+
+            if (obj.TryGetComponent(out Rigidbody2D rb))
             {
                 rb.velocity = new Vector2(speed * Mathf.Cos(radian), speed * Mathf.Sin(radian));
             }
@@ -186,7 +211,7 @@ public class WaveParticle : MonoBehaviour
         left = null;
         right = null;
 
-        if (TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+        if (TryGetComponent(out Rigidbody2D rb))
         {
             rb.velocity = Vector2.zero;
         }
@@ -194,20 +219,22 @@ public class WaveParticle : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IDamageTaker damageTaker;
-        if (collision.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
+        if (collision.gameObject.TryGetComponent(out IDamageTaker damageTaker))
         {
             damageTaker.TakeDamage(damage);
         }
 
-        if (!collision.gameObject.TryGetComponent<WaveParticle>(out WaveParticle _))
+        if (!collision.gameObject.TryGetComponent(out WaveParticle _))
         {
-            left?.RightDied();
-            right?.LeftDied();
-
-            if (_pool != null && !inPool)
+            if (collision.gameObject.tag != "Checkpoint")
             {
-                _pool.Release(this);
+                left?.RightDied();
+                right?.LeftDied();
+
+                if (_pool != null && !inPool)
+                {
+                    _pool.Release(this);
+                }
             }
         }
     }

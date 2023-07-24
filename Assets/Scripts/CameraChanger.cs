@@ -13,13 +13,13 @@ public class CameraChanger : MonoBehaviour
     private bool outside = true;
 
     [Foldout("Info:")]
-    [DisableIf("true")][SerializeField] private List<BoxCollider2D> staticColliders = new List<BoxCollider2D>();
+    [DisableIf("true")][SerializeField] private List<BoxCollider2D> staticColliders = new();
 
     private void Awake()
     {
-        foreach (GameObject item in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
+        foreach (GameObject item in FindObjectsOfType<GameObject>())
         {
-            if(item.layer == LayerMask.NameToLayer("CameraViewCollider"))
+            if (item.layer == LayerMask.NameToLayer("CameraViewCollider"))
             {
                 staticColliders.Add(item.GetComponent<BoxCollider2D>());
             }
@@ -111,8 +111,7 @@ public class CameraChanger : MonoBehaviour
 
         if (isOneOfUs && outside && !isStillIn)
         {
-            Rigidbody2D rb;
-            if (target.gameObject.TryGetComponent<Rigidbody2D>(out rb))
+            if (target.gameObject.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
             {
                 LeanTween.value(cam.gameObject, ChangeCamTransform, cam.transform.position, new Vector3(target.position.x + rb.velocity.x * 0.5f, target.position.y + rb.velocity.y * 0.5f, cam.transform.position.z), 0.25f)
                     .setOnComplete(() => {

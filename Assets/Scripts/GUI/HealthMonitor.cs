@@ -8,6 +8,6 @@ public class HealthMonitor : MonoBehaviour
 
     void Update()
     {
-        image.fillAmount = healthToMonitor.getHealth() / healthToMonitor.getMaxHealth();
+        image.fillAmount = healthToMonitor.GetHealth() / healthToMonitor.GetMaxHealth();
     }
 }

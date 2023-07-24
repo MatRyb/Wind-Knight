@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.UI;
 
 public class WindControl : BaseEntityBehaviour
 {
@@ -10,9 +11,17 @@ public class WindControl : BaseEntityBehaviour
     [SerializeField] private float maxMovePower = 20f;
     [SerializeField] private float throwForceConstant = 5f;
 
+    [SerializeField] private GameObject windBubble = null;
+
+    [Header("UI:")]
+    [SerializeField] [Tag] private string uiImages;
+    [SerializeField] [Range(0f, 255f)] private int alpha = 154;
+    private bool uiActive = false;
+
+    [Header("Objects:")]
     [SerializeField] private LayerMask blockingLayers;
 
-    [SerializeField] private GameObject windBubble = null;
+    [SerializeField] [Tag] private string[] notMovingObjects;
 
     [DisableIf("true")] [SerializeField] private List<ObjectInRange> objectsInRange;
 
@@ -40,9 +49,9 @@ public class WindControl : BaseEntityBehaviour
 
     private void OnValidate()
     {
-        if (playerControler == null && GetComponent<PlayerControler>() != null)
+        if (playerControler == null && GetComponentInChildren<PlayerControler>() != null)
         {
-            playerControler = GetComponent<PlayerControler>();
+            playerControler = GetComponentInChildren<PlayerControler>();
         }
         else if (playerControler == null)
         {
@@ -66,10 +75,12 @@ public class WindControl : BaseEntityBehaviour
             UpdateObjectsList();
             MoveObjects();
             DrawWindRange();
+            ChangeUI(false);
         }
         else
         {
             windBubble.SetActive(false);
+            ChangeUI(true);
             for (int i = 0; i < objectsInRange.Count; ++i)
             {
                 if (objectsInRange[i].rigidbody != null)
@@ -113,10 +124,9 @@ public class WindControl : BaseEntityBehaviour
         {
             foreach (var collider in collidersInRange)
             {
-                Rigidbody2D rigid;
-                if (collider.TryGetComponent<Rigidbody2D>(out rigid))
+                if (collider.TryGetComponent(out Rigidbody2D rigid))
                 {
-                    if (isObjectBlockedByOtherObject(rigid.gameObject, blockingLayers))
+                    if (IsObjectBlockedByOtherObject(rigid.gameObject, blockingLayers) || CheckTags(rigid.gameObject))
                     {
                         continue;
                     }
@@ -135,6 +145,18 @@ public class WindControl : BaseEntityBehaviour
         }
     }
 
+    private bool CheckTags(GameObject obj)
+    {
+        bool res = false;
+
+        foreach (var tag in notMovingObjects)
+        {
+            res = res || obj.CompareTag(tag);
+        }
+
+        return res;
+    }
+
     private void MoveObjects()
     {
         foreach (var obj in objectsInRange)
@@ -143,10 +165,10 @@ public class WindControl : BaseEntityBehaviour
             {
                 if (playerControler.playerState == PlayerState.MOVING)
                 {
-                    obj.rigidbody.gravityScale = 0f;
+                    //obj.rigidbody.gravityScale = 0f;
 
                     float percent = (Mathf.Abs(Vector2.Distance(obj.gameObject.transform.position, playerControler.playerBodyTransform.position)) - (windBubbleRange / 2f)) / (windBubbleRange / 2f);
-                    Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent * Time.fixedDeltaTime * windPower;
+                    //Vector2 additionForce = (playerControler.playerBodyTransform.position - obj.gameObject.transform.position).normalized * percent * Time.fixedDeltaTime * windPower;
 
                     Vector2 newVelocityDirection = ((playerControler.velocity - obj.rigidbody.velocity) / obj.rigidbody.mass) * Time.fixedDeltaTime * windPower;
 
@@ -155,14 +177,14 @@ public class WindControl : BaseEntityBehaviour
                         newVelocityDirection = newVelocityDirection.normalized * maxMovePower;
                     }
 
-                    obj.rigidbody.velocity += (newVelocityDirection + additionForce);
+                    obj.rigidbody.velocity += (newVelocityDirection /*+ additionForce*/);
                 }
                 else
                 {
                     obj.rigidbody.gravityScale = obj.gravityScale;
                 }
 
-                obj.rigidbody.velocity = obj.rigidbody.velocity * GameTimer.timeMultiplayer;
+                obj.rigidbody.velocity = obj.rigidbody.velocity * GameTimer.TimeMultiplier;
             }
         }
     }
@@ -180,6 +202,56 @@ public class WindControl : BaseEntityBehaviour
         windBubble.transform.localScale = new Vector3(windBubbleRange * imageToRangeRatio, windBubbleRange * imageToRangeRatio, windBubble.transform.localScale.z);
 
         windBubble.SetActive(true);
+    }
+
+    [Button()]
+    private void UpdateUI()
+    {
+        if (uiActive)
+        {
+            ChangeUI(false);
+        }
+        else
+        {
+            ChangeUI(true);
+        }
+
+        uiActive = !uiActive;
+    }
+
+    private void ChangeUI(bool active)
+    {
+        GameObject[] arr = GameObject.FindGameObjectsWithTag(uiImages);
+
+        if (arr.Length == 0)
+        {
+            return;
+        }
+
+        if (active)
+        {
+            foreach (var item in arr)
+            {
+                Color c = item.GetComponent<Image>().color;
+
+                if (c.a != 1.0f)
+                {
+                    item.GetComponent<Image>().color = new(c.r, c.g, c.b, 1.0f);
+                }
+            }
+        }
+        else
+        {
+            foreach (var item in arr)
+            {
+                Color c = item.GetComponent<Image>().color;
+
+                if (c.a != (float)alpha / 255f)
+                {
+                    item.GetComponent<Image>().color = new(c.r, c.g, c.b, (float)alpha / 255f);
+                }
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()

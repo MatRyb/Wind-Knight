@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using NaughtyAttributes;
 
 public class LevelManager : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class LevelManager : MonoBehaviour
     private class RespawnPoint
     {
         public int id = 0;
-        public Vector3 position = new Vector3(0,0,0);
+        public Vector3 position = new(0,0,0);
 
         public RespawnPoint(int _id, Vector3 _pos)
         {
@@ -18,7 +19,7 @@ public class LevelManager : MonoBehaviour
         }
     };
 
-    private static LevelManager instance = null;
+    public static LevelManager instance = null;
 
     private bool waitingForStart = false;
     private GameObject startText = null;
@@ -31,24 +32,46 @@ public class LevelManager : MonoBehaviour
 
     private bool start;
 
-    private RespawnPoint resp = new RespawnPoint(0, new Vector3(0,0,0));
+    private RespawnPoint startResp = null;
+    private RespawnPoint resp = null;
+
+    [SerializeField] private AudioClip checkpointClip;
+    [SerializeField] private bool isNextLevel = false;
+    [SerializeField] [ShowIf("isNextLevel")] private string nextLevelSceneName;
+    public string ThisLevelName = "";
 
     void OnLevelWasLoaded(int level)
     {
-        instance.start = true;
+        if (level != SceneManager.GetSceneByName(ThisLevelName).buildIndex)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            instance.start = true;
+        }
     }
 
     void Awake()
     {
         if (instance != null && instance != this)
         {
-            Destroy(gameObject);
-            return;
+            if (instance.ThisLevelName != SceneManager.GetActiveScene().name && ThisLevelName == SceneManager.GetActiveScene().name)
+            {
+                Destroy(instance.gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
 
         instance = this;
         DontDestroyOnLoad(gameObject);
         instance.start = true;
+        instance.startResp = new(0, GameObject.FindGameObjectWithTag("Player").transform.position);
     }
 
     void Update()
@@ -56,15 +79,25 @@ public class LevelManager : MonoBehaviour
         if (instance.start)
         {
             instance.start = false;
-            GameObject player = FindObjectOfType<PlayerControler>().gameObject;
-            Camera.main.transform.position = new Vector3(instance.resp.position.x, instance.resp.position.y, Camera.main.transform.position.z);
-            player.transform.position = instance.resp.position;
-            player.GetComponent<PlayerControler>().mouseInit();
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            player.GetComponentInChildren<TrailRenderer>().enabled = false;
+            if (instance.resp != null)
+            {
+                Camera.main.transform.position = new Vector3(instance.resp.position.x, instance.resp.position.y, Camera.main.transform.position.z);
+                player.transform.position = new(instance.resp.position.x, instance.resp.position.y, player.transform.position.z);
+            }
+            else
+            {
+                Camera.main.transform.position = new Vector3(instance.startResp.position.x, instance.startResp.position.y, Camera.main.transform.position.z);
+                player.transform.position = new(instance.startResp.position.x, instance.startResp.position.y, player.transform.position.z);
+            }
+            player.GetComponentInChildren<PlayerControler>().mouseInit();
+            player.GetComponentInChildren<TrailRenderer>().enabled = true;
             PauseGame(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             waitingForStart = true;
-            startText = GUIManager.ShowText("Press 'Left Mouse Button' to start");
+            startText = GUIManager.ShowText("Press   to Start");
         }
 
         if (waitingForStart && Input.GetMouseButtonDown(0))
@@ -81,6 +114,7 @@ public class LevelManager : MonoBehaviour
         if (waitAfterWin)
             return;
 
+        /*
         if (Input.GetMouseButtonDown(1))
         {
             if (paused)
@@ -92,8 +126,9 @@ public class LevelManager : MonoBehaviour
                 PauseGameJob(false);
             }
         }
+        */
 
-        if (Input.GetKeyDown("escape") && !paused)
+        if (Input.GetKeyDown(KeyCode.Escape) && !paused)
         {
             PauseGameJob(true);
         }
@@ -115,7 +150,11 @@ public class LevelManager : MonoBehaviour
             }
             else if (buttons[i].name == "RestartBtn")
             {
-                buttons[i].onClick.AddListener(() => instance.RestartJob());
+                buttons[i].onClick.AddListener(() => instance.RestartLevelJob(true));
+            }
+            else if (buttons[i].name == "MenuBtn")
+            {
+                buttons[i].onClick.AddListener(() => SceneManager.LoadScene("Menu"));
             }
             else if (buttons[i].name == "ExitBtn")
             {
@@ -131,12 +170,54 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void RestartJob()
+    public static void RestartLevel(bool isScreen)
+    {
+        instance.RestartLevelJob(isScreen);
+    }
+
+    private void RestartLevelJob(bool isScreen)
+    {
+        if (isScreen)
+        {
+            GameObject screen = GUIManager.ShowRestartQuestionScreen();
+            Button[] buttons = screen.GetComponentsInChildren<Button>();
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i].name == "YesBtn")
+                {
+                    buttons[i].onClick.AddListener(() => instance.RestartYesJob());
+                }
+                else if (buttons[i].name == "NoBtn")
+                {
+                    buttons[i].onClick.AddListener(() => instance.RestartNoJob(isScreen));
+                }
+            }
+        }
+    }
+
+    private void RestartYesJob()
     {
         waitForRespawn = false;
-        instance.resp.id = 0;
-        instance.resp.position = new Vector3(0,0,0);
+        if (instance.resp == null)
+        {
+            instance.resp = new(startResp.id, startResp.position);
+        }
+        else
+        {
+            instance.resp.id = startResp.id;
+            instance.resp.position = startResp.position;
+        }
+        FindObjectOfType<PaperScrapManager>().Restart();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void RestartNoJob(bool isScreen)
+    {
+        if (isScreen)
+        {
+            GUIManager.HideRestartQuestionScreen();
+        }
     }
 
     public static void InitWinGame()
@@ -151,7 +232,22 @@ public class LevelManager : MonoBehaviour
         {
             if (buttons[i].name == "RestartBtn")
             {
-                buttons[i].onClick.AddListener(() => instance.RespawnJob());
+                buttons[i].onClick.AddListener(() => instance.RestartLevelJob(true));
+            }
+            else if (buttons[i].name == "NextLevelBtn")
+            {
+                if (!instance.isNextLevel)
+                {
+                    buttons[i].gameObject.SetActive(false);
+                }
+                else
+                {
+                    buttons[i].onClick.AddListener(() => SceneManager.LoadScene(instance.nextLevelSceneName));
+                }
+            }
+            else if (buttons[i].name == "MenuBtn")
+            {
+                buttons[i].onClick.AddListener(() => SceneManager.LoadScene("Menu"));
             }
             else if (buttons[i].name == "ExitBtn")
             {
@@ -188,11 +284,15 @@ public class LevelManager : MonoBehaviour
             {
                 if (buttons[i].name == "RestartBtn")
                 {
-                    buttons[i].onClick.AddListener(() => instance.RespawnJob());
+                    buttons[i].onClick.AddListener(() => instance.RestartLevelJob(true));
                 }
                 else if (buttons[i].name == "ResumeBtn")
                 {
                     buttons[i].onClick.AddListener(() => instance.ResumeGameJob(isScreen));
+                }
+                else if (buttons[i].name == "MenuBtn")
+                {
+                    buttons[i].onClick.AddListener(() => SceneManager.LoadScene("Menu"));
                 }
                 else if (buttons[i].name == "ExitBtn")
                 {
@@ -219,36 +319,64 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public Vector3 getRespawnPointPosition()
+    public Vector3 GetRespawnPointPosition()
     {
-        return instance.resp.position;
+        if (instance.resp != null)
+        {
+            return instance.resp.position;
+        }
+        else
+        {
+            return instance.startResp.position;
+        }
     }
 
-    public void setRespawnPoint(int id, Vector3 pos, Action action)
+    public void SetRespawnPoint(int id, Vector3 pos, Action<AudioClip, bool> action)
     {
-        if (id >= instance.resp.id && instance.resp.position != pos)
+        if (instance.resp == null || (id >= instance.resp.id && instance.resp.position != pos))
         {
             Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
 
             foreach (Checkpoint check in checkpoints)
             {
-                if(check.getId() == instance.resp.id)
+                if (instance.resp == null)
                 {
-                    if (check.getId() < id)
+                    if (check.GetId() < id)
                     {
-                        check.setDisabled();
+                        check.SetDisabled();
                     }
                     else
                     {
-                        check.setNotActive();
+                        check.SetNotActive();
                     }
                 }
-
+                else
+                {
+                    if (check.GetId() <= instance.resp.id)
+                    {
+                        if (check.GetId() < id)
+                        {
+                            check.SetDisabled();
+                        }
+                        else
+                        {
+                            check.SetNotActive();
+                        }
+                    }
+                }
             }
 
-            instance.resp.id = id;
-            instance.resp.position = pos;
-            action.Invoke();
+            if (instance.resp == null)
+            {
+                instance.resp = new(id, pos);
+            }
+            else
+            {
+                instance.resp.id = id;
+                instance.resp.position = pos;
+            }
+            action.Invoke(checkpointClip, false);
+            
         }
         else if (id == instance.resp.id && instance.resp.position == pos)
         {
@@ -256,13 +384,13 @@ public class LevelManager : MonoBehaviour
 
             foreach (Checkpoint check in checkpoints)
             {
-                if (check.getId() < instance.resp.id)
+                if (check.GetId() < instance.resp.id)
                 {
-                    check.setDisabled();
+                    check.SetDisabled();
                 }
             }
 
-            action.Invoke();
+            action.Invoke(checkpointClip, true);
         }
     }
 }

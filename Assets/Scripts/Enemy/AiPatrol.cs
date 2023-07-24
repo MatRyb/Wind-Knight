@@ -11,7 +11,7 @@ public class AiPatrol : MonoBehaviour
     private bool fliped = true;
     private float distanceToPlayer;
 
-    [SerializeField] private EnemyController enemyRange;
+    [SerializeField] private EnemyController enemyController;
     [SerializeField] private Transform player;
     [SerializeField] private Transform frontGroundCheckerPosition;
     [SerializeField] private Transform backGroundCheckerPosition;
@@ -20,34 +20,37 @@ public class AiPatrol : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask viewBlockingLayers;
 
-    [SerializeField] public new BoxCollider2D collider;
+    [SerializeField] public new Collider2D collider;
 
     [SerializeField] private GameObject body;
 
     private void OnValidate()
     {
-        if (GetComponent<EnemyController>() != null && enemyRange == null)
+        if (GetComponent<EnemyController>() != null && enemyController == null)
         {
-            enemyRange = GetComponent<EnemyController>();
+            enemyController = GetComponent<EnemyController>();
         }
-        else if (enemyRange == null)
+        else if (enemyController == null)
         {
-            Debug.LogError("AiPatrol -> No Enemy Range");
+            Debug.LogError(gameObject.name + " AiPatrol -> No Enemy Controller");
         }
 
         if (GetComponent<Rigidbody2D>() != null && rb == null)
         {
             rb = GetComponent<Rigidbody2D>();
         }
-        else if (enemyRange == null)
+        else if (rb == null && GetComponent<Rigidbody2D>() == null)
         {
-            Debug.LogError("AiPatrol -> No RigidBody2D");
+            Debug.LogError(gameObject.name + " AiPatrol -> No RigidBody2D");
         }
+    }
 
+    private void Awake()
+    {
         if (player == null)
-        {   
-            if (GameObject.FindGameObjectWithTag("Player") != null)
-                player = GameObject.FindGameObjectWithTag("Player").transform;
+        {
+            if (FindObjectOfType<PlayerControler>() != null)
+                player = FindObjectOfType<PlayerControler>().transform;
         }
 
         gravityScale = rb.gravityScale;
@@ -66,7 +69,7 @@ public class AiPatrol : MonoBehaviour
         }
 
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        if (distanceToPlayer <= enemyRange.range && !enemyRange.isObjectBlockedByOtherObject(player.gameObject, viewBlockingLayers)) 
+        if (distanceToPlayer <= enemyController.range && !enemyController.IsObjectBlockedByOtherObject(player.gameObject, viewBlockingLayers) || enemyController.attacking) 
         {
             mustPatrol = false;
             if (player.position.x > body.transform.position.x && body.transform.localScale.x < 0 ||
@@ -85,11 +88,20 @@ public class AiPatrol : MonoBehaviour
             mustFlip = (!Physics2D.OverlapCircle(frontGroundCheckerPosition.position, 0.15f, groundLayer) && Physics2D.OverlapCircle(backGroundCheckerPosition.position, 0.15f, groundLayer));
         }
 
-        rb.velocity *= GameTimer.timeMultiplayer;
-        rb.gravityScale = gravityScale * GameTimer.timeMultiplayer;
+        rb.velocity *= GameTimer.TimeMultiplier;
+        rb.gravityScale = gravityScale * GameTimer.TimeMultiplier;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    /*private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if ((collision.gameObject.CompareTag("Object") || collision.gameObject.CompareTag("Enemy")) && fliped)
+        {
+            Flip();
+        }
+    }
+    */
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if ((collision.gameObject.CompareTag("Object") || collision.gameObject.CompareTag("Enemy")) && fliped)
         {
@@ -113,9 +125,9 @@ public class AiPatrol : MonoBehaviour
         body.transform.localScale = new Vector2(body.transform.localScale.x * -1, body.transform.localScale.y);
         walkSpead *= -1;
         mustPatrol = true;
-        StartCoroutine(flipping(0.5f));
+        StartCoroutine(Flipping(0.5f));
     }
-    private IEnumerator flipping(float waitTime)
+    private IEnumerator Flipping(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         fliped = true;

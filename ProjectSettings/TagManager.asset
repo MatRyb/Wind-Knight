@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Object
   - Enemy
+  - SFX
+  - PaperScarpCounterText
+  - WaveParticle
+  - Checkpoint
+  - WindBubbleUI
   layers:
   - Default
   - TransparentFX
@@ -18,10 +23,10 @@ TagManager:
   - CameraViewCollider
   - Bullet
   - PlayerHitboxes
+  - ViewNotBlockingWall
   - 
   - 
-  - 
-  - 
+  - Puzzle
   - 
   - 
   - 

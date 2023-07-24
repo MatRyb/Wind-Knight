@@ -1,0 +1,13 @@
+Wind Rider to gra typu puzzle-platformer w której przemierzamy zamknięte labirynty małym papierowym samolocikiem dzierżąc moc wiatru która pozwala nam podnosić obiekty. Na swojej drodze możesz napotkać wiele przeszkód, przeciwników, a tak samo uderzyć się w wiele ścian. Próbuj aż nie dotrzesz do celu.
+
+Jest to wczesna wersja gry. Aktulanie są dostępne 3 poziomy w których próbowaliśmy zawrzeć wszystko co aktualnie jest w grze.
+
+Stworzona przez The Long Cat:
+
+Muppetsg2
+MaiPa
+Adanadhar
+MatRyb
+kek
+
+Repository: https://github.com/MatRyb/Wind-Knight

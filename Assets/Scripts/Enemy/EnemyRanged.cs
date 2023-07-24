@@ -4,16 +4,35 @@ using UnityEngine;
 
 public class EnemyRanged : EnemyController
 {
+    [SerializeField] private SpriteRenderer moveSprite;
+    [SerializeField] private SpriteRenderer attackSprite;
+
+
     [SerializeField] private float shootSpeed = 2f;
     [Range(0,100f)][SerializeField] private float aim = 50.0f;
     private bool canShoot = true;
 
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform shootPosition;
+    [SerializeField] private Rigidbody2D rb;
 
     [SerializeField] private float minSpeed = 2.0f;
 
+    [SerializeField] private float scaleFactor = 2.0f;
+
     private float distanceToPlayer;
+
+    private void OnValidate()
+    {
+        if (rb == null && GetComponent<Rigidbody2D>() != null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+        else if (rb == null && GetComponent<Rigidbody2D>() == null)
+        {
+            Debug.LogError(gameObject.name + " EnemyRanged -> No RigidBody2D");
+        }
+    }
 
     void Start()
     {
@@ -25,9 +44,9 @@ public class EnemyRanged : EnemyController
     {
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        if(distanceToPlayer <= range && GameTimer.timeMultiplayer != 0f)
+        if(distanceToPlayer <= range && GameTimer.TimeMultiplier != GameTimer.STOPPED)
         {
-            if (canShoot && !isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
+            if (canShoot && !IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
             {    
                 Attack();
             }
@@ -45,10 +64,38 @@ public class EnemyRanged : EnemyController
         yield return new WaitForSeconds(attackRecharge);
         Vector2 direction = (player.position - transform.position).normalized;
         GameObject newBullet = Instantiate(bullet, shootPosition.position, Quaternion.identity);
-        newBullet.transform.localScale = transform.localScale / 2f;
+        newBullet.transform.localScale = transform.localScale / scaleFactor;
         newBullet.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x, direction.y - UnityEngine.Random.Range(-0.2f, 0.15f) * aim) * shootSpeed;
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = attackClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
+        StartCoroutine(ChangeSpriteForAttack(0.2f));
         yield return new WaitForSeconds(attackRecharge);
         canShoot = true;
+    }
+
+    private IEnumerator ChangeSpriteForAttack(float waitTime)
+    {
+        yield return new WaitForSeconds(0.1f);
+        moveSprite.enabled = false;
+        attackSprite.enabled = true;
+        yield return new WaitForSeconds(waitTime);
+        /*transform.localScale = new Vector3(1f, 1f, 1f);
+        transform.position = new Vector2(transform.position.x, transform.position.y - 1.0f);
+        */
+        StartCoroutine(RevertSpriteToNormal(0.1f));
+    }
+
+    private IEnumerator RevertSpriteToNormal(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        moveSprite.enabled = true;
+        attackSprite.enabled = false;
+       /* transform.localScale = new Vector3(4f, 4, 4f);
+        transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);*/
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -59,12 +106,11 @@ public class EnemyRanged : EnemyController
 
         if (speed > minSpeed)
         {
-            float damage = speed * (this.GetComponent<Rigidbody2D>().mass / 10);
+            float damage = speed * (rb.mass / 10);
 
-            this.TakeDamage(damage);
+            TakeDamage(damage);
 
-            IDamageTaker damageTaker;
-            if (collision.collider.gameObject.TryGetComponent(out damageTaker))
+            if (collision.collider.gameObject.TryGetComponent(out IDamageTaker damageTaker))
             {
                 damageTaker.TakeDamage(damage);
             }

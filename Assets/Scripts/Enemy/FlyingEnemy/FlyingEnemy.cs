@@ -13,6 +13,8 @@ public class FlyingEnemy : EnemyController
     [SerializeField] private float setOffTime = 2f;
     [SerializeField] private float explosionPower = 2f;
 
+    private LocalTimerContainer timer;
+
     private void Start()
     {
         StartHealth();
@@ -22,11 +24,11 @@ public class FlyingEnemy : EnemyController
     {
         if (attack && !settingOff)
         {
-            Vector3 dir = player.position - this.gameObject.transform.position;
+            Vector3 dir = player.position - gameObject.transform.position;
 
             if (Mathf.Abs(Vector3.Distance(Vector3.zero, dir)) > setOffRange)
             {
-                if (GameTimer.timeMultiplayer == 1f)
+                if (GameTimer.TimeMultiplier == GameTimer.PLAYING)
                 {
                     Vector3 vel = dir.normalized * speed;
                     enemyRigidbody.velocity = vel;
@@ -41,9 +43,10 @@ public class FlyingEnemy : EnemyController
                     enemyRigidbody.velocity = Vector3.zero;
                 }
             }
-            else if (!isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
+            else if (!IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
             {
                 enemyRigidbody.velocity = Vector3.zero;
+                enemyRigidbody.constraints = RigidbodyConstraints2D.FreezePosition;
                 Attack();
             }
         }   
@@ -52,7 +55,7 @@ public class FlyingEnemy : EnemyController
     public override void Attack()
     {
         settingOff = true;
-        LocalTimersManager.CreateNewTimer(setOffTime).DoAfter(() =>
+        timer = LocalTimersManager.CreateNewTimer(setOffTime).DoAfter(() =>
         {
             Explode();
         }).Start();
@@ -65,8 +68,7 @@ public class FlyingEnemy : EnemyController
         {
             foreach (var collider in collidersInExplosion)
             {
-                IDamageTaker damageTaker;
-                if (collider.TryGetComponent<IDamageTaker>(out damageTaker))
+                if (collider.TryGetComponent(out IDamageTaker damageTaker))
                 {
                     if ((Object)damageTaker == this)
                     {
@@ -79,17 +81,25 @@ public class FlyingEnemy : EnemyController
                 }
             }
         }
-        TakeDamage(getMaxHealth());
+
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = attackClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
+        TakeDamage(GetMaxHealth());
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player" && !attack)
+        if (collision.gameObject.TryGetComponent(out PlayerControler _) && !attack)
         {
-            if (!isObjectBlockedByOtherObject(collision.gameObject, viewRayBlockingLayers))
+            if (!IsObjectBlockedByOtherObject(collision.gameObject, viewRayBlockingLayers))
             {
                 player = collision.gameObject.transform;
                 attack = true;
+                enemyRigidbody.freezeRotation = true;
                 patrol.StopPatrol();
             }
         }
@@ -98,12 +108,16 @@ public class FlyingEnemy : EnemyController
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") || collision.gameObject.layer == LayerMask.NameToLayer("Wall") 
-            || collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Object")
+            || collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Object"))
         {
             Explode();
         }
     }
 
+    private void OnDestroy()
+    {
+        timer?.Stop();
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,9 +8,9 @@ public class BaseEntityBehaviour : MonoBehaviour
     /// </summary>
     /// <param name="objectToCheck">object which was detected</param>
     /// <returns>bool value, if true object is behind other object else object is not behind anything</returns>
-    public bool isObjectBlockedByOtherObject(GameObject objectToCheck)
+    public bool IsObjectBlockedByOtherObject(GameObject objectToCheck)
     {
-        return isObjectBlockedByOtherObject(objectToCheck, null, ~0);
+        return IsObjectBlockedByOtherObject(objectToCheck, null, ~0);
     }
 
     /// <summary>
@@ -20,9 +19,9 @@ public class BaseEntityBehaviour : MonoBehaviour
     /// <param name="objectToCheck">object which was detected</param>
     /// <param name="blockingLayers">layers of objects behind which objectToCheck can hide</param>
     /// <returns>bool value, if true object is behind other object else object is not behind anything</returns>
-    public bool isObjectBlockedByOtherObject(GameObject objectToCheck, LayerMask blockingLayers)
+    public bool IsObjectBlockedByOtherObject(GameObject objectToCheck, LayerMask blockingLayers)
     {
-        return isObjectBlockedByOtherObject(objectToCheck, null, blockingLayers);
+        return IsObjectBlockedByOtherObject(objectToCheck, null, blockingLayers);
     }
 
     /// <summary>
@@ -31,9 +30,9 @@ public class BaseEntityBehaviour : MonoBehaviour
     /// <param name="objectToCheck">object which was detected</param>
     /// <param name="excludedTags">tags of objects which will be ignored while checking if objectToCheck is behind them</param>
     /// <returns>bool value, if true object is behind other object else object is not behind anything</returns>
-    public bool isObjectBlockedByOtherObject(GameObject objectToCheck, string[] excludedTags)
+    public bool IsObjectBlockedByOtherObject(GameObject objectToCheck, string[] excludedTags)
     {
-        return isObjectBlockedByOtherObject(objectToCheck, excludedTags, ~0);
+        return IsObjectBlockedByOtherObject(objectToCheck, excludedTags, ~0);
     }
 
     /// <summary>
@@ -43,18 +42,21 @@ public class BaseEntityBehaviour : MonoBehaviour
     /// <param name="excludedTags">tags of objects which will be ignored while checking if objectToCheck is behind them</param>
     /// <param name="blockingLayers">layers of objects behind which objectToCheck can hide</param>
     /// <returns>bool value, if true object is behind other object else object is not behind anything</returns>
-    public bool isObjectBlockedByOtherObject(GameObject objectToCheck, string[] excludedTags, LayerMask blockingLayers)
+    public bool IsObjectBlockedByOtherObject(GameObject objectToCheck, string[] excludedTags, LayerMask blockingLayers)
     {
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, (objectToCheck.transform.position - transform.position).normalized, Mathf.Abs(Vector3.Distance(objectToCheck.transform.position, transform.position)));
         if (hits.Length == 0)
         {
-            return true;
+            return false;
         }
 
         List<RaycastHit2D> allowedHits = new List<RaycastHit2D>();
         foreach (var hit in hits)
         {
             if (hit.collider.gameObject == this.gameObject)
+                continue;
+
+            if (hit.collider.isTrigger)
                 continue;
 
             bool next = false;
@@ -74,7 +76,7 @@ public class BaseEntityBehaviour : MonoBehaviour
             }
 
             int layerVal = 1 << hit.collider.gameObject.layer;
-            if ((blockingLayers | layerVal) != blockingLayers)
+            if ((blockingLayers & layerVal) == 0)
             {
                 continue;
             }
@@ -83,10 +85,11 @@ public class BaseEntityBehaviour : MonoBehaviour
         }
         if (allowedHits.Count == 0)
         {
-            return true;
+            return false;
         }
 
         RaycastHit2D closestHit = allowedHits[0];
+
         float minDist = Mathf.Abs(Vector3.Distance(closestHit.point, transform.position));
         for (int i = 1; i < allowedHits.Count; i++)
         {

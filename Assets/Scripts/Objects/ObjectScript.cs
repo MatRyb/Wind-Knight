@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
-using UnityEngine.UI;
 
 public class ObjectScript : ObjectHealth
 {
@@ -14,13 +12,31 @@ public class ObjectScript : ObjectHealth
 
     [Header("Damage:")]
     [SerializeField] private float factor = 1.0f;
+    [SerializeField] private SpriteRenderer crackRenderer;
     [SerializeField] private List<Sprite> states;
-    [SerializeField] private float percent;
-    private SpriteRenderer image;
-    [SerializeField] private float minSpeed = 2.0f; 
+    [SerializeField] private float minSpeed = 2.0f;
+
+    [Header("Audio:")]
+    [SerializeField] private GameObject source;
+    [SerializeField] private AudioClip destroyClip;
+    private float volume = 0f;
+    private bool mute = false;
+
+    [Header("Particle:")]
+    [SerializeField] private Color destroyColor1;
+    [SerializeField] private Color destroyColor2;
+    [SerializeField] private ParticleSystem destroyParticle;
 
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private Vector2 velocity;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float percent;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float maxSpeed = 32.69955f;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float minDealtDamage;
+    [Foldout("Info")]
+    [DisableIf("true")] [SerializeField] private float maxDealtDamage;
 
     void OnValidate()
     {
@@ -30,56 +46,107 @@ public class ObjectScript : ObjectHealth
         }
         else if (rb == null)
         {
-            rb = this.gameObject.AddComponent<Rigidbody2D>();
+            rb = gameObject.AddComponent<Rigidbody2D>();
         }
 
-        if (this.gameObject.GetComponent<Collider2D>() == null)
+        if (gameObject.GetComponent<Collider2D>() == null)
         {
-            Debug.LogError("ObjectScript -> NO COLLIDER ATTACHED");
+            Debug.LogError("ObjectScript[ " + gameObject.name + " ] -> NO COLLIDER ATTACHED");
+        }
+
+        if (crackRenderer == null)
+        {
+            Debug.LogError("ObjectScript[ " + gameObject.name + " ] -> NO CRACK RENDERER ATTACHED");
         }
 
         if (states.Count == 0)
         {
-            Debug.LogError("ObjectScript -> ADD AT LEAST ONE STATE");
+            Debug.LogError("ObjectScript[" + gameObject.name + "] -> ADD AT LEAST ONE STATE");
         }
+
+        minDealtDamage = minSpeed * (mass / 10) * factor;
+
+        maxDealtDamage = maxSpeed * (mass / 10) * factor;
     }
 
     void Awake()
     {
-        image = this.gameObject.GetComponent<SpriteRenderer>();
-        image.sprite = states[0];
+        crackRenderer.sprite = states[0];
         rb.mass = mass;
         rb.drag = linearDrag;
         gravityScale = rb.gravityScale;
-        this.StartHealth();
+        StartHealth();
+
+        GameTimer.OnStart += StartGameTime;
+        GameTimer.OnStopped += StopGameTime;
+    }
+
+    private void Start()
+    {
+        if (OptionsLevelManager.instance != null)
+        {
+            volume = OptionsLevelManager.instance.GetSFXVolume();
+            mute = OptionsLevelManager.instance.GetSFXMute();
+        }
+        else
+        {
+            mute = true;
+        }
     }
 
     void Update()
     {
-        this.changeSprite();
+        ChangeSprite();
 
-        percent = (this.getHealth() / this.getMaxHealth()) * 100;
+        percent = (GetHealth() / GetMaxHealth()) * 100;
 
         if (rb.velocity.x != 0.0f || rb.velocity.y != 0.0f)
         {
             velocity = rb.velocity;
         }
 
-        rb.velocity *= GameTimer.timeMultiplayer;
-        rb.gravityScale = gravityScale * GameTimer.timeMultiplayer;
+        rb.velocity *= GameTimer.TimeMultiplier;
+        rb.gravityScale = gravityScale * GameTimer.TimeMultiplier;
+    }
+
+    public void StartGameTime()
+    {
+        rb.constraints = RigidbodyConstraints2D.None;
+    }
+
+    public void StopGameTime()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
     public override void OnDead()
     {
+        ParticleSystem particle = Instantiate(destroyParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        var mainModule = particle.main;
+        mainModule.startColor = new ParticleSystem.MinMaxGradient(destroyColor1, destroyColor2);
+        particle.Play();
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = destroyClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
+        Destroy(particle.gameObject, 3f);
         Destroy(gameObject);
     }
 
-    public float getMass()
+    public void OnDestroy()
+    {
+        GameTimer.OnStart -= StartGameTime;
+        GameTimer.OnStopped -= StopGameTime;
+    }
+
+    public float GetMass()
     {
         return mass;
     }
 
-    public void setMass(float value)
+    public void SetMass(float value)
     {
         if (value < 0f)
         {
@@ -89,7 +156,7 @@ public class ObjectScript : ObjectHealth
         mass = value;
     }
 
-    public void setFactor(float value)
+    public void SetFactor(float value)
     {
         if (value < 0f)
         {
@@ -99,15 +166,15 @@ public class ObjectScript : ObjectHealth
         factor = value;
     }
 
-    private void changeSprite()
+    private void ChangeSprite()
     {
-        if (this.getHealth() == this.getMaxHealth())
+        if (GetHealth() == GetMaxHealth())
         {
-            image.sprite = states[0];
+            crackRenderer.sprite = states[0];
         }
         else
         {
-            image.sprite = states[states.Count-1-Mathf.FloorToInt((states.Count/this.getMaxHealth())*this.getHealth())];
+            crackRenderer.sprite = states[states.Count - 1 - Mathf.FloorToInt((states.Count / GetMaxHealth()) * GetHealth())];
         }
     }
 
@@ -121,13 +188,34 @@ public class ObjectScript : ObjectHealth
         {
             float damage = speed * (mass / 10) * factor;
 
-            this.TakeDamage(damage);
+            TakeDamage(damage);
 
-            IDamageTaker damageTaker;
-            if (collision.collider.gameObject.TryGetComponent<IDamageTaker>(out damageTaker))
+            if (!collision.collider.gameObject.TryGetComponent(out PlayerControler _))
             {
-                damageTaker.TakeDamage(damage);
+                if (collision.collider.gameObject.TryGetComponent(out IDamageTaker damageTaker))
+                {
+                    damageTaker.TakeDamage(damage);
+                }
             }
         }
+
+        /*if (collision.collider.gameObject.TryGetComponent(out PlayerControler _))
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+        }*/
     }
+    /*
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.collider.gameObject.TryGetComponent(out PlayerControler _))
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        rb.bodyType = RigidbodyType2D.Dynamic;
+    }
+    */
 }

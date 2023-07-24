@@ -7,6 +7,12 @@ public class PatrolFlying : MonoBehaviour
     [SerializeField] private List<Vector2> points;
     [SerializeField] private float speed = 10.0f;
     private LTDescr tween = null;
+    private Matrix4x4 localToWorld;
+
+    void Awake()
+    {
+        localToWorld = transform.localToWorldMatrix;
+    }
 
     void Start()
     {
@@ -16,22 +22,23 @@ public class PatrolFlying : MonoBehaviour
         }
         else
         {
-            moveToPoint(0);
+            GetComponent<Rigidbody2D>().freezeRotation = true;
+            MoveToPoint(0);
         }
     }
 
-    private void moveToPoint(int i)
+    private void MoveToPoint(int i)
     {
-        float flyTime = Vector3.Distance(points[i], this.transform.position) / speed;
+        float flyTime = Vector3.Distance(localToWorld.MultiplyPoint3x4(points[i]), this.transform.position) / speed;
 
-        Vector2 dir = points[i] - (Vector2) this.transform.position;
+        Vector2 dir = (Vector2) localToWorld.MultiplyPoint3x4(points[i]) - (Vector2) this.transform.position;
         if ((dir.x > 0 && body.transform.localScale.x < 0) || (dir.x < 0 && body.transform.localScale.x > 0))
         {
             body.transform.localScale = new Vector2(body.transform.localScale.x * -1, body.transform.localScale.y);
         }
 
-        tween = LeanTween.move(this.gameObject, points[i], flyTime)
-            .setOnComplete(() => { moveToPoint((++i)%points.Count); });
+        tween = LeanTween.move(this.gameObject, (Vector2) localToWorld.MultiplyPoint3x4(points[i]), flyTime)
+            .setOnComplete(() => { MoveToPoint((++i) % points.Count); });
     }
 
     public void StopPatrol()
@@ -45,7 +52,7 @@ public class PatrolFlying : MonoBehaviour
         if (tween == null)
             return;
 
-        if (GameTimer.timeMultiplayer == 0)
+        if (GameTimer.TimeMultiplier == GameTimer.STOPPED)
         {
             LeanTween.pause(tween.id);
         }
@@ -57,19 +64,21 @@ public class PatrolFlying : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        localToWorld = transform.localToWorldMatrix;
+
         if (points.Count > 0)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(points[0], 0.5f);
+            Gizmos.DrawWireSphere((Vector2) localToWorld.MultiplyPoint3x4(points[0]), 0.5f);
             for (int i = 1; i < points.Count; i++)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(points[i], 0.5f);
+                Gizmos.DrawWireSphere((Vector2) localToWorld.MultiplyPoint3x4(points[i]), 0.5f);
 
                 Gizmos.color = Color.green;
-                Gizmos.DrawLine(points[i - 1], points[i]);
+                Gizmos.DrawLine((Vector2) localToWorld.MultiplyPoint3x4(points[i - 1]), (Vector2) localToWorld.MultiplyPoint3x4(points[i]));
             }
-            Gizmos.DrawLine(points[points.Count - 1], points[0]);
+            Gizmos.DrawLine((Vector2) localToWorld.MultiplyPoint3x4(points[^1]), (Vector2) localToWorld.MultiplyPoint3x4(points[0]));
         }
     }
 }

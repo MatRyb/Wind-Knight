@@ -1,24 +1,31 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MeleeEnemy : EnemyController
 {
-    [SerializeField] private float attackCooldown = 2f;
     private bool canAttack = true;
+    private bool isDoneCooldown = true;
 
+    [SerializeField] private SpriteRenderer currentSprite;
+
+    [SerializeField] private PolygonCollider2D colliderNormalSprite;
+    [SerializeField] private PolygonCollider2D colliderAttackSprite;
+
+    [SerializeField] private GameObject hpBar;
     [SerializeField] private GameObject attackPrefab;
+
+    [SerializeField] private Sprite moveSprite;
+    [SerializeField] private Sprite attackSprite;
+
+    [SerializeField] private Transform tailPos;
 
     [SerializeField] private float minSpeed = 2.0f;
     private float distanceToPlayer;
     private float timeofLastAttack;
 
-
     void Start()
     {
-        //healthBarUI.SetActive(true);
         StartHealth();
-        //slider.value = CalculateHealth();
     }
 
     // Update is called once per frame
@@ -26,15 +33,48 @@ public class MeleeEnemy : EnemyController
     {
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        if (distanceToPlayer <= range && GameTimer.timeMultiplayer != 0f)
+        if (distanceToPlayer <= range && GameTimer.TimeMultiplier != GameTimer.STOPPED)
         {
-            if (canAttack)
+            if (canAttack && isDoneCooldown)
             {
                 Attack();
+                StartCoroutine(ChangeSpriteForAttack(0.2f));
+                isDoneCooldown = false;
+                StartCoroutine(WaitCooldown(attackRecharge));
             }
         }
+    }
 
-        //slider.value = CalculateHealth();
+    private IEnumerator WaitCooldown(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        isDoneCooldown = true;
+    }
+
+    private IEnumerator ChangeSpriteForAttack(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        currentSprite.sprite = attackSprite;
+        colliderAttackSprite.enabled = true;
+        colliderNormalSprite.enabled = false;
+        transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
+        transform.position = new Vector2(transform.position.x, transform.position.y - 1.0f);
+        hpBar.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
+        hpBar.transform.position = new Vector2(transform.position.x, transform.position.y + 4f);
+
+        StartCoroutine(RevertSpriteToNormal(0.1f));
+    }
+
+    private IEnumerator RevertSpriteToNormal(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        currentSprite.sprite = moveSprite;
+        colliderAttackSprite.enabled = false;
+        colliderNormalSprite.enabled = true;
+        transform.localScale = new Vector3(4f, 4, 4f);
+        transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);
+        hpBar.transform.localScale = new Vector3(1f, 1f, 1f);
+        attacking = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -45,12 +85,11 @@ public class MeleeEnemy : EnemyController
 
         if (speed > minSpeed)
         {
-            float damage = speed * (this.GetComponent<Rigidbody2D>().mass / 10);
+            float damage = speed * (GetComponent<Rigidbody2D>().mass / 10);
 
-            this.TakeDamage(damage);
+            TakeDamage(damage);
 
-            IDamageTaker damageTaker;
-            if (collision.collider.gameObject.TryGetComponent(out damageTaker))
+            if (collision.collider.gameObject.TryGetComponent(out IDamageTaker damageTaker))
             {
                 damageTaker.TakeDamage(damage);
             }
@@ -59,13 +98,23 @@ public class MeleeEnemy : EnemyController
 
     public override void Attack()
     {
-        if (Time.time - timeofLastAttack < attackCooldown)
-        {
+        attacking = true;
+        if (Time.time - timeofLastAttack < attackRecharge)
+        {  
             return;
+
         }
         timeofLastAttack = Time.time;
-        GameObject hitbox = Instantiate(attackPrefab, transform.position, Quaternion.identity);
-        AttackAngleVisualisation(player.transform.position, hitbox);
+
+        GameObject mainHitBox = Instantiate(attackPrefab, tailPos.position, Quaternion.identity);
+        AttackAngleVisualisation(player.transform.position, mainHitBox);
+        AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
+        s.clip = attackClip;
+        s.volume = volume;
+        s.mute = mute;
+        s.Play();
+        Destroy(s.gameObject, 2f);
+        canAttack = true;
     }
 
     void AttackAngleVisualisation(Vector2 targetPos, GameObject objectToRotate)
@@ -73,10 +122,5 @@ public class MeleeEnemy : EnemyController
         float degreeToAdd = AdvancedMath.GetAngleBetweenPoints(targetPos, transform.position, Vector2.right + targetPos);
 
         objectToRotate.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90 + degreeToAdd));
-    }
-
-    private float CalculateHealth()
-    {
-        return getHealth() / getMaxHealth();
     }
 }

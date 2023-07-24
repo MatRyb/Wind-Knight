@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class WaveEnemy : EnemyController
@@ -20,16 +18,20 @@ public class WaveEnemy : EnemyController
 
     void Awake()
     {
-        if (TryGetComponent(out rb))
+        if (rb == null && TryGetComponent(out rb))
         {
             rb.gravityScale = 0f;
         }
-        else
+        else if (rb != null)
+        {
+            rb.gravityScale = 0f;
+        }
+        else if (rb == null)
         {
             Debug.LogError("Wave Enemy needs Rigidbody2D");
         }
 
-        if (!TryGetComponent(out wg))
+        if (wg == null && !TryGetComponent(out wg))
         {
             Debug.LogError("Wave Enemy needs WaveGenerator");
         }
@@ -46,7 +48,7 @@ public class WaveEnemy : EnemyController
         Vector3 dir = player.position - transform.position;
         float distance = Mathf.Abs(Vector3.Distance(Vector3.zero, dir));
 
-        if (isObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers) || distance > range + rangeOffset)
+        if (IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers) || distance > range + rangeOffset)
         {
             canAttack = true;
             return;
@@ -54,7 +56,7 @@ public class WaveEnemy : EnemyController
 
         if (distance > escapeRange && distance <= range)
         {
-            if (GameTimer.timeMultiplayer == 1f)
+            if (GameTimer.TimeMultiplier == GameTimer.PLAYING)
             {
                 float degreeToAdd = AdvancedMath.GetAngleBetweenPoints(transform.position, player.position, Vector3.right + transform.position);
 
@@ -71,7 +73,7 @@ public class WaveEnemy : EnemyController
         {
             Debug.Log(transform.position);
 
-            if (GameTimer.timeMultiplayer == 1f && !moved)
+            if (GameTimer.TimeMultiplier == GameTimer.PLAYING && !moved)
             {
                 float degree = AdvancedMath.GetAngleBetweenPoints(transform.position, player.position, Vector3.right + transform.position);
 

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SpawnObjectManager : MonoBehaviour
 {
-    [SerializeField] private List<Transform> transformList = new List<Transform>();
+    [SerializeField] private List<Transform> transformList = new();
 
-    [SerializeField] private List<GameObject> prefabList = new List<GameObject>();
+    [SerializeField] private List<GameObject> prefabList = new();
 
     [SerializeField] private int objectCountPerTransform = 20;
 
@@ -14,7 +14,7 @@ public class SpawnObjectManager : MonoBehaviour
     {
         foreach (Transform tran in transformList)
         {
-            for(int i=0;i<objectCountPerTransform;i++)
+            for(int i = 0; i < objectCountPerTransform; ++i)
             {
                 StartCoroutine(Spawn(tran, i));
             }
@@ -25,9 +25,9 @@ public class SpawnObjectManager : MonoBehaviour
     {
         yield return new WaitForSeconds(i);
         GameObject obj = Instantiate(prefabList[Random.Range(0, prefabList.Count)], tran.position, Quaternion.identity);
-        obj.GetComponent<ObjectScript>().setFactor(0);
+        obj.GetComponent<ObjectScript>().SetFactor(0);
         obj.GetComponent<ObjectScript>().StartHealth();
         yield return new WaitForSeconds(2);
-        obj.GetComponent<ObjectScript>().setFactor(1);
+        obj.GetComponent<ObjectScript>().SetFactor(1);
     }
 }

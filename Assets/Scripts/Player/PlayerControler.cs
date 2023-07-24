@@ -8,15 +8,20 @@ public class PlayerControler : ObjectHealth
 {
     public PlayerState playerState { get; private set; }
 
-    [SerializeField] private SpriteRenderer bodySprite;
     [SerializeField] private ParticleSystem deathParticle;
-    private Color damageColor = new Color(1, 79/255, 79/255);
-    private Color normalColor = new Color(1, 1, 1);
+    private Color damageColor = new(1, 79/255, 79/255);
+    private Color normalColor = new(1, 1, 1);
 
     public Transform playerBodyTransform = null;
     [SerializeField] private float minForceRadius = 1f;
     [SerializeField] private float maxForceRadius = 10f;
     [SerializeField] private float basePower = 2f;
+
+    [Header("Body: ")]
+    [SerializeField] private GameObject body;
+    [SerializeField] private bool m_FacingRight = true;
+    [SerializeField] private float maxRotation = 90;
+    [SerializeField] private float minRotation = -90;
 
     [Header("Rigidbody: ")]
     public Rigidbody2D playerRigidbody = null;
@@ -30,38 +35,58 @@ public class PlayerControler : ObjectHealth
     [SerializeField] private Vector2 mouseBoundryOffset = Vector2.zero;
     [SerializeField] private List<Sprite> mouseStates;
 
+    [Header("Audio:")]
+    [SerializeField] private AudioSource source;
+    [SerializeField] private AudioClip damageClip;
+
+    [Header("Mana:")]
+    [SerializeField] private int maxObjectHits = 100;
+
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 virtualMousePosition;
     [Foldout("info")]
     [DisableIf("true")] public Vector2 velocity = Vector2.zero;
     [Foldout("info")]
+    [DisableIf("true")] public float minSpeed = 0f;
+    [Foldout("info")]
+    [DisableIf("true")] public float speed = 0f;
+    [Foldout("info")]
+    [DisableIf("true")] public float maxSpeed = 0f;
+    [Foldout("info")]
     [DisableIf("true")] [SerializeField] private Vector2 positionChange = Vector2.zero;
+    [Foldout("info")]
+    [DisableIf("true")] [SerializeField] private int objectHits = 0;
     private Vector2 lastPosition;
 
     private void OnValidate()
     {
         if (playerBodyTransform == null)
         {
-            playerBodyTransform = this.transform;
+            playerBodyTransform = transform;
+        }
+
+        if (body == null)
+        {
+            Debug.LogError(gameObject.name + " Body Object can't be null. Please provide one. :)");
         }
 
         if (mouseObject == null)
         {
-            Debug.LogError("Mouse Object can't be null. Please provide one. :)");
+            Debug.LogError(gameObject.name + " Mouse Object can't be null. Please provide one. :)");
         }
 
         if (mouseStates.Count == 0)
         {
-            Debug.LogError("There must be at least 2 states.");
+            Debug.LogError(gameObject.name + " There must be at least 2 states.");
         }
 
-        if (GetComponent<Rigidbody2D>() != null && playerRigidbody == null)
+        if (GetComponentInParent<Rigidbody2D>() != null && playerRigidbody == null)
         {
-            playerRigidbody = GetComponent<Rigidbody2D>();
+            playerRigidbody = GetComponentInParent<Rigidbody2D>();
         }
         else if (playerRigidbody == null)
         {
-            Debug.LogError("Players Rigidbody can't be null. Please provide one. :)");
+            Debug.LogError(gameObject.name + " Players Rigidbody can't be null. Please provide one. :)");
         }
     }
 
@@ -78,7 +103,9 @@ public class PlayerControler : ObjectHealth
             playerRigidbody.mass = mass;
         }
 
-        this.StartHealth();
+        StartHealth();
+
+        objectHits = maxObjectHits;
     }
 
     public void mouseInit()
@@ -100,6 +127,32 @@ public class PlayerControler : ObjectHealth
 
         VirtualMousePositionCalculations();
 
+        if (virtualMousePosition.x >= transform.position.x && !m_FacingRight)
+        {
+            Flip();
+        }
+        else if (virtualMousePosition.x < transform.position.x && m_FacingRight)
+        {
+            Flip();
+        }
+
+        float y = virtualMousePosition.y - transform.position.y;
+
+        float x = Mathf.Abs(virtualMousePosition.x - transform.position.x);
+
+        if (Mathf.Atan2(y, x) * 180 / Mathf.PI >= minRotation && Mathf.Atan2(y, x) * 180 / Mathf.PI <= maxRotation)
+        {
+            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? Mathf.Atan2(y, x) * 180 / Mathf.PI : - Mathf.Atan2(y, x) * 180 / Mathf.PI);
+        }
+        else if (Mathf.Atan2(y, x) * 180 / Mathf.PI < minRotation)
+        {
+            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? minRotation : maxRotation);
+        }
+        else if (Mathf.Atan2(y, x) * 180 / Mathf.PI > maxRotation)
+        {
+            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? maxRotation : minRotation);
+        }
+
         MouseVisualisation(playerBodyTransform.position);
 
         MovementBasis(playerBodyTransform.position);
@@ -112,22 +165,35 @@ public class PlayerControler : ObjectHealth
 
     public override void TakeDamage(float value)
     {
-        LeanTween.value(bodySprite.gameObject, setSpriteColor, bodySprite.color, damageColor, 0.15f).setOnComplete(() => {
-            LeanTween.value(bodySprite.gameObject, setSpriteColor, bodySprite.color, normalColor, 0.15f);
+        LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, damageColor, 0.15f).setOnComplete(() => {
+            LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, normalColor, 0.15f);
         });
+        source.clip = damageClip;
+        source.Play();
         base.TakeDamage(value);
     }
 
-    public void setSpriteColor(Color val)
+    private void Flip()
     {
-        bodySprite.color = val;
+        // Switch the way the player is labelled as facing.
+        m_FacingRight = !m_FacingRight;
+
+        // Multiply the player's x local scale by -1.
+        Vector3 theScale = body.transform.localScale;
+        theScale.x *= -1;
+        body.transform.localScale = theScale;
+    }
+
+    public void SetSpriteColor(Color val)
+    {
+        body.GetComponent<SpriteRenderer>().color = val;
     }
 
     public override void OnDead()
     {
-        ParticleSystem particle = Instantiate(deathParticle, this.gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        ParticleSystem particle = Instantiate(deathParticle, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
         particle.Play();
-        Destroy(particle, 3);
+        Destroy(particle.gameObject, 3);
         LevelManager.InitRespawn();
     }
 
@@ -141,10 +207,10 @@ public class PlayerControler : ObjectHealth
 
     void VirtualMousePositionCalculations()
     {
-        if (GameTimer.timeMultiplayer == 0f)
+        if (GameTimer.TimeMultiplier == GameTimer.STOPPED)
             return;
 
-        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector2 mouseDelta = new(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
         if (staticMousePos)
             virtualMousePosition += positionChange;
@@ -190,11 +256,12 @@ public class PlayerControler : ObjectHealth
         }
 
         mouseObject.transform.position = finalMousePosition;
+        mouseObject.transform.localPosition = new Vector3(mouseObject.transform.localPosition.x, mouseObject.transform.localPosition.y, 0);
     }
 
     void MovementBasis(Vector2 playerPos)
     {
-        if (GameTimer.timeMultiplayer == 0f)
+        if (GameTimer.TimeMultiplier == GameTimer.STOPPED)
         {
             playerRigidbody.bodyType = RigidbodyType2D.Static;
             return;
@@ -216,6 +283,7 @@ public class PlayerControler : ObjectHealth
             }
             int state = Mathf.CeilToInt(((mouseStates.Count-1) / maxForceRadius) * Mathf.Abs(Vector2.Distance(calculateTo, playerPos)));
             mouseObject.GetComponent<SpriteRenderer>().sprite = mouseStates[state == mouseStates.Count ? mouseStates.Count - 1 : state];
+            speed = Mathf.Abs(Vector2.Distance(calculateTo, playerPos)) * basePower;
             velocity = (calculateTo - playerPos) * basePower;
             playerRigidbody.velocity = velocity;
         }
@@ -224,6 +292,8 @@ public class PlayerControler : ObjectHealth
             mouseObject.GetComponent<SpriteRenderer>().sprite = mouseStates[0];
             playerRigidbody.gravityScale = gravityScale;
         }
+
+        maxSpeed = Mathf.Abs(Vector2.Distance(((virtualMousePosition - playerPos).normalized * maxForceRadius) + playerPos, playerPos)) * basePower;
 
         playerRigidbody.velocity = playerRigidbody.velocity;
     }
@@ -239,6 +309,10 @@ public class PlayerControler : ObjectHealth
 
     private void OnDrawGizmosSelected()
     {
+        if (!Application.isPlaying)
+        {
+            virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+        }
         Vector2 playerPos = playerBodyTransform.position;
         float totalDist = Mathf.Abs(Vector2.Distance(playerPos, virtualMousePosition));
 
@@ -267,5 +341,26 @@ public class PlayerControler : ObjectHealth
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(lowerBound, 2f);
         Gizmos.DrawWireSphere(upperBound, 2f);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent(out ObjectScript _))
+        {
+            if (--objectHits <= 0)
+            {
+                OnDead();
+            }
+        }
+    }
+
+    public int GetMana()
+    {
+        return objectHits;
+    }
+
+    public int GetMaxMana()
+    {
+        return maxObjectHits;
     }
 }
