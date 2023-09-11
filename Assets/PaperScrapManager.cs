@@ -36,7 +36,7 @@ public class PaperScrapManager : MonoBehaviour
     [SerializeField] private AudioClip collectedClip;
     [SerializeField] private TMP_Text text;
     [SerializeField] private IPuzzleSolvedEvent puzzleSolvedEvent;
-    public string ThisLevelName = "";
+    [Scene] public string ThisLevelName = "";
 
     [SerializeField] private List<Scrap> scraps;
     private bool restart;
