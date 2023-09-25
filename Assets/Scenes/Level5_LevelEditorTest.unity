@@ -813,11 +813,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea45084abb1f13d49b81f35d310807ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map: {fileID: 2800000, guid: 2c43186b9a90c7e4c8aead71feb9926b, type: 3}
+  levelMap: {fileID: 2800000, guid: 2c43186b9a90c7e4c8aead71feb9926b, type: 3}
+  vertexMap: {fileID: 2800000, guid: 7f21ba6e853c7604eb008d606b84888c, type: 3}
   colorMappings:
   - color: {r: 0.58431375, g: 0, b: 0.41960785, a: 1}
     type: 1
     prefab: {fileID: 3053495975456952606, guid: 7fea2793f94dafd4180b5d8c12eb6cfe, type: 3}
+    name: 
     pattern:
       ul: 0
       um: 0
@@ -831,6 +833,7 @@ MonoBehaviour:
   - color: {r: 0.99607843, g: 1, b: 0.5058824, a: 1}
     type: 2
     prefab: {fileID: 4713143785253776626, guid: c03fc07920eba884aa35b2f1be78dded, type: 3}
+    name: WinTrigger
     pattern:
       ul: 0
       um: 1
@@ -844,6 +847,7 @@ MonoBehaviour:
   - color: {r: 1, g: 1, b: 1, a: 1}
     type: 2
     prefab: {fileID: 787269825349021895, guid: a39b3dbbea7cca14aae4312cfc97de48, type: 3}
+    name: Player
     pattern:
       ul: 0
       um: 0
@@ -857,6 +861,7 @@ MonoBehaviour:
   - color: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
     type: 1
     prefab: {fileID: 746952629089250870, guid: 2fb070a6d2534944485a75bc74c84d11, type: 3}
+    name: 
     pattern:
       ul: 0
       um: 0
@@ -870,6 +875,7 @@ MonoBehaviour:
   - color: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
     type: 0
     prefab: {fileID: 746952629089250870, guid: 7c05b4c94acc6134d8b83cebb93f13f3, type: 3}
+    name: 
     pattern:
       ul: 0
       um: 0
@@ -883,6 +889,7 @@ MonoBehaviour:
   - color: {r: 0.58431375, g: 0, b: 0.41960785, a: 1}
     type: 0
     prefab: {fileID: 3053495975456952606, guid: 993c46219195a9d49a0fc77f7eb5c6e2, type: 3}
+    name: 
     pattern:
       ul: 0
       um: 0

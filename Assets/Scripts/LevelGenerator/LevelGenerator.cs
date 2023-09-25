@@ -9,11 +9,13 @@ using System.Linq;
 /// 
 /// 
 /// TODO:
-/// - *Add meshGenerator Vertex creator*
-/// - Add info about type importance
-/// - Add name to Patterns
+/// - Add deleting repeated wall and ground color definition in sorted list
+/// - Add decoding of vertex map
+/// - Add generating planes based on vertex map by heritating of created scripts
+/// - Add generating big plane behind when generating map (with size of map + 20)
 /// - Create new empty object (Room) where will be stored grouped objects by type (if Pattern -> by name)
 /// - Add Room counter
+/// - Add deleting choosen rooms
 /// - Create Editor
 /// - Add Objects
 /// - Add Enemies
@@ -24,21 +26,22 @@ using System.Linq;
 
 public class LevelGenerator : MonoBehaviour
 {
-    // Show preview of map
-    [SerializeField] private Texture2D map;
+    [SerializeField] private Texture2D levelMap;
+    [SerializeField] private Texture2D vertexMap;
 
+    [HelpBox("Checking which object type will be used for a given pixel color is in the order: \n Pattern > Wall (Including Angel Wall) > Ground", HelpBoxMessageType.Info)]
     [SerializeField] private ColorMapping[] colorMappings;
 
-    // make it readonly
+    [ReadOnly]
     [SerializeField] private int objectsCount = 0;
 
     private List<int> visittedPixels;
 
     public void GenerateLevel()
     {
-        if (map == null)
+        if (levelMap == null)
         {
-            Debug.LogError("LevelGenerator: Map Texture is null. Please provide one.");
+            Debug.LogError("LevelGenerator: Level Map Texture is null. Please provide one.");
             return;
         }
 
@@ -50,7 +53,7 @@ public class LevelGenerator : MonoBehaviour
 
         visittedPixels = new();
 
-        int allPixels = map.width * map.height;
+        int allPixels = levelMap.width * levelMap.height;
 
         List<ColorMapping> sorted = colorMappings.OrderByDescending(c => c, new ColorMappingComparator()).ToList();
 
@@ -61,8 +64,8 @@ public class LevelGenerator : MonoBehaviour
                 continue;
             }
 
-            int x = i / map.height;
-            int y = i % map.height;
+            int x = i / levelMap.height;
+            int y = i % levelMap.height;
             GenerateTile(x, y, sorted);
         }
     }
@@ -88,12 +91,12 @@ public class LevelGenerator : MonoBehaviour
 
     private void GenerateTile(int x, int y, List<ColorMapping> mappings)
     {
-        Color pixelColor = map.GetPixel(x, y);
+        Color pixelColor = levelMap.GetPixel(x, y);
 
         if (pixelColor.a == 0)
         {
             // The pixel is transParent ;)
-            visittedPixels.Add(x * map.height + y);
+            visittedPixels.Add(x * levelMap.height + y);
             return;
         }
 
@@ -194,7 +197,7 @@ public class LevelGenerator : MonoBehaviour
             return false;
         }
 
-        if (beg_x + 2f >= map.width || beg_y + 2f >= map.height)
+        if (beg_x + 2f >= levelMap.width || beg_y + 2f >= levelMap.height)
         {
             return false;
         }
@@ -214,7 +217,7 @@ public class LevelGenerator : MonoBehaviour
 
             if (mapping.pattern.Get(i))
             {
-                if (mapping.color.Equals(map.GetPixel(beg_x + curr_pos.Item1, beg_y + curr_pos.Item2)))
+                if (mapping.color.Equals(levelMap.GetPixel(beg_x + curr_pos.Item1, beg_y + curr_pos.Item2)))
                 {
                     patternCheck.Add((beg_x + curr_pos.Item1, beg_y + curr_pos.Item2));
                 }
@@ -231,7 +234,7 @@ public class LevelGenerator : MonoBehaviour
 
         foreach (var item in patternCheck)
         {
-            visittedPixels.Add(item.Item1 * map.height + item.Item2);
+            visittedPixels.Add(item.Item1 * levelMap.height + item.Item2);
         }
 
         return true;
@@ -241,7 +244,7 @@ public class LevelGenerator : MonoBehaviour
     {
         (int, int) end_pos = (x, y);
 
-        while (map.GetPixel(x, end_pos.Item2).Equals(mapping.color) && end_pos.Item2 < map.height && !visittedPixels.Contains(x * map.height + end_pos.Item2))
+        while (levelMap.GetPixel(x, end_pos.Item2).Equals(mapping.color) && end_pos.Item2 < levelMap.height && !visittedPixels.Contains(x * levelMap.height + end_pos.Item2))
         {
             end_pos.Item2++;
         }
@@ -258,7 +261,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < end_pos.Item2 - y; i++)
         {
-            visittedPixels.Add(x * map.height + y + i);
+            visittedPixels.Add(x * levelMap.height + y + i);
         }
 
         return true;
@@ -268,7 +271,7 @@ public class LevelGenerator : MonoBehaviour
     {
         (int, int) end_pos = (x, y);
 
-        while (map.GetPixel(end_pos.Item1, y).Equals(mapping.color) && end_pos.Item1 < map.width)
+        while (levelMap.GetPixel(end_pos.Item1, y).Equals(mapping.color) && end_pos.Item1 < levelMap.width)
         {
             end_pos.Item1++;
         }
@@ -280,7 +283,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < end_pos.Item1 - x; i++)
         {
-            visittedPixels.Add((x + i) * map.height + y);
+            visittedPixels.Add((x + i) * levelMap.height + y);
         }
 
         return true;
@@ -291,12 +294,12 @@ public class LevelGenerator : MonoBehaviour
         (int, int) wall_start = (x, y);
         (int, int) ground_start = (x, y);
 
-        if (!map.GetPixel(wall_start.Item1, wall_start.Item2 + 1).Equals(wall.color) || visittedPixels.Contains(wall_start.Item1 * map.height + wall_start.Item2 + 1))
+        if (!levelMap.GetPixel(wall_start.Item1, wall_start.Item2 + 1).Equals(wall.color) || visittedPixels.Contains(wall_start.Item1 * levelMap.height + wall_start.Item2 + 1))
         {
             return false;
         }
 
-        if (map.GetPixel(ground_start.Item1 + 1, ground_start.Item2).Equals(wall.color) && ground_start.Item1 + 1 < map.width)
+        if (levelMap.GetPixel(ground_start.Item1 + 1, ground_start.Item2).Equals(wall.color) && ground_start.Item1 + 1 < levelMap.width)
         {
             bool v = CheckGround(ground, ground_start.Item1, ground_start.Item2);
             
@@ -308,12 +311,12 @@ public class LevelGenerator : MonoBehaviour
 
         (int, int) wall_end = (wall_start.Item1, wall_start.Item2);
 
-        while (map.GetPixel(wall_start.Item1, wall_end.Item2).Equals(wall.color) && wall_end.Item2 < map.height && !visittedPixels.Contains(wall_start.Item1 * map.height + wall_end.Item2))
+        while (levelMap.GetPixel(wall_start.Item1, wall_end.Item2).Equals(wall.color) && wall_end.Item2 < levelMap.height && !visittedPixels.Contains(wall_start.Item1 * levelMap.height + wall_end.Item2))
         {
             wall_end.Item2++;
         }
 
-        if (map.GetPixel(wall_end.Item1 + 1, wall_end.Item2 - 1).Equals(wall.color) && wall_end.Item1 + 1 < map.width)
+        if (levelMap.GetPixel(wall_end.Item1 + 1, wall_end.Item2 - 1).Equals(wall.color) && wall_end.Item1 + 1 < levelMap.width)
         {
             ground_start = (wall_end.Item1, wall_end.Item2 - 1);
             bool v = CheckGround(ground, ground_start.Item1, ground_start.Item2);
@@ -331,7 +334,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < wall_end.Item2 - wall_start.Item2; i++)
         {
-            visittedPixels.Add(wall_start.Item1 * map.height + wall_start.Item2 + i);
+            visittedPixels.Add(wall_start.Item1 * levelMap.height + wall_start.Item2 + i);
         }
 
         return true;
@@ -348,14 +351,14 @@ public class LevelGenerator : MonoBehaviour
     {
         (int, int) end_pos = (x, y);
 
-        while (map.GetPixel(end_pos.Item1, end_pos.Item2).Equals(mapping.color) && end_pos.Item1 < map.width && end_pos.Item2 < map.height)
+        while (levelMap.GetPixel(end_pos.Item1, end_pos.Item2).Equals(mapping.color) && end_pos.Item1 < levelMap.width && end_pos.Item2 < levelMap.height)
         {
             end_pos.Item1++;
             end_pos.Item2++;
         }
 
-        if (map.GetPixel(end_pos.Item1, end_pos.Item2 - 1).Equals(mapping.color) || map.GetPixel(end_pos.Item1 - 2, end_pos.Item2 - 1).Equals(mapping.color) ||
-            map.GetPixel(end_pos.Item1 - 1, end_pos.Item2).Equals(mapping.color) || map.GetPixel(end_pos.Item1 - 1, end_pos.Item2 - 2).Equals(mapping.color))
+        if (levelMap.GetPixel(end_pos.Item1, end_pos.Item2 - 1).Equals(mapping.color) || levelMap.GetPixel(end_pos.Item1 - 2, end_pos.Item2 - 1).Equals(mapping.color) ||
+            levelMap.GetPixel(end_pos.Item1 - 1, end_pos.Item2).Equals(mapping.color) || levelMap.GetPixel(end_pos.Item1 - 1, end_pos.Item2 - 2).Equals(mapping.color))
         {
             end_pos.Item1--;
             end_pos.Item2--;
@@ -367,7 +370,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
         if ((end_pos.Item1 == x + 2 && end_pos.Item2 == y + 2) && 
-            (map.GetPixel(end_pos.Item1 - 1, end_pos.Item2 - 2).Equals(mapping.color) || map.GetPixel(end_pos.Item1 - 2, end_pos.Item2 - 1).Equals(mapping.color)))
+            (levelMap.GetPixel(end_pos.Item1 - 1, end_pos.Item2 - 2).Equals(mapping.color) || levelMap.GetPixel(end_pos.Item1 - 2, end_pos.Item2 - 1).Equals(mapping.color)))
         {
             return false;
         }
@@ -386,9 +389,9 @@ public class LevelGenerator : MonoBehaviour
         bool extra_bottom = !map.GetPixel(x - 1, y - 1).a.Equals(a.a) || !map.GetPixel(x - 2, y - 1).a.Equals(a.a) || !map.GetPixel(x, y - 1).a.Equals(a.a) ||
             !map.GetPixel(x - 1, y - 2).a.Equals(a.a) || !map.GetPixel(x - 1, y).a.Equals(a.a);*/
 
-        bool extra_top = !map.GetPixel(end_pos.Item1, end_pos.Item2).a.Equals(a.a);
+        bool extra_top = !levelMap.GetPixel(end_pos.Item1, end_pos.Item2).a.Equals(a.a);
 
-        bool extra_bottom = !map.GetPixel(x - 1, y - 1).a.Equals(a.a);
+        bool extra_bottom = !levelMap.GetPixel(x - 1, y - 1).a.Equals(a.a);
 
         // scale is added to make an object appear to be part of a whole with other objects
         if (extra_top)
@@ -431,7 +434,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < end_pos.Item2 - y; i++)
         {
-            visittedPixels.Add((x + i) * map.height + y + i);
+            visittedPixels.Add((x + i) * levelMap.height + y + i);
         }
 
         return true;
@@ -441,14 +444,14 @@ public class LevelGenerator : MonoBehaviour
     {
         (int, int) end_pos = (x, y);
 
-        while (map.GetPixel(end_pos.Item1, end_pos.Item2).Equals(mapping.color) && end_pos.Item1 < map.width && end_pos.Item2 >= 0)
+        while (levelMap.GetPixel(end_pos.Item1, end_pos.Item2).Equals(mapping.color) && end_pos.Item1 < levelMap.width && end_pos.Item2 >= 0)
         {
             end_pos.Item1++;
             end_pos.Item2--;
         }
 
-        if (map.GetPixel(end_pos.Item1, end_pos.Item2 + 1).Equals(mapping.color) || map.GetPixel(end_pos.Item1 - 2, end_pos.Item2 + 1).Equals(mapping.color) ||
-            map.GetPixel(end_pos.Item1 - 1, end_pos.Item2).Equals(mapping.color) || map.GetPixel(end_pos.Item1 - 1, end_pos.Item2 + 2).Equals(mapping.color))
+        if (levelMap.GetPixel(end_pos.Item1, end_pos.Item2 + 1).Equals(mapping.color) || levelMap.GetPixel(end_pos.Item1 - 2, end_pos.Item2 + 1).Equals(mapping.color) ||
+            levelMap.GetPixel(end_pos.Item1 - 1, end_pos.Item2).Equals(mapping.color) || levelMap.GetPixel(end_pos.Item1 - 1, end_pos.Item2 + 2).Equals(mapping.color))
         {
             end_pos.Item1--;
             end_pos.Item2++;
@@ -460,7 +463,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
         if ((end_pos.Item1 == x + 2 && end_pos.Item2 == y - 2) &&
-            (map.GetPixel(end_pos.Item1 - 1, end_pos.Item2 + 2).Equals(mapping.color) || map.GetPixel(end_pos.Item1 - 2, end_pos.Item2 + 1).Equals(mapping.color)))
+            (levelMap.GetPixel(end_pos.Item1 - 1, end_pos.Item2 + 2).Equals(mapping.color) || levelMap.GetPixel(end_pos.Item1 - 2, end_pos.Item2 + 1).Equals(mapping.color)))
         {
             return false;
         }
@@ -479,9 +482,9 @@ public class LevelGenerator : MonoBehaviour
             !map.GetPixel(end_pos.Item1, end_pos.Item2 - 1).a.Equals(a.a) || !map.GetPixel(end_pos.Item1, end_pos.Item2 + 1).a.Equals(a.a) ||
             !map.GetPixel(end_pos.Item1 + 1, end_pos.Item2).a.Equals(a.a);*/
 
-        bool extra_top = !map.GetPixel(x - 1, y + 1).a.Equals(a.a);
+        bool extra_top = !levelMap.GetPixel(x - 1, y + 1).a.Equals(a.a);
 
-        bool extra_bottom = !map.GetPixel(end_pos.Item1, end_pos.Item2).a.Equals(a.a);
+        bool extra_bottom = !levelMap.GetPixel(end_pos.Item1, end_pos.Item2).a.Equals(a.a);
 
         // scale is added to make an object appear to be part of a whole with other objects
         if (extra_top)
@@ -524,7 +527,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < end_pos.Item1 - x; i++)
         {
-            visittedPixels.Add((x + i) * map.height + y - i);
+            visittedPixels.Add((x + i) * levelMap.height + y - i);
         }
 
         return true;

@@ -18,6 +18,7 @@ public class ColorMapping
     public MappingType type;
     public GameObject prefab;
 
+    public string name;
     public Pattern pattern;
 
     public static Pattern SetTexturePattern()
