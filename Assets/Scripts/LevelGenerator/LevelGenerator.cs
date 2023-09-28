@@ -9,7 +9,15 @@ using System.Linq;
 /// 
 /// 
 /// TODO:
-/// - Repair generating mesh and sprite based on vertexes
+/// - if prefab name Player then take it out from rooms
+/// - Repair generating sprite based on vertexes (move everything so the player is on position 0) (Wszystko przesun¹æ o ró¿nice player pos Vector2.Zero)
+/// - Add creating Canvases
+/// - Add creating Managers
+/// - Add creating InfoCanvases
+/// - Add creating LevelManager
+/// - Add creating PaperScrapManager
+/// - Add creating OptionsManager
+/// - Add creating EventSystem
 /// - Add Objects
 /// - Add Enemies
 /// - Add Checkpoints
@@ -117,13 +125,47 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    public void GenerateMesh()
+    {
+        if (GameObject.Find("Textures") == null || GameObject.Find("Textures").transform.Find("MeshVertex") == null || GameObject.Find("Textures").transform.Find("MeshVertex").GetComponent<InsideTextureMesh>() == null)
+        {
+            Debug.LogWarning("MeshVertex wasn't generated");
+            return;
+        }
+
+        GameObject.Find("Textures").transform.Find("MeshVertex").GetComponent<InsideTextureMesh>().GenerateMesh();
+    }
+
+    public void DeleteMesh()
+    {
+        if (GameObject.Find("Textures") != null)
+        {
+            if (GameObject.Find("Textures").transform.Find("MeshVertex") != null)
+            {
+                if (GameObject.Find("Textures").transform.Find("MeshVertex").GetComponent<InsideTextureMesh>() != null)
+                {
+                    GameObject.Find("Textures").transform.Find("MeshVertex").GetComponent<InsideTextureMesh>().DeleteMesh();
+                }
+            }
+        }
+    }
+
     public void DeleteLevel()
     {
         if (GameObject.Find("Rooms") != null)
             DestroyImmediate(GameObject.Find("Rooms"));
 
         if (GameObject.Find("Textures") != null)
+        {
+            if (GameObject.Find("Textures").transform.Find("MeshVertex") != null)
+            {
+                if (GameObject.Find("Textures").transform.Find("MeshVertex").GetComponent<InsideTextureMesh>() != null)
+                {
+                    GameObject.Find("Textures").transform.Find("MeshVertex").GetComponent<InsideTextureMesh>().DeleteMesh();
+                }
+            }
             DestroyImmediate(GameObject.Find("Textures"));
+        }
 
         if (visittedPixels != null)
             visittedPixels.Clear();

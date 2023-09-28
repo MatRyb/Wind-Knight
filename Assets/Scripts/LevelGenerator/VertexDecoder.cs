@@ -32,8 +32,30 @@ public class VertexDecoder : MonoBehaviour
         int currX = x, currY = y;
         for (int i = 0; i < 4; i++)
         {
+            float realX = currX, realY = currY;
+
+            switch(i)
+            {
+                case 0:
+                    realX -= 0.5f;
+                    realY += 0.5f;
+                    break;
+                case 1:
+                    realX += 0.5f;
+                    realY += 0.5f;
+                    break;
+                case 2:
+                    realX -= 0.5f;
+                    realY -= 0.5f;
+                    break;
+                case 3:
+                    realX += 0.5f;
+                    realY -= 0.5f;
+                    break;
+            }
+
             GameObject vertex = new("Vertex (" + i + ", " + currX + ", " + currY + ")");
-            vertex.transform.position = new Vector3(currX, currY);
+            vertex.transform.position = new Vector3(realX, realY);
             vertex.transform.parent = handler.transform;
             (currX, currY) = DecodePos(map.GetPixel(currX, currY));
         }
@@ -46,18 +68,12 @@ public class VertexDecoder : MonoBehaviour
 
     static (int, int) DecodePos(Color color)
     {
-        //int id = 0;
-        int x = 0;
-        int y = 0;
-
         int r = (int)(color.r * 255f);
         int g = (int)(color.g * 255f);
         int b = (int)(color.b * 255f);
 
-        //id = (r & 0xC0) >> 6;
-        x = ((r & 0x3F) << 5) | ((g & 0xF8) >> 3);
-        y = ((g & 0x07) << 8) | b;
-
+        int x = (r & 0x3F) << 5 | (g & 0xF8) >> 3;
+        int y = (g & 0x07) << 8 | b;
         return (x, y);
     }
 

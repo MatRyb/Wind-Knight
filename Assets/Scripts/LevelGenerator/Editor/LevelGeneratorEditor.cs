@@ -4,11 +4,6 @@ using UnityEditor;
 [CustomEditor(typeof(LevelGenerator))]
 public class LevelGeneratorEditor : Editor
 {
-    private float CalculateHeight(string text)
-    {
-        return Mathf.Max(40f, GUI.skin.GetStyle("helpbox").CalcHeight(new GUIContent(text), EditorGUIUtility.currentViewWidth) + 4);
-    }
-
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -87,6 +82,22 @@ public class LevelGeneratorEditor : Editor
                 generator.DeleteLevel();
             }
             
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+            EditorGUI.BeginDisabledGroup(serializedObject.FindProperty("vertexMap").objectReferenceValue == null);
+
+                if (GUILayout.Button("Generate Mesh"))
+                {
+                    generator.GenerateMesh();
+                }
+
+                if (GUILayout.Button("Delete Mesh"))
+                {
+                    generator.DeleteMesh();
+                }
+
+            EditorGUI.EndDisabledGroup();
         GUILayout.EndHorizontal();
     }
 }

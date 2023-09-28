@@ -40,7 +40,7 @@ public class InsideTextureMesh : MonoBehaviour
     }
 
     [Button]
-    private void GenerateMesh()
+    public void GenerateMesh()
     {
         var transforms = gameObject.GetComponentsInChildren<Transform>();
         Verticles = new Vector3[transforms.Length - 1];
@@ -113,7 +113,7 @@ public class InsideTextureMesh : MonoBehaviour
     }
 
     [Button]
-    private void DeleteMesh()
+    public void DeleteMesh()
     {
         if (renderer != null)
         {
