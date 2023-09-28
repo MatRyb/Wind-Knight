@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 public enum HelpBoxMessageType { None, Info, Warning, Error }
 
+[AttributeUsage(AttributeTargets.Field, Inherited = true)]
 public class HelpBoxAttribute : PropertyAttribute
 {
 

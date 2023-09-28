@@ -815,10 +815,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelMap: {fileID: 2800000, guid: 2c43186b9a90c7e4c8aead71feb9926b, type: 3}
   vertexMap: {fileID: 2800000, guid: 7f21ba6e853c7604eb008d606b84888c, type: 3}
+  insideMeshMaterial: {fileID: 2100000, guid: d04f9bde97fb9ad45be46d6f3c0bcee3, type: 2}
+  insideSpriteMaterial: {fileID: 2100000, guid: 2f8c1267df7e01947973476461c52cc8, type: 2}
+  insideSpriteTexture: {fileID: 2800000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
+  outsidePlane: {fileID: 9044349096019233049, guid: 07975cab4395a5140b344f4ff52e3dd4, type: 3}
   colorMappings:
-  - color: {r: 0.58431375, g: 0, b: 0.41960785, a: 1}
-    type: 1
-    prefab: {fileID: 3053495975456952606, guid: 7fea2793f94dafd4180b5d8c12eb6cfe, type: 3}
+  - color: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
+    type: 0
+    prefab: {fileID: 746952629089250870, guid: 7c05b4c94acc6134d8b83cebb93f13f3, type: 3}
     name: 
     pattern:
       ul: 0
@@ -827,6 +831,34 @@ MonoBehaviour:
       ml: 0
       mm: 0
       mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
+    type: 1
+    prefab: {fileID: 746952629089250870, guid: 2fb070a6d2534944485a75bc74c84d11, type: 3}
+    name: 
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 0
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    type: 2
+    prefab: {fileID: 787269825349021895, guid: a39b3dbbea7cca14aae4312cfc97de48, type: 3}
+    name: Player
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 1
+      mm: 1
+      mr: 1
       dl: 0
       dm: 0
       dr: 0
@@ -844,48 +876,6 @@ MonoBehaviour:
       dl: 0
       dm: 1
       dr: 0
-  - color: {r: 1, g: 1, b: 1, a: 1}
-    type: 2
-    prefab: {fileID: 787269825349021895, guid: a39b3dbbea7cca14aae4312cfc97de48, type: 3}
-    name: Player
-    pattern:
-      ul: 0
-      um: 0
-      ur: 0
-      ml: 1
-      mm: 1
-      mr: 1
-      dl: 0
-      dm: 0
-      dr: 0
-  - color: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
-    type: 1
-    prefab: {fileID: 746952629089250870, guid: 2fb070a6d2534944485a75bc74c84d11, type: 3}
-    name: 
-    pattern:
-      ul: 0
-      um: 0
-      ur: 0
-      ml: 0
-      mm: 0
-      mr: 0
-      dl: 1
-      dm: 0
-      dr: 1
-  - color: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
-    type: 0
-    prefab: {fileID: 746952629089250870, guid: 7c05b4c94acc6134d8b83cebb93f13f3, type: 3}
-    name: 
-    pattern:
-      ul: 0
-      um: 0
-      ur: 0
-      ml: 0
-      mm: 0
-      mr: 0
-      dl: 1
-      dm: 0
-      dr: 1
   - color: {r: 0.58431375, g: 0, b: 0.41960785, a: 1}
     type: 0
     prefab: {fileID: 3053495975456952606, guid: 993c46219195a9d49a0fc77f7eb5c6e2, type: 3}
@@ -897,10 +887,23 @@ MonoBehaviour:
       ml: 0
       mm: 0
       mr: 0
-      dl: 1
+      dl: 0
       dm: 0
-      dr: 1
-  objectsCount: 0
+      dr: 0
+  - color: {r: 0.58431375, g: 0, b: 0.41960785, a: 1}
+    type: 1
+    prefab: {fileID: 3053495975456952606, guid: 7fea2793f94dafd4180b5d8c12eb6cfe, type: 3}
+    name: 
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 0
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
 --- !u!4 &1847756006
 Transform:
   m_ObjectHideFlags: 0

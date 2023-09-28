@@ -9,18 +9,12 @@ using System.Linq;
 /// 
 /// 
 /// TODO:
-/// - Add deleting repeated wall and ground color definition in sorted list
-/// - Add decoding of vertex map
-/// - Add generating planes based on vertex map by heritating of created scripts
-/// - Add generating big plane behind when generating map (with size of map + 20)
-/// - Create new empty object (Room) where will be stored grouped objects by type (if Pattern -> by name)
-/// - Add Room counter
-/// - Add deleting choosen rooms
-/// - Create Editor
+/// - Repair generating mesh and sprite based on vertexes
 /// - Add Objects
 /// - Add Enemies
 /// - Add Checkpoints
 /// - Player spawn
+/// - Create Editor
 /// </summary>
 
 
@@ -29,13 +23,19 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private Texture2D levelMap;
     [SerializeField] private Texture2D vertexMap;
 
-    [HelpBox("Checking which object type will be used for a given pixel color is in the order: \n Pattern > Wall (Including Angel Wall) > Ground", HelpBoxMessageType.Info)]
+    [Header("Mesh:")]
+    [SerializeField] private Material insideMeshMaterial;
+    [Header("Sprite:")]
+    [SerializeField] private Material insideSpriteMaterial;
+    [SerializeField] private Texture2D insideSpriteTexture;
+    [Header("Plane:")]
+    [SerializeField] private GameObject outsidePlane;
+
     [SerializeField] private ColorMapping[] colorMappings;
 
-    [ReadOnly]
-    [SerializeField] private int objectsCount = 0;
-
     private List<int> visittedPixels;
+
+    private List<HierarchyObject> hierarchyObjects;
 
     public void GenerateLevel()
     {
@@ -51,11 +51,31 @@ public class LevelGenerator : MonoBehaviour
             return;
         }
 
+        int allPixels = levelMap.width * levelMap.height;
+        int middle = allPixels / 2;
+        Vector2 middlePos = new(middle / levelMap.height, middle / levelMap.height);
+
+        hierarchyObjects = new();
+
+        int roomNumber = 0;
+        if (GameObject.Find("Rooms") != null)
+        {
+            hierarchyObjects.Add(new("Rooms", GameObject.Find("Rooms")));
+            roomNumber = GameObject.Find("Rooms").transform.childCount > 0 ? GameObject.Find("Rooms").transform.childCount : 0;
+        }
+        else
+        {
+            new GameObject("Rooms");
+            hierarchyObjects.Add(new("Rooms", GameObject.Find("Rooms")));
+        }
+
+        GameObject obj = new("Room " + roomNumber);
+        obj.transform.parent = hierarchyObjects.Find(x => x.path == "Rooms").referenceObject.transform;
+        hierarchyObjects.Add(new("Room", GameObject.Find("Room " + roomNumber)));
+
         visittedPixels = new();
 
-        int allPixels = levelMap.width * levelMap.height;
-
-        List<ColorMapping> sorted = colorMappings.OrderByDescending(c => c, new ColorMappingComparator()).ToList();
+        List<ColorMapping> sorted = colorMappings.OrderByDescending(c => c, new ColorMappingComparator()).Distinct().ToList();
 
         for (int i = 0; i < allPixels; i++)
         {
@@ -68,25 +88,48 @@ public class LevelGenerator : MonoBehaviour
             int y = i % levelMap.height;
             GenerateTile(x, y, sorted);
         }
+
+        if (GameObject.Find("Textures") != null)
+        {
+            hierarchyObjects.Add(new("Textures", GameObject.Find("Textures")));
+        }
+        else
+        {
+            new GameObject("Textures");
+            hierarchyObjects.Add(new("Textures", GameObject.Find("Textures")));
+        }
+
+        if (outsidePlane != null && GameObject.Find("OutsideTexture") == null)
+        {
+            GameObject o = Instantiate(outsidePlane, middlePos, outsidePlane.transform.rotation, hierarchyObjects.Find(x => x.path == "Textures").referenceObject.transform);
+            o.transform.position = new Vector3(o.transform.position.x, o.transform.position.y, 15);
+            o.name = "OutsideTexture";
+        }
+
+        if (vertexMap != null)
+        {
+            GameObject vertex = VertexDecoder.DecodeVertexMap(vertexMap);
+            vertex.transform.parent = hierarchyObjects.Find(x => x.path == "Textures").referenceObject.transform;
+            vertex.AddComponent<InsideTextureMesh>();
+            vertex.GetComponent<InsideTextureMesh>().SetVariables(insideMeshMaterial, "Cover", 1);
+            vertex.AddComponent<InsideTextureSprite>();
+            vertex.GetComponent<InsideTextureSprite>().SetVariables(insideSpriteMaterial, insideSpriteTexture, "Background", 1);
+        }
     }
 
     public void DeleteLevel()
     {
-        if (objectsCount == 0)
-        {
-            return;
-        }
+        if (GameObject.Find("Rooms") != null)
+            DestroyImmediate(GameObject.Find("Rooms"));
 
-        for (int i = 0; i < transform.childCount; ++i)
-        {
-            DestroyImmediate(transform.GetChild(0).gameObject);
-            --objectsCount;
-        }
+        if (GameObject.Find("Textures") != null)
+            DestroyImmediate(GameObject.Find("Textures"));
 
-        if (transform.childCount != 0)
-        {
-            DeleteLevel();
-        }
+        if (visittedPixels != null)
+            visittedPixels.Clear();
+
+        if (hierarchyObjects != null)
+            hierarchyObjects.Clear();
     }
 
     private void GenerateTile(int x, int y, List<ColorMapping> mappings)
@@ -139,7 +182,6 @@ public class LevelGenerator : MonoBehaviour
                         {
                             Vector2 position = new(x, y);
                             Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
-                            ++objectsCount;
                             break;
                         }
                 }
@@ -151,11 +193,6 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
-    }
-
-    private bool IsWallDefinied(int index, List<ColorMapping> mappings)
-    {
-        return index - 1 >= 0 && mappings[index - 1].color.Equals(mappings[index].color) && mappings[index - 1].type == MappingType.Wall;
     }
 
     private bool IsGroundDefinied(int index, List<ColorMapping> mappings)
@@ -228,9 +265,17 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
+        if (hierarchyObjects.Find(x => x.path == mapping.name + "s") == null)
+        {
+            GameObject g = new(mapping.name + "s");
+            g.transform.parent = hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform;
+            g.transform.position = new(0, 0);
+            hierarchyObjects.Add(new(mapping.name + "s", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find(mapping.name + "s").gameObject));
+        }
+
         Vector2 position = new(beg_x + 1, beg_y + 1);
-        Instantiate(mapping.prefab, position, Quaternion.identity, transform);
-        ++objectsCount;
+        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform);
+        obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform.childCount - 1);
 
         foreach (var item in patternCheck)
         {
@@ -254,10 +299,18 @@ public class LevelGenerator : MonoBehaviour
             return false;
         }
 
+        if (hierarchyObjects.Find(x => x.path == "Walls") == null)
+        {
+            GameObject g = new("Walls");
+            g.transform.parent = hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform;
+            g.transform.position = new(0, 0);
+            hierarchyObjects.Add(new("Walls", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Walls").gameObject));
+        }
+
         Vector2 position = new(x, ((end_pos.Item2 - y - 1f) / 2f) + y);
-        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, transform);
+        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
+        obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x, obj.transform.localScale.y * (end_pos.Item2 - y), obj.transform.localScale.z);
-        ++objectsCount;
 
         for (int i = 0; i < end_pos.Item2 - y; i++)
         {
@@ -276,10 +329,18 @@ public class LevelGenerator : MonoBehaviour
             end_pos.Item1++;
         }
 
+        if (hierarchyObjects.Find(x => x.path == "Grounds") == null)
+        {
+            GameObject g = new("Grounds");
+            g.transform.parent = hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform;
+            g.transform.position = new(0, 0);
+            hierarchyObjects.Add(new("Grounds", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Grounds").gameObject));
+        }
+
         Vector2 position = new(((end_pos.Item1 - x - 1f) / 2f) + x, y);
-        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, transform);
+        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Grounds").referenceObject.transform);
+        obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Grounds").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x * (end_pos.Item1 - x), obj.transform.localScale.y, obj.transform.localScale.z);
-        ++objectsCount;
 
         for (int i = 0; i < end_pos.Item1 - x; i++)
         {
@@ -327,10 +388,18 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
+        if (hierarchyObjects.Find(x => x.path == "Walls") == null)
+        {
+            GameObject g = new("Walls");
+            g.transform.parent = hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform;
+            g.transform.position = new(0, 0);
+            hierarchyObjects.Add(new("Walls", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Walls").gameObject));
+        }
+
         Vector2 position = new(wall_start.Item1, ((wall_end.Item2 - wall_start.Item2 - 1f) / 2f) + wall_start.Item2);
-        GameObject obj = Instantiate(wall.prefab, position, Quaternion.identity, transform);
+        GameObject obj = Instantiate(wall.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
+        obj.name = wall.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x, obj.transform.localScale.y * (wall_end.Item2 - wall_start.Item2), obj.transform.localScale.z);
-        ++objectsCount;
 
         for (int i = 0; i < wall_end.Item2 - wall_start.Item2; i++)
         {
@@ -426,11 +495,19 @@ public class LevelGenerator : MonoBehaviour
             position = new(((end_pos.Item1 - x - 1f) / 2f) + x, ((end_pos.Item2 - y - 1f) / 2f) + y);
         }
 
-        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, transform);
 
+        if (hierarchyObjects.Find(x => x.path == "Walls") == null)
+        {
+            GameObject g = new("Walls");
+            g.transform.parent = hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform;
+            g.transform.position = new(0, 0);
+            hierarchyObjects.Add(new("Walls", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Walls").gameObject));
+        }
+
+        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
+        obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x * scale_factor, obj.transform.localScale.y, obj.transform.localScale.z);
         obj.transform.Rotate(0f, 0f, 45f);
-        ++objectsCount;
 
         for (int i = 0; i < end_pos.Item2 - y; i++)
         {
@@ -519,11 +596,19 @@ public class LevelGenerator : MonoBehaviour
             position = new(((end_pos.Item1 - x - 1f) / 2f) + x, y - ((y - end_pos.Item2 - 1f) / 2f));
         }
 
-        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, transform);
 
+        if (hierarchyObjects.Find(x => x.path == "Walls") == null)
+        {
+            GameObject g = new("Walls");
+            g.transform.parent = hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform;
+            g.transform.position = new(0, 0);
+            hierarchyObjects.Add(new("Walls", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Walls").gameObject));
+        }
+
+        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
+        obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x * scale_factor, obj.transform.localScale.y, obj.transform.localScale.z);
         obj.transform.Rotate(0f, 0f, -45f);
-        ++objectsCount;
 
         for (int i = 0; i < end_pos.Item1 - x; i++)
         {

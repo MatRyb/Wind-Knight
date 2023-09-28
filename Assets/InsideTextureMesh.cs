@@ -32,6 +32,13 @@ public class InsideTextureMesh : MonoBehaviour
         GenerateMesh();
     }
 
+    public void SetVariables(Material material, string meshName, float zPos)
+    {
+        this.material = material;
+        this.meshName = meshName;
+        this.zPos = zPos;
+    }
+
     [Button]
     private void GenerateMesh()
     {
