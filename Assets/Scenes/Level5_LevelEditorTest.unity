@@ -819,6 +819,21 @@ MonoBehaviour:
   insideSpriteMaterial: {fileID: 2100000, guid: 2f8c1267df7e01947973476461c52cc8, type: 2}
   insideSpriteTexture: {fileID: 2800000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
   outsidePlane: {fileID: 9044349096019233049, guid: 07975cab4395a5140b344f4ff52e3dd4, type: 3}
+  playerMapping:
+    color: {r: 1, g: 1, b: 1, a: 1}
+    type: 2
+    prefab: {fileID: 787269825349021895, guid: a39b3dbbea7cca14aae4312cfc97de48, type: 3}
+    name: Player
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 1
+      mm: 1
+      mr: 1
+      dl: 0
+      dm: 0
+      dr: 0
   colorMappings:
   - color: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
     type: 0
@@ -845,20 +860,6 @@ MonoBehaviour:
       ml: 0
       mm: 0
       mr: 0
-      dl: 0
-      dm: 0
-      dr: 0
-  - color: {r: 1, g: 1, b: 1, a: 1}
-    type: 2
-    prefab: {fileID: 787269825349021895, guid: a39b3dbbea7cca14aae4312cfc97de48, type: 3}
-    name: Player
-    pattern:
-      ul: 0
-      um: 0
-      ur: 0
-      ml: 1
-      mm: 1
-      mr: 1
       dl: 0
       dm: 0
       dr: 0

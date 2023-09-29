@@ -9,8 +9,7 @@ using System.Linq;
 /// 
 /// 
 /// TODO:
-/// - if prefab name Player then take it out from rooms
-/// - Repair generating sprite based on vertexes (move everything so the player is on position 0) (Wszystko przesun¹æ o ró¿nice player pos Vector2.Zero)
+/// - Repair converting points from MeshVertex to objects (Map repair and points spawn repair)
 /// - Add creating Canvases
 /// - Add creating Managers
 /// - Add creating InfoCanvases
@@ -38,6 +37,9 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private Texture2D insideSpriteTexture;
     [Header("Plane:")]
     [SerializeField] private GameObject outsidePlane;
+
+    [Header("ColorMappings:")]
+    [SerializeField] private PlayerColorMapping playerMapping;
 
     [SerializeField] private ColorMapping[] colorMappings;
 
@@ -85,6 +87,11 @@ public class LevelGenerator : MonoBehaviour
 
         List<ColorMapping> sorted = colorMappings.OrderByDescending(c => c, new ColorMappingComparator()).Distinct().ToList();
 
+        if (playerMapping.prefab != null)
+        {
+            sorted.Insert(0, playerMapping);
+        }
+
         for (int i = 0; i < allPixels; i++)
         {
             if (visittedPixels.Contains(i))
@@ -107,11 +114,19 @@ public class LevelGenerator : MonoBehaviour
             hierarchyObjects.Add(new("Textures", GameObject.Find("Textures")));
         }
 
-        if (outsidePlane != null && GameObject.Find("OutsideTexture") == null)
+        if (outsidePlane != null)
         {
-            GameObject o = Instantiate(outsidePlane, middlePos, outsidePlane.transform.rotation, hierarchyObjects.Find(x => x.path == "Textures").referenceObject.transform);
-            o.transform.position = new Vector3(o.transform.position.x, o.transform.position.y, 15);
-            o.name = "OutsideTexture";
+            if (GameObject.Find("OutsideTexture") != null)
+            {
+                hierarchyObjects.Add(new("OutsideTexture", GameObject.Find("OutsideTexture")));
+            }
+            else
+            {
+                GameObject o = Instantiate(outsidePlane, middlePos, outsidePlane.transform.rotation, hierarchyObjects.Find(x => x.path == "Textures").referenceObject.transform);
+                o.transform.position = new Vector3(o.transform.position.x, o.transform.position.y, 15);
+                o.name = "OutsideTexture";
+                hierarchyObjects.Add(new("OutsideTexture", GameObject.Find("OutsideTexture")));
+            }
         }
 
         if (vertexMap != null)
@@ -122,7 +137,10 @@ public class LevelGenerator : MonoBehaviour
             vertex.GetComponent<InsideTextureMesh>().SetVariables(insideMeshMaterial, "Cover", 1);
             vertex.AddComponent<InsideTextureSprite>();
             vertex.GetComponent<InsideTextureSprite>().SetVariables(insideSpriteMaterial, insideSpriteTexture, "Background", 1);
+            hierarchyObjects.Add(new("MeshVertex", vertex));
         }
+
+        MoveEverythingBasedOnPlayer();
     }
 
     public void GenerateMesh()
@@ -166,6 +184,9 @@ public class LevelGenerator : MonoBehaviour
             }
             DestroyImmediate(GameObject.Find("Textures"));
         }
+
+        if (GameObject.Find("Player") != null)
+            DestroyImmediate(GameObject.Find("Player"));
 
         if (visittedPixels != null)
             visittedPixels.Clear();
@@ -307,17 +328,30 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        if (hierarchyObjects.Find(x => x.path == mapping.name + "s") == null)
+        if (mapping.player)
         {
-            GameObject g = new(mapping.name + "s");
-            g.transform.parent = hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform;
-            g.transform.position = new(0, 0);
-            hierarchyObjects.Add(new(mapping.name + "s", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find(mapping.name + "s").gameObject));
+            Vector2 position = new(beg_x + 1, beg_y + 1);
+            GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity);
+            obj.name = "Player";
+            if (hierarchyObjects.Find(x => x.path == "Player") == null)
+            {
+                hierarchyObjects.Add(new("Player", obj));
+            }
         }
+        else
+        {
+            if (hierarchyObjects.Find(x => x.path == mapping.name + "s") == null)
+            {
+                GameObject g = new(mapping.name + "s");
+                g.transform.parent = hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform;
+                g.transform.position = new(0, 0);
+                hierarchyObjects.Add(new(mapping.name + "s", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find(mapping.name + "s").gameObject));
+            }
 
-        Vector2 position = new(beg_x + 1, beg_y + 1);
-        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform);
-        obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform.childCount - 1);
+            Vector2 position = new(beg_x + 1, beg_y + 1);
+            GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform);
+            obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform.childCount - 1);
+        }
 
         foreach (var item in patternCheck)
         {
@@ -658,5 +692,47 @@ public class LevelGenerator : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void MoveEverythingBasedOnPlayer()
+    {
+        List<GameObject> elementsToMove = new();
+
+        // Grounds, Patterns, Walls
+        Transform tran = hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform;
+        for (int i = 0; i < tran.childCount; ++i)
+        {
+            Transform t = tran.GetChild(i);
+            for (int z = 0; z < t.childCount; ++z)
+            {
+                elementsToMove.Add(t.GetChild(z).gameObject);
+            }
+        }
+
+        if (hierarchyObjects.Find(x => x.path == "MeshVertex") != null)
+        {
+            // Vertexes
+            tran = hierarchyObjects.Find(x => x.path == "MeshVertex").referenceObject.transform;
+            for (int i = 0; i < tran.childCount; ++i)
+            {
+                elementsToMove.Add(tran.GetChild(i).gameObject);
+            }
+        }
+
+        if (hierarchyObjects.Find(x => x.path == "OutsideTexture") != null)
+        {
+            // OutsideTexture
+            elementsToMove.Add(hierarchyObjects.Find(x => x.path == "OutsideTexture").referenceObject);
+        }
+
+        Vector3 playerPos = hierarchyObjects.Find(x => x.path == "Player").referenceObject.transform.position;
+        Vector3 diff = new(playerPos.x, playerPos.y, 0f);
+
+        hierarchyObjects.Find(x => x.path == "Player").referenceObject.transform.position -= diff;
+
+        foreach (GameObject elem in elementsToMove)
+        {
+            elem.transform.position -= diff;
+        }
     }
 }

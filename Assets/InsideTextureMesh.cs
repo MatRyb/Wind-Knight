@@ -124,7 +124,7 @@ public class InsideTextureMesh : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Mesh wasn't created!");
+            Debug.Log("Mesh wasn't created!");
         }
     }
 }

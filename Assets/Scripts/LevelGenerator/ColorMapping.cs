@@ -2,24 +2,22 @@ using System.IO;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using System;
-
-public enum MappingType
-{
-    Ground = 0,
-    Wall = 1,
-    Pattern = 2
-}
 
 [System.Serializable]
 public class ColorMapping
 {
-    public Color color;
+    public Color color = Color.black;
     public MappingType type;
     public GameObject prefab;
 
     public string name;
     public Pattern pattern;
+    public bool player { get; protected set; }
+
+    public ColorMapping()
+    {
+        player = false;
+    }
 
     public static Pattern SetTexturePattern()
     {

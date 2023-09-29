@@ -57,6 +57,14 @@ public class LevelGeneratorEditor : Editor
         }
         EditorGUILayout.PropertyField(serializedObject.FindProperty("outsidePlane"));
 
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("playerMapping"));
+        if (serializedObject.FindProperty("playerMapping").FindPropertyRelative("prefab").objectReferenceValue == null)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.HelpBox("You need to define Player prefab if you want to generate Player.", MessageType.Warning);
+            EditorGUILayout.EndHorizontal();
+        }
+
         EditorGUILayout.HelpBox("Checking which object type will be used for a given pixel color is in the order: \n Pattern > Wall (Including Angel Wall) > Ground", MessageType.Info);
         if (serializedObject.FindProperty("colorMappings").arraySize == 0)
         {
