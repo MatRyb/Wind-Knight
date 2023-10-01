@@ -9,13 +9,9 @@ using System.Linq;
 /// 
 /// 
 /// TODO:
-/// - Add Canvases
-/// - Add Managers
-/// - Add InfoCanvases
-/// - Add LevelManager
-/// - Add PaperScrapManager
-/// - Add OptionsManager
-/// - Add EventSystem
+/// - Add Player Z pos
+/// - Rooms Z pos -10 after adding everything
+/// - Z pos to Color Mappings
 /// - Add Objects
 /// - Add Enemies
 /// - Add Checkpoints
@@ -156,6 +152,8 @@ public class LevelGenerator : MonoBehaviour
 
         AddCamera();
 
+        AddGameTimer();
+
         if (additionalObjects.Length != 0)
         {
             AddAdditionalObjects();
@@ -206,6 +204,12 @@ public class LevelGenerator : MonoBehaviour
 
         if (GameObject.Find("Player") != null)
             DestroyImmediate(GameObject.Find("Player"));
+
+        if (GameObject.Find("GameGlobalTimer") != null)
+            DestroyImmediate(GameObject.Find("GameGlobalTimer"));
+
+        if (additionalObjects.Length != 0)
+            RemoveAdditionalObjects();
 
         if (visittedPixels != null)
             visittedPixels.Clear();
@@ -806,6 +810,25 @@ public class LevelGenerator : MonoBehaviour
         f.smoothFactor = cameraSmoothFactor;
     }
 
+    private void AddGameTimer()
+    {
+        GameObject g;
+
+        if ((g = GameObject.Find("GameGlobalTimer")) != null)
+        {
+            if (g.GetComponent<GameTimer>() != null)
+            {
+                return;
+            }
+        }
+        else
+        {
+            g = new("GameGlobalTimer");
+        }
+
+        g.AddComponent<GameTimer>();
+    }
+
     private void AddAdditionalObjects()
     {
         foreach (GameObject item in additionalObjects)
@@ -813,7 +836,23 @@ public class LevelGenerator : MonoBehaviour
             if (item == null)
                 continue;
 
-            Instantiate(item);
+            GameObject g = Instantiate(item);
+            g.name = item.name;
+        }
+    }
+
+    private void RemoveAdditionalObjects()
+    {
+        foreach (GameObject item in additionalObjects)
+        {
+            if (item == null)
+                continue;
+
+            if (GameObject.Find(item.name) != null)
+            {
+
+            }
+            DestroyImmediate(GameObject.Find(item.name));
         }
     }
 }

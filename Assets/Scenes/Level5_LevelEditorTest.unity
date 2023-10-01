@@ -635,7 +635,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.2138218, g: 0.08285868, b: 0.3584906, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -652,11 +652,11 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 14
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -908,7 +908,70 @@ MonoBehaviour:
       dl: 0
       dm: 0
       dr: 0
-  additionalObjects: []
+  - color: {r: 0.5994315, g: 0.7372549, b: 0.015686274, a: 1}
+    type: 0
+    prefab: {fileID: 2751858212510257318, guid: 4af9d30cdc4b2924fac350760eb12dad, type: 3}
+    name: 
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 0
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0.5994315, g: 0.7372549, b: 0.015686274, a: 1}
+    type: 1
+    prefab: {fileID: 2751858212510257318, guid: b7d67f55f8f983141be996ce48991a63, type: 3}
+    name: 
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 0
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0.735849, g: 0.22133745, b: 0.017354928, a: 1}
+    type: 0
+    prefab: {fileID: 2751858212510257318, guid: 823e000a81a886e4388130feea4073a9, type: 3}
+    name: 
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 0
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0.735849, g: 0.22133745, b: 0.017354928, a: 1}
+    type: 1
+    prefab: {fileID: 2751858212510257318, guid: c9a97d9253b9fa145b76de0a0ad1a091, type: 3}
+    name: 
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 0
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  additionalObjects:
+  - {fileID: 8543692636568559079, guid: e2e7a11f1a391ce46a1883bd96f06f9f, type: 3}
+  - {fileID: 4408570646890957878, guid: 514a959b7697752459f58551c5737afe, type: 3}
+  - {fileID: 7451277413946090310, guid: 8387313de5a2a344b9ea9c43c1070f09, type: 3}
+  - {fileID: 4790198419187357995, guid: f69929209c0f3ad489ebdc8e4cff592c, type: 3}
+  - {fileID: 5605473641204852331, guid: 78e9a4eb1c08af04d9933e34d84fd88e, type: 3}
+  - {fileID: 4664100525893191778, guid: 7f6610f224cf2dd4988a7fea095cee86, type: 3}
+  - {fileID: 19649570786347626, guid: 3c936dc3c12e6c74ab0989d1da4c2133, type: 3}
 --- !u!4 &1847756006
 Transform:
   m_ObjectHideFlags: 0
