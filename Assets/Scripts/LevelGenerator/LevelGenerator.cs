@@ -9,18 +9,16 @@ using System.Linq;
 /// 
 /// 
 /// TODO:
-/// - Repair converting points from MeshVertex to objects (Map repair and points spawn repair)
-/// - Add creating Canvases
-/// - Add creating Managers
-/// - Add creating InfoCanvases
-/// - Add creating LevelManager
-/// - Add creating PaperScrapManager
-/// - Add creating OptionsManager
-/// - Add creating EventSystem
+/// - Add Canvases
+/// - Add Managers
+/// - Add InfoCanvases
+/// - Add LevelManager
+/// - Add PaperScrapManager
+/// - Add OptionsManager
+/// - Add EventSystem
 /// - Add Objects
 /// - Add Enemies
 /// - Add Checkpoints
-/// - Player spawn
 /// - Create Editor
 /// </summary>
 
@@ -37,11 +35,18 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private Texture2D insideSpriteTexture;
     [Header("Plane:")]
     [SerializeField] private GameObject outsidePlane;
+    [Header("Camera Settings:")]
+    [SerializeField] private Color cameraBackground = Color.gray;
+    [SerializeField] private float cameraSize = 14f;
+    [SerializeField] [Range(0,10)] private float cameraSmoothFactor = 10f;
 
     [Header("ColorMappings:")]
     [SerializeField] private PlayerColorMapping playerMapping;
 
     [SerializeField] private ColorMapping[] colorMappings;
+
+    [Header("Managers:")]
+    [SerializeField] private GameObject[] additionalObjects;
 
     private List<int> visittedPixels;
 
@@ -140,7 +145,21 @@ public class LevelGenerator : MonoBehaviour
             hierarchyObjects.Add(new("MeshVertex", vertex));
         }
 
-        MoveEverythingBasedOnPlayer();
+        if (playerMapping.prefab != null)
+        {
+            MoveEverythingBasedOnPlayer();
+        }
+        else
+        {
+            MoveEverythingBasedOnMiddlePoint(middlePos);
+        }
+
+        AddCamera();
+
+        if (additionalObjects.Length != 0)
+        {
+            AddAdditionalObjects();
+        }
     }
 
     public void GenerateMesh()
@@ -694,7 +713,7 @@ public class LevelGenerator : MonoBehaviour
         return true;
     }
 
-    private void MoveEverythingBasedOnPlayer()
+    private void MoveEverything(Vector3 diff)
     {
         List<GameObject> elementsToMove = new();
 
@@ -725,14 +744,76 @@ public class LevelGenerator : MonoBehaviour
             elementsToMove.Add(hierarchyObjects.Find(x => x.path == "OutsideTexture").referenceObject);
         }
 
-        Vector3 playerPos = hierarchyObjects.Find(x => x.path == "Player").referenceObject.transform.position;
-        Vector3 diff = new(playerPos.x, playerPos.y, 0f);
-
         hierarchyObjects.Find(x => x.path == "Player").referenceObject.transform.position -= diff;
 
         foreach (GameObject elem in elementsToMove)
         {
             elem.transform.position -= diff;
+        }
+    }
+
+    private void MoveEverythingBasedOnPlayer()
+    {
+        Vector3 playerPos = hierarchyObjects.Find(x => x.path == "Player").referenceObject.transform.position;
+        Vector3 diff = new(playerPos.x, playerPos.y, 0f);
+        MoveEverything(diff);
+    }
+
+    private void MoveEverythingBasedOnMiddlePoint(Vector2 middle)
+    {
+        Vector3 diff = new(middle.x, middle.y, 0f);
+        MoveEverything(diff);
+    }
+
+    private void AddCamera()
+    {
+        GameObject cam = GameObject.Find("Main Camera");
+
+        if (cam == null)
+        {
+            cam = new("Main Camera");
+        }
+
+        if (cam.GetComponent<AudioListener>() == null)
+        {
+            cam.AddComponent<AudioListener>();
+        }
+
+        if (cam.GetComponent<CameraFolow>() == null)
+        {
+            cam.AddComponent<CameraFolow>();
+        }
+
+        if (cam.GetComponent<Camera>() == null)
+        {
+            cam.AddComponent<Camera>();
+        }
+
+        Camera c = cam.GetComponent<Camera>();
+        c.clearFlags = CameraClearFlags.Skybox;
+        c.backgroundColor = cameraBackground;
+        c.cullingMask = 0;
+        c.orthographic = true;
+        c.orthographicSize = cameraSize;
+        c.nearClipPlane = 0.3f;
+        c.farClipPlane = 1000;
+        c.rect = new(0, 0, 1, 1);
+        c.depth = -1;
+
+        CameraFolow f = cam.GetComponent<CameraFolow>();
+        f.cam = c;
+        f.offset = new(0, 0, 0);
+        f.smoothFactor = cameraSmoothFactor;
+    }
+
+    private void AddAdditionalObjects()
+    {
+        foreach (GameObject item in additionalObjects)
+        {
+            if (item == null)
+                continue;
+
+            Instantiate(item);
         }
     }
 }

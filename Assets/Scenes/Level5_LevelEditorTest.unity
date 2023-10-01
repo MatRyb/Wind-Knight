@@ -814,11 +814,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelMap: {fileID: 2800000, guid: 2c43186b9a90c7e4c8aead71feb9926b, type: 3}
-  vertexMap: {fileID: 2800000, guid: 7f21ba6e853c7604eb008d606b84888c, type: 3}
+  vertexMap: {fileID: 2800000, guid: cf3b18d9524f0d047a05857aae455f56, type: 3}
   insideMeshMaterial: {fileID: 2100000, guid: d04f9bde97fb9ad45be46d6f3c0bcee3, type: 2}
   insideSpriteMaterial: {fileID: 2100000, guid: 2f8c1267df7e01947973476461c52cc8, type: 2}
   insideSpriteTexture: {fileID: 2800000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
   outsidePlane: {fileID: 9044349096019233049, guid: 07975cab4395a5140b344f4ff52e3dd4, type: 3}
+  cameraBackground: {r: 0.2138218, g: 0.08285868, b: 0.3584906, a: 0}
+  cameraSize: 14
+  cameraSmoothFactor: 10
   playerMapping:
     color: {r: 1, g: 1, b: 1, a: 1}
     type: 2
@@ -905,6 +908,7 @@ MonoBehaviour:
       dl: 0
       dm: 0
       dr: 0
+  additionalObjects: []
 --- !u!4 &1847756006
 Transform:
   m_ObjectHideFlags: 0

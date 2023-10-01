@@ -57,6 +57,10 @@ public class LevelGeneratorEditor : Editor
         }
         EditorGUILayout.PropertyField(serializedObject.FindProperty("outsidePlane"));
 
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraBackground"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraSize"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraSmoothFactor"));
+
         EditorGUILayout.PropertyField(serializedObject.FindProperty("playerMapping"));
         if (serializedObject.FindProperty("playerMapping").FindPropertyRelative("prefab").objectReferenceValue == null)
         {
@@ -73,6 +77,8 @@ public class LevelGeneratorEditor : Editor
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.PropertyField(serializedObject.FindProperty("colorMappings"));
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("additionalObjects"));
 
         serializedObject.ApplyModifiedProperties();
 
