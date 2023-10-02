@@ -828,7 +828,7 @@ MonoBehaviour:
     color: {r: 1, g: 1, b: 1, a: 1}
     type: 2
     prefab: {fileID: 787269825349021895, guid: a39b3dbbea7cca14aae4312cfc97de48, type: 3}
-    zPos: 2
+    zPos: -2
     name: Player
     pattern:
       ul: 0
