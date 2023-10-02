@@ -9,6 +9,7 @@ public class ColorMapping
     public Color color = Color.black;
     public MappingType type;
     public GameObject prefab;
+    public float zPos;
 
     public string name;
     public Pattern pattern;
@@ -17,6 +18,7 @@ public class ColorMapping
     public ColorMapping()
     {
         player = false;
+        zPos = 0;
     }
 
     public static Pattern SetTexturePattern()

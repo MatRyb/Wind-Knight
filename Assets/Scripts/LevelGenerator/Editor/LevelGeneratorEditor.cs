@@ -49,6 +49,8 @@ public class LevelGeneratorEditor : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("insideSpriteTexture"));
         }
 
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("roomsZPos"));
+
         if (serializedObject.FindProperty("outsidePlane").objectReferenceValue == null)
         {
             EditorGUILayout.BeginHorizontal();
@@ -56,6 +58,7 @@ public class LevelGeneratorEditor : Editor
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.PropertyField(serializedObject.FindProperty("outsidePlane"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("planeZPos"));
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraBackground"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraSize"));

@@ -13,7 +13,7 @@ public class PlayerColorMappingDrawer : PropertyDrawer
 
 		Rect contentPosition = EditorGUI.PrefixLabel(position, label);
 
-		if (position.height - 28f > propertyHeight * 6f)
+		if (position.height - 31f > propertyHeight * 7f)
 		{
 			position.height = propertyHeight;
 			EditorGUI.indentLevel += 1;
@@ -28,6 +28,9 @@ public class PlayerColorMappingDrawer : PropertyDrawer
 		contentPosition.y += propertyHeight + 3f;
 		contentPosition.height = propertyHeight + 2f;
 		EditorGUI.PropertyField(contentPosition, property.FindPropertyRelative("prefab"), GUIContent.none);
+		contentPosition.y += propertyHeight + 3f;
+		EditorGUIUtility.labelWidth = EditorStyles.label.CalcSize(new GUIContent("Pattern")).x + 20f;
+		EditorGUI.PropertyField(contentPosition, property.FindPropertyRelative("zPos"), new GUIContent("Z Pos"));
 
 		contentPosition.y += propertyHeight + 9f;
 		SerializedProperty p = property.FindPropertyRelative("pattern");
@@ -63,6 +66,6 @@ public class PlayerColorMappingDrawer : PropertyDrawer
 
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
-		return (label != GUIContent.none && Screen.width < 333 ? propertyHeight * 7f + 28f : propertyHeight * 6f + 26f);
+		return (label != GUIContent.none && Screen.width < 333 ? propertyHeight * 8f + 31f : propertyHeight * 7f + 29f);
 	}
 }

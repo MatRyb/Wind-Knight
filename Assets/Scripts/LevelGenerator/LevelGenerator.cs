@@ -4,21 +4,8 @@ using System.Linq;
 
 
 /// <summary>
-/// 
-/// READING IMAGE GOES FROM DOWN LEFT TO UPPER RIGHT!!!
-/// 
-/// 
-/// TODO:
-/// - Add Player Z pos
-/// - Rooms Z pos -10 after adding everything
-/// - Z pos to Color Mappings
-/// - Add Objects
-/// - Add Enemies
-/// - Add Checkpoints
-/// - Create Editor
+/// Level Generator to Wind Rider Game
 /// </summary>
-
-
 public class LevelGenerator : MonoBehaviour
 {
     [SerializeField] private Texture2D levelMap;
@@ -29,8 +16,11 @@ public class LevelGenerator : MonoBehaviour
     [Header("Sprite:")]
     [SerializeField] private Material insideSpriteMaterial;
     [SerializeField] private Texture2D insideSpriteTexture;
+    [Header("Base Settings:")]
+    [SerializeField] private float roomsZPos;
     [Header("Plane:")]
     [SerializeField] private GameObject outsidePlane;
+    [SerializeField] private float planeZPos;
     [Header("Camera Settings:")]
     [SerializeField] private Color cameraBackground = Color.gray;
     [SerializeField] private float cameraSize = 14f;
@@ -124,7 +114,7 @@ public class LevelGenerator : MonoBehaviour
             else
             {
                 GameObject o = Instantiate(outsidePlane, middlePos, outsidePlane.transform.rotation, hierarchyObjects.Find(x => x.path == "Textures").referenceObject.transform);
-                o.transform.position = new Vector3(o.transform.position.x, o.transform.position.y, 15);
+                o.transform.position = new Vector3(o.transform.position.x, o.transform.position.y, planeZPos);
                 o.name = "OutsideTexture";
                 hierarchyObjects.Add(new("OutsideTexture", GameObject.Find("OutsideTexture")));
             }
@@ -149,6 +139,9 @@ public class LevelGenerator : MonoBehaviour
         {
             MoveEverythingBasedOnMiddlePoint(middlePos);
         }
+
+        Transform t = hierarchyObjects.Find(x => x.path == "Rooms").referenceObject.transform;
+        t.position = new(t.position.x, t.position.y, roomsZPos);
 
         AddCamera();
 
@@ -201,6 +194,9 @@ public class LevelGenerator : MonoBehaviour
             }
             DestroyImmediate(GameObject.Find("Textures"));
         }
+
+        if (GameObject.Find("Main Camera").GetComponent<CameraFolow>() != null)
+            DestroyImmediate(GameObject.Find("Main Camera").GetComponent<CameraFolow>());
 
         if (GameObject.Find("Player") != null)
             DestroyImmediate(GameObject.Find("Player"));
@@ -353,7 +349,7 @@ public class LevelGenerator : MonoBehaviour
 
         if (mapping.player)
         {
-            Vector2 position = new(beg_x + 1, beg_y + 1);
+            Vector3 position = new(beg_x + 1, beg_y + 1, mapping.zPos);
             GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity);
             obj.name = "Player";
             if (hierarchyObjects.Find(x => x.path == "Player") == null)
@@ -371,7 +367,7 @@ public class LevelGenerator : MonoBehaviour
                 hierarchyObjects.Add(new(mapping.name + "s", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find(mapping.name + "s").gameObject));
             }
 
-            Vector2 position = new(beg_x + 1, beg_y + 1);
+            Vector3 position = new(beg_x + 1, beg_y + 1, mapping.zPos);
             GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform);
             obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform.childCount - 1);
         }
@@ -406,7 +402,7 @@ public class LevelGenerator : MonoBehaviour
             hierarchyObjects.Add(new("Walls", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Walls").gameObject));
         }
 
-        Vector2 position = new(x, ((end_pos.Item2 - y - 1f) / 2f) + y);
+        Vector3 position = new(x, ((end_pos.Item2 - y - 1f) / 2f) + y, mapping.zPos);
         GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
         obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x, obj.transform.localScale.y * (end_pos.Item2 - y), obj.transform.localScale.z);
@@ -436,7 +432,7 @@ public class LevelGenerator : MonoBehaviour
             hierarchyObjects.Add(new("Grounds", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Grounds").gameObject));
         }
 
-        Vector2 position = new(((end_pos.Item1 - x - 1f) / 2f) + x, y);
+        Vector3 position = new(((end_pos.Item1 - x - 1f) / 2f) + x, y, mapping.zPos);
         GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Grounds").referenceObject.transform);
         obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Grounds").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x * (end_pos.Item1 - x), obj.transform.localScale.y, obj.transform.localScale.z);
@@ -495,7 +491,7 @@ public class LevelGenerator : MonoBehaviour
             hierarchyObjects.Add(new("Walls", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Walls").gameObject));
         }
 
-        Vector2 position = new(wall_start.Item1, ((wall_end.Item2 - wall_start.Item2 - 1f) / 2f) + wall_start.Item2);
+        Vector3 position = new(wall_start.Item1, ((wall_end.Item2 - wall_start.Item2 - 1f) / 2f) + wall_start.Item2, wall.zPos);
         GameObject obj = Instantiate(wall.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
         obj.name = wall.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x, obj.transform.localScale.y * (wall_end.Item2 - wall_start.Item2), obj.transform.localScale.z);
@@ -572,26 +568,26 @@ public class LevelGenerator : MonoBehaviour
             scale_factor += scale;
         }
 
-        Vector2 position;
+        Vector3 position;
 
         if (extra_top && extra_bottom)
         {
             float shift = 0.5f - scale / 2f;
-            position = new(((end_pos.Item1 - x - 1f) / 2f) + x + shift, ((end_pos.Item2 - y - 1f) / 2f) + y + shift);
+            position = new(((end_pos.Item1 - x - 1f) / 2f) + x + shift, ((end_pos.Item2 - y - 1f) / 2f) + y + shift, mapping.zPos);
         }
         else if (extra_top && !extra_bottom)
         {
             float shift = (scale / 2f) - 0.25f;
-            position = new(((end_pos.Item1 - x - 1f) / 2f) + x + shift, ((end_pos.Item2 - y - 1f) / 2f) + y - 0.5f + shift);
+            position = new(((end_pos.Item1 - x - 1f) / 2f) + x + shift, ((end_pos.Item2 - y - 1f) / 2f) + y - 0.5f + shift, mapping.zPos);
         }
         else if (!extra_top && extra_bottom)
         {
             float shift = (scale / 2f) - 0.25f;
-            position = new(((end_pos.Item1 - x - 1f) / 2f) + x - shift, ((end_pos.Item2 - y - 1f) / 2f) + y - 0.5f + shift);
+            position = new(((end_pos.Item1 - x - 1f) / 2f) + x - shift, ((end_pos.Item2 - y - 1f) / 2f) + y - 0.5f + shift, mapping.zPos);
         }
         else
         {
-            position = new(((end_pos.Item1 - x - 1f) / 2f) + x, ((end_pos.Item2 - y - 1f) / 2f) + y);
+            position = new(((end_pos.Item1 - x - 1f) / 2f) + x, ((end_pos.Item2 - y - 1f) / 2f) + y, mapping.zPos);
         }
 
 
@@ -673,26 +669,26 @@ public class LevelGenerator : MonoBehaviour
             scale_factor += scale;
         }
 
-        Vector2 position;
+        Vector3 position;
 
         if (extra_top && extra_bottom)
         {
             float shift = 0.5f - scale / 2f;
-            position = new(((end_pos.Item1 - x - 1f) / 2f) + x + shift, y - ((y - end_pos.Item2 - 1f) / 2f) + shift);
+            position = new(((end_pos.Item1 - x - 1f) / 2f) + x + shift, y - ((y - end_pos.Item2 - 1f) / 2f) + shift, mapping.zPos);
         }
         else if (extra_top && !extra_bottom)
         {
             float shift = (scale / 2f) - 0.25f;
-            position = new(((end_pos.Item1 - x - 1f) / 2f) + x - shift, y - ((y - end_pos.Item2 - 1f) / 2f) + 0.5f - shift);
+            position = new(((end_pos.Item1 - x - 1f) / 2f) + x - shift, y - ((y - end_pos.Item2 - 1f) / 2f) + 0.5f - shift, mapping.zPos);
         }
         else if (!extra_top && extra_bottom)
         {
             float shift = (scale / 2f) - 0.25f;
-            position = new(((end_pos.Item1 - x - 1f) / 2f) + x + shift, y - ((y - end_pos.Item2 - 1f) / 2f) - 0.5f + shift);
+            position = new(((end_pos.Item1 - x - 1f) / 2f) + x + shift, y - ((y - end_pos.Item2 - 1f) / 2f) - 0.5f + shift, mapping.zPos);
         }
         else
         {
-            position = new(((end_pos.Item1 - x - 1f) / 2f) + x, y - ((y - end_pos.Item2 - 1f) / 2f));
+            position = new(((end_pos.Item1 - x - 1f) / 2f) + x, y - ((y - end_pos.Item2 - 1f) / 2f), mapping.zPos);
         }
 
 

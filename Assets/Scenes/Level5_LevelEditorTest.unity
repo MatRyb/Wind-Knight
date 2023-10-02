@@ -818,7 +818,9 @@ MonoBehaviour:
   insideMeshMaterial: {fileID: 2100000, guid: d04f9bde97fb9ad45be46d6f3c0bcee3, type: 2}
   insideSpriteMaterial: {fileID: 2100000, guid: 2f8c1267df7e01947973476461c52cc8, type: 2}
   insideSpriteTexture: {fileID: 2800000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
+  roomsZPos: -10
   outsidePlane: {fileID: 9044349096019233049, guid: 07975cab4395a5140b344f4ff52e3dd4, type: 3}
+  planeZPos: 15
   cameraBackground: {r: 0.2138218, g: 0.08285868, b: 0.3584906, a: 0}
   cameraSize: 14
   cameraSmoothFactor: 10
@@ -826,6 +828,7 @@ MonoBehaviour:
     color: {r: 1, g: 1, b: 1, a: 1}
     type: 2
     prefab: {fileID: 787269825349021895, guid: a39b3dbbea7cca14aae4312cfc97de48, type: 3}
+    zPos: 2
     name: Player
     pattern:
       ul: 0
@@ -841,6 +844,7 @@ MonoBehaviour:
   - color: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
     type: 0
     prefab: {fileID: 746952629089250870, guid: 7c05b4c94acc6134d8b83cebb93f13f3, type: 3}
+    zPos: 0
     name: 
     pattern:
       ul: 0
@@ -855,6 +859,7 @@ MonoBehaviour:
   - color: {r: 0, g: 0.58431375, b: 0.5019608, a: 1}
     type: 1
     prefab: {fileID: 746952629089250870, guid: 2fb070a6d2534944485a75bc74c84d11, type: 3}
+    zPos: 0
     name: 
     pattern:
       ul: 0
@@ -869,6 +874,7 @@ MonoBehaviour:
   - color: {r: 0.99607843, g: 1, b: 0.5058824, a: 1}
     type: 2
     prefab: {fileID: 4713143785253776626, guid: c03fc07920eba884aa35b2f1be78dded, type: 3}
+    zPos: 0
     name: WinTrigger
     pattern:
       ul: 0
@@ -883,6 +889,7 @@ MonoBehaviour:
   - color: {r: 0.58431375, g: 0, b: 0.41960785, a: 1}
     type: 0
     prefab: {fileID: 3053495975456952606, guid: 993c46219195a9d49a0fc77f7eb5c6e2, type: 3}
+    zPos: 0
     name: 
     pattern:
       ul: 0
@@ -897,6 +904,7 @@ MonoBehaviour:
   - color: {r: 0.58431375, g: 0, b: 0.41960785, a: 1}
     type: 1
     prefab: {fileID: 3053495975456952606, guid: 7fea2793f94dafd4180b5d8c12eb6cfe, type: 3}
+    zPos: 0
     name: 
     pattern:
       ul: 0
@@ -911,6 +919,7 @@ MonoBehaviour:
   - color: {r: 0.5994315, g: 0.7372549, b: 0.015686274, a: 1}
     type: 0
     prefab: {fileID: 2751858212510257318, guid: 4af9d30cdc4b2924fac350760eb12dad, type: 3}
+    zPos: 0
     name: 
     pattern:
       ul: 0
@@ -925,6 +934,7 @@ MonoBehaviour:
   - color: {r: 0.5994315, g: 0.7372549, b: 0.015686274, a: 1}
     type: 1
     prefab: {fileID: 2751858212510257318, guid: b7d67f55f8f983141be996ce48991a63, type: 3}
+    zPos: 0
     name: 
     pattern:
       ul: 0
@@ -939,6 +949,7 @@ MonoBehaviour:
   - color: {r: 0.735849, g: 0.22133745, b: 0.017354928, a: 1}
     type: 0
     prefab: {fileID: 2751858212510257318, guid: 823e000a81a886e4388130feea4073a9, type: 3}
+    zPos: 0
     name: 
     pattern:
       ul: 0
@@ -953,6 +964,7 @@ MonoBehaviour:
   - color: {r: 0.735849, g: 0.22133745, b: 0.017354928, a: 1}
     type: 1
     prefab: {fileID: 2751858212510257318, guid: c9a97d9253b9fa145b76de0a0ad1a091, type: 3}
+    zPos: 0
     name: 
     pattern:
       ul: 0

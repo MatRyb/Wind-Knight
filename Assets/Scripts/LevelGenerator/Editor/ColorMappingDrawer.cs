@@ -14,7 +14,7 @@ public class ColorMappingDrawer : PropertyDrawer
 
 			Rect contentPosition = EditorGUI.PrefixLabel(position, label);
 
-			if ((pattern && position.height - 27f > propertyHeight * 8.5f) || (!pattern && position.height - 14f > propertyHeight * 2))
+			if ((pattern && position.height - 27f > propertyHeight * 9.5f) || (!pattern && position.height - 14f > propertyHeight * 3))
 			{
 				position.height = propertyHeight;
 				EditorGUI.indentLevel += 1;
@@ -46,6 +46,8 @@ public class ColorMappingDrawer : PropertyDrawer
 			contentPosition.height = propertyHeight + 2f;
 			contentPosition.width *= 1.03f * 2f;
 			EditorGUI.PropertyField(contentPosition, property.FindPropertyRelative("prefab"), GUIContent.none);
+			contentPosition.y += propertyHeight + 3f;
+			EditorGUI.PropertyField(contentPosition, property.FindPropertyRelative("zPos"), new GUIContent("Z Pos"));
 
 		if (pattern)
 			{
@@ -86,6 +88,6 @@ public class ColorMappingDrawer : PropertyDrawer
 
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
-		return (label != GUIContent.none && Screen.width < 333 ? ((MappingType)property.FindPropertyRelative("type").intValue == MappingType.Pattern ? propertyHeight * 8.5f + 27f : propertyHeight * 3 + 12f) : ((MappingType)property.FindPropertyRelative("type").intValue == MappingType.Pattern ? propertyHeight * 8.5f + 13f : propertyHeight * 2 + 12f));
+		return (label != GUIContent.none && Screen.width < 333 ? ((MappingType)property.FindPropertyRelative("type").intValue == MappingType.Pattern ? propertyHeight * 9.5f + 27f : propertyHeight * 4 + 12f) : ((MappingType)property.FindPropertyRelative("type").intValue == MappingType.Pattern ? propertyHeight * 9.5f + 13f : propertyHeight * 3 + 12f));
 	}
 }
