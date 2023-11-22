@@ -16,7 +16,7 @@ public class OptionsLevelManager : MonoBehaviour
     [Header("SFX:")]
     [SerializeField] private List<AudioSource> sfxSources;
     [SerializeField] [Tag] private string sfxTag = "SFX";
-    public string ThisLevelName = "";
+    [Scene] public string ThisLevelName = "";
 
     private bool start;
 

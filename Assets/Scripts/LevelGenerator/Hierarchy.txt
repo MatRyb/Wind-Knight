@@ -1,0 +1,16 @@
+﻿Level Generator
+Textures
+	├ OutsideTxt
+	└ MeshVertex
+		├ Vertex 0
+		:
+		└ Vertex n
+Rooms
+	├ Room 0
+	|	├ Walls
+	|	├ Grounds
+	|	├ Pattern Name 0
+	|	:
+	|	└ Pattern Name n
+	:
+	└ Room n

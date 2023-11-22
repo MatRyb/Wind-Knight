@@ -32,8 +32,15 @@ public class InsideTextureMesh : MonoBehaviour
         GenerateMesh();
     }
 
+    public void SetVariables(Material material, string meshName, float zPos)
+    {
+        this.material = material;
+        this.meshName = meshName;
+        this.zPos = zPos;
+    }
+
     [Button]
-    private void GenerateMesh()
+    public void GenerateMesh()
     {
         var transforms = gameObject.GetComponentsInChildren<Transform>();
         Verticles = new Vector3[transforms.Length - 1];
@@ -106,7 +113,7 @@ public class InsideTextureMesh : MonoBehaviour
     }
 
     [Button]
-    private void DeleteMesh()
+    public void DeleteMesh()
     {
         if (renderer != null)
         {
@@ -117,7 +124,7 @@ public class InsideTextureMesh : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Mesh wasn't created!");
+            Debug.Log("Mesh wasn't created!");
         }
     }
 }

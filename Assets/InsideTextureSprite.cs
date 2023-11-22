@@ -31,6 +31,14 @@ public class InsideTextureSprite : MonoBehaviour
         GenerateSprite();
     }
 
+    public void SetVariables(Material material, Texture2D texture, string spriteName, float zPos)
+    {
+        this.material = material;
+        this.texture = texture;
+        this.spriteName = spriteName;
+        this.zPos = zPos;
+    }
+
     private Vector3 VertexPointToGlobal(Vector3 point, GameObject meshHandler)
     {
         Matrix4x4 trs = meshHandler.transform.localToWorldMatrix;
