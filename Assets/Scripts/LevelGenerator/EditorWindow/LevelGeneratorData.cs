@@ -4,21 +4,26 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "Level Generator Data", menuName = "Level Generator/Level Generator Data")]
 public class LevelGeneratorData : ScriptableObject
 {
+    [Header("Mesh:")]
+    public Material insideMeshMaterial;
+    [Header("Sprite:")]
+    public Material insideSpriteMaterial;
+    public Texture2D insideSpriteTexture;
     [Header("Base Settings:")]
-    [SerializeField] private float roomsZPos;
+    public float roomsZPos;
     [Header("Plane:")]
-    [SerializeField] private GameObject outsidePlane;
-    [SerializeField] private float planeZPos;
+    public GameObject outsidePlane;
+    public float planeZPos;
     [Header("Camera Settings:")]
-    [SerializeField] private Color cameraBackground = Color.gray;
-    [SerializeField] private float cameraSize = 14f;
-    [SerializeField][Range(0, 10)] private float cameraSmoothFactor = 10f;
+    public Color cameraBackground = Color.gray;
+    public float cameraSize = 14f;
+    [Range(0, 10)] public float cameraSmoothFactor = 10f;
 
     [Header("ColorMappings:")]
-    [SerializeField] private PlayerColorMapping playerMapping;
+    public PlayerColorMapping playerMapping;
 
-    [SerializeField] private List<ColorMapping> colorMappings;
+    public List<ColorMapping> colorMappings;
 
     [Header("Managers:")]
-    [SerializeField] private List<GameObject> additionalObjects;
+    public List<GameObject> additionalObjects;
 }

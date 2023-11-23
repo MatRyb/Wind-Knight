@@ -3,6 +3,8 @@ using UnityEditor;
 
 public class LevelGeneratorDataEditorWindow : ExtendedEditorWindow
 {
+    private Vector2 scrollPos;
+
     public static void Open(LevelGeneratorData generatorData)
     {
         LevelGeneratorDataEditorWindow window = GetWindow<LevelGeneratorDataEditorWindow>("Level Generator Data Editor");
@@ -11,15 +13,28 @@ public class LevelGeneratorDataEditorWindow : ExtendedEditorWindow
 
     private void OnGUI()
     {
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("insideMeshMaterial"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("insideSpriteMaterial"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("insideSpriteTexture"));
+        if (serializedObject.FindProperty("insideMeshMaterial").objectReferenceValue == null ||
+            serializedObject.FindProperty("insideSpriteMaterial").objectReferenceValue == null ||
+            serializedObject.FindProperty("insideSpriteTexture").objectReferenceValue == null)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.HelpBox("This materials and texture are needed to generate background inside walls. With only a vertex map defined and no materials defined, backgrounds will not be generated.", MessageType.Error);
+            EditorGUILayout.EndHorizontal();
+        }
+
         EditorGUILayout.PropertyField(serializedObject.FindProperty("roomsZPos"));
 
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("outsidePlane"));
         if (serializedObject.FindProperty("outsidePlane").objectReferenceValue == null)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.HelpBox("Plane outside level won't be generated.", MessageType.Warning);
             EditorGUILayout.EndHorizontal();
         }
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("outsidePlane"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("planeZPos"));
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraBackground"));
@@ -44,7 +59,7 @@ public class LevelGeneratorDataEditorWindow : ExtendedEditorWindow
         EditorGUILayout.PropertyField(serializedObject.FindProperty("colorMappings"));
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("additionalObjects"));
-
+        EditorGUILayout.EndScrollView();
         serializedObject.ApplyModifiedProperties();
     }
 }
