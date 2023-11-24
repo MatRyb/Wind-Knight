@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efec16f1569dfa1419e5b42f0cc9614b, type: 3}
   m_Name: Level Generator Data
   m_EditorClassIdentifier: 
-  insideMeshMaterial: {fileID: 2100000, guid: d04f9bde97fb9ad45be46d6f3c0bcee3, type: 2}
-  insideSpriteMaterial: {fileID: 2100000, guid: 2f8c1267df7e01947973476461c52cc8, type: 2}
-  insideSpriteTexture: {fileID: 2800000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
+  meshMaterial: {fileID: 2100000, guid: d04f9bde97fb9ad45be46d6f3c0bcee3, type: 2}
+  spriteMaterial: {fileID: 2100000, guid: 2f8c1267df7e01947973476461c52cc8, type: 2}
+  spriteTexture: {fileID: 2800000, guid: 2b649cf792a05454eaf297597943f7d9, type: 3}
   roomsZPos: 0
   outsidePlane: {fileID: 9044349096019233049, guid: 07975cab4395a5140b344f4ff52e3dd4, type: 3}
   planeZPos: 15

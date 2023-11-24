@@ -13,7 +13,7 @@ public class LevelGeneratorEditorWindow : EditorWindow
     private List<int> visittedPixels;
     private List<HierarchyObject> hierarchyObjects;
 
-    [MenuItem("Window/Level Generator")]
+    [MenuItem("Window/Level Generator/Generator")]
     public static void ShowWindow()
     {
         GetWindow<LevelGeneratorEditorWindow>("Level Generator");
@@ -156,9 +156,9 @@ public class LevelGeneratorEditorWindow : EditorWindow
             GameObject vertex = VertexDecoder.DecodeVertexMap(vertexMap);
             vertex.transform.parent = hierarchyObjects.Find(x => x.path == "Textures").referenceObject.transform;
             vertex.AddComponent<InsideTextureMesh>();
-            vertex.GetComponent<InsideTextureMesh>().SetVariables(_data.insideMeshMaterial, "Cover", 1);
+            vertex.GetComponent<InsideTextureMesh>().SetVariables(_data.meshMaterial, "Cover", 1);
             vertex.AddComponent<InsideTextureSprite>();
-            vertex.GetComponent<InsideTextureSprite>().SetVariables(_data.insideSpriteMaterial, _data.insideSpriteTexture, "Background", 1);
+            vertex.GetComponent<InsideTextureSprite>().SetVariables(_data.spriteMaterial, _data.spriteTexture, "Background", 1);
             hierarchyObjects.Add(new("MeshVertex", vertex));
         }
 
