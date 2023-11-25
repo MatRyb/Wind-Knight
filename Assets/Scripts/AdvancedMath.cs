@@ -19,6 +19,12 @@ public static class AdvancedMath
         float deltaX = lineEndPoint.x - originPoint.x;
         float deltaY = lineEndPoint.y - originPoint.y;
         float r = Vector2.Distance(lineEndPoint, originPoint);
+
+        if (r == 0f)
+        {
+            return 0f;
+        }
+
         float degree;
         if (deltaY > 0)
             degree = Mathf.Acos(deltaX / r) * 180f / Mathf.PI;

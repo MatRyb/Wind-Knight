@@ -1,6 +1,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using CnControls;
 
 public enum PlayerState { FALLING, MOVING }
 
@@ -56,6 +57,7 @@ public class PlayerControler : ObjectHealth
     [DisableIf("true")] [SerializeField] private Vector2 positionChange = Vector2.zero;
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private int objectHits = 0;
+
     private Vector2 lastPosition;
 
     private void OnValidate()
@@ -94,7 +96,7 @@ public class PlayerControler : ObjectHealth
     {
         velocity = Vector2.zero;
 
-        mouseInit();
+        MouseInit();
 
         if (playerRigidbody != null)
         {
@@ -108,7 +110,7 @@ public class PlayerControler : ObjectHealth
         objectHits = maxObjectHits;
     }
 
-    public void mouseInit()
+    public void MouseInit()
     {
         virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
 
@@ -165,8 +167,9 @@ public class PlayerControler : ObjectHealth
 
     public override void TakeDamage(float value)
     {
-        LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, damageColor, 0.15f).setOnComplete(() => {
-            LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, normalColor, 0.15f);
+        LeanTween.value(body, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, damageColor, 0.15f).setOnComplete(() =>
+        {
+            LeanTween.value(body, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, normalColor, 0.15f);
         });
         source.clip = damageClip;
         source.Play();
@@ -209,7 +212,7 @@ public class PlayerControler : ObjectHealth
     {
         if (GameTimer.TimeMultiplier == GameTimer.STOPPED)
             return;
-
+#if UNITY_STANDALONE
         Vector2 mouseDelta = new(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
         if (staticMousePos)
@@ -218,6 +221,7 @@ public class PlayerControler : ObjectHealth
         if (!(mouseDelta == Vector2.zero && velocity == Vector2.zero))
         {
             virtualMousePosition += mouseDelta * mouseSensitivity;
+
             mouseObject.transform.position = virtualMousePosition;
 
             playerState = PlayerState.MOVING;
@@ -228,6 +232,42 @@ public class PlayerControler : ObjectHealth
 
             playerState = PlayerState.FALLING;
         }
+#elif UNITY_ANDROID
+        Vector2 joystickValue = new(CnInputManager.GetAxis("Mouse X"), CnInputManager.GetAxis("Mouse Y"));
+
+        virtualMousePosition = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y) + joystickValue * 5f;
+
+        if (!(joystickValue == Vector2.zero && velocity == Vector2.zero))
+        {
+            mouseObject.transform.position = virtualMousePosition;
+            playerState = PlayerState.MOVING;
+        }
+        else
+        {
+            virtualMousePosition = mouseObject.transform.position;
+            playerState = PlayerState.FALLING;
+        }
+
+        /*
+        if (staticMousePos)
+            virtualMousePosition += positionChange;
+
+        if (!(joystickValue == Vector2.zero && velocity == Vector2.zero))
+        {
+            virtualMousePosition += joystickValue * 0.05f;
+
+            mouseObject.transform.position = virtualMousePosition;
+
+            playerState = PlayerState.MOVING;
+        }
+        else
+        {
+            virtualMousePosition = mouseObject.transform.position;
+
+            playerState = PlayerState.FALLING;
+        }
+        */
+#endif
     }
 
     void BoundMousePositionToMainCameraView()

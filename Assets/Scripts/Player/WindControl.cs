@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.UI;
+using CnControls;
 
 public class WindControl : BaseEntityBehaviour
 {
@@ -70,8 +71,14 @@ public class WindControl : BaseEntityBehaviour
         if (playerControler == null)
             return;
 
+#if UNITY_STANDALONE
+
         if (Input.GetMouseButton(0))
         {
+#elif UNITY_ANDROID
+        if (CnInputManager.GetButton("Wind")) 
+        {
+#endif
             UpdateObjectsList();
             MoveObjects();
             DrawWindRange();

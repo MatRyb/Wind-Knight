@@ -17305,7 +17305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000041962, y: 0.0000038147}
+  m_AnchoredPosition: {x: -0.000045776367, y: 0}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &8526103868810899048
@@ -17453,11 +17453,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MovementRange: 50
-  HorizontalAxisName: Horizontal
-  VerticalAxisName: Vertical
-  HideOnRelease: 1
+  HorizontalAxisName: Mouse X
+  VerticalAxisName: Mouse Y
+  HideOnRelease: 0
   MoveBase: 1
-  SnapsToFinger: 1
+  SnapsToFinger: 0
   JoystickMoveAxis: 3
   JoystickBase: {fileID: 8526103868826095716}
   Stick: {fileID: 8526103868826119192}
