@@ -8,8 +8,8 @@ public class MeleeEnemy : EnemyController
 
     [SerializeField] private SpriteRenderer currentSprite;
 
-    [SerializeField] private PolygonCollider2D colliderNormalSprite;
-    [SerializeField] private PolygonCollider2D colliderAttackSprite;
+    [SerializeField] private BoxCollider2D colliderNormalSprite;
+    [SerializeField] private BoxCollider2D colliderAttackSprite;
 
     [SerializeField] private GameObject hpBar;
     [SerializeField] private GameObject attackPrefab;
@@ -38,7 +38,7 @@ public class MeleeEnemy : EnemyController
             if (canAttack && isDoneCooldown)
             {
                 Attack();
-                StartCoroutine(ChangeSpriteForAttack(0.2f));
+                StartCoroutine(ChangeSpriteForAttack(0.5f));
                 isDoneCooldown = false;
                 StartCoroutine(WaitCooldown(attackRecharge));
             }
@@ -54,26 +54,28 @@ public class MeleeEnemy : EnemyController
     private IEnumerator ChangeSpriteForAttack(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        currentSprite.sprite = attackSprite;
+        currentSprite.sprite = null;
+        colliderAttackSprite.gameObject.GetComponent<SpriteRenderer>().sprite = attackSprite;
         colliderAttackSprite.enabled = true;
         colliderNormalSprite.enabled = false;
-        transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
-        transform.position = new Vector2(transform.position.x, transform.position.y - 1.0f);
-        hpBar.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
-        hpBar.transform.position = new Vector2(transform.position.x, transform.position.y + 4f);
+        //transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
+        //transform.position = new Vector2(transform.position.x, transform.position.y - 2.0f);
+        //hpBar.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
+       //hpBar.transform.position = new Vector2(transform.position.x, transform.position.y + 4f);
 
-        StartCoroutine(RevertSpriteToNormal(0.1f));
+        StartCoroutine(RevertSpriteToNormal(0.5f));
     }
 
     private IEnumerator RevertSpriteToNormal(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         currentSprite.sprite = moveSprite;
+        colliderAttackSprite.gameObject.GetComponent<SpriteRenderer>().sprite = null;
         colliderAttackSprite.enabled = false;
         colliderNormalSprite.enabled = true;
-        transform.localScale = new Vector3(4f, 4, 4f);
-        transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);
-        hpBar.transform.localScale = new Vector3(1f, 1f, 1f);
+        //transform.localScale = new Vector3(4f, 4, 4f);
+        //transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);
+        //hpBar.transform.localScale = new Vector3(1f, 1f, 1f);
         attacking = false;
     }
 

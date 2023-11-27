@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderer: {fileID: 6210601562148168544}
-  durationOfOutline: 0.2
+  durationOfOutline: 0.5
   dieTime: 0.1
   damage: 25
   deafultColor: {r: 0.49384123, g: 0.9622642, b: 0.55093646, a: 0.19607843}

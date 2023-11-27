@@ -85,7 +85,7 @@ public class AiPatrol : MonoBehaviour
 
         if (mustPatrol)
         {
-            mustFlip = (!Physics2D.OverlapCircle(frontGroundCheckerPosition.position, 0.15f, groundLayer) && Physics2D.OverlapCircle(backGroundCheckerPosition.position, 0.15f, groundLayer));
+            mustFlip = (!Physics2D.OverlapCircle(frontGroundCheckerPosition.position, 0.45f, groundLayer) && Physics2D.OverlapCircle(backGroundCheckerPosition.position, 0.45f, groundLayer));
         }
 
         rb.velocity *= GameTimer.TimeMultiplier;
