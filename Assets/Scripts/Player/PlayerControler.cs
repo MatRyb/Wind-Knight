@@ -129,7 +129,11 @@ public class PlayerControler : ObjectHealth
 
         VirtualMousePositionCalculations();
 
+#if UNITY_STANDALONE
         if (virtualMousePosition.x >= transform.position.x && !m_FacingRight)
+#elif UNITY_ANDROID
+        if (virtualMousePosition.x > transform.position.x && !m_FacingRight)
+#endif
         {
             Flip();
         }
@@ -142,17 +146,20 @@ public class PlayerControler : ObjectHealth
 
         float x = Mathf.Abs(virtualMousePosition.x - transform.position.x);
 
-        if (Mathf.Atan2(y, x) * 180 / Mathf.PI >= minRotation && Mathf.Atan2(y, x) * 180 / Mathf.PI <= maxRotation)
+        if (x != 0 && y != 0)
         {
-            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? Mathf.Atan2(y, x) * 180 / Mathf.PI : - Mathf.Atan2(y, x) * 180 / Mathf.PI);
-        }
-        else if (Mathf.Atan2(y, x) * 180 / Mathf.PI < minRotation)
-        {
-            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? minRotation : maxRotation);
-        }
-        else if (Mathf.Atan2(y, x) * 180 / Mathf.PI > maxRotation)
-        {
-            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? maxRotation : minRotation);
+            if (Mathf.Atan2(y, x) * 180 / Mathf.PI >= minRotation && Mathf.Atan2(y, x) * 180 / Mathf.PI <= maxRotation)
+            {
+                body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? Mathf.Atan2(y, x) * 180 / Mathf.PI : -Mathf.Atan2(y, x) * 180 / Mathf.PI);
+            }
+            else if (Mathf.Atan2(y, x) * 180 / Mathf.PI < minRotation)
+            {
+                body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? minRotation : maxRotation);
+            }
+            else if (Mathf.Atan2(y, x) * 180 / Mathf.PI > maxRotation)
+            {
+                body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? maxRotation : minRotation);
+            }
         }
 
         MouseVisualisation(playerBodyTransform.position);
@@ -248,6 +255,8 @@ public class PlayerControler : ObjectHealth
             playerState = PlayerState.FALLING;
         }
 
+        // TODO: Using Finger
+
         /*
         if (staticMousePos)
             virtualMousePosition += positionChange;
@@ -341,8 +350,10 @@ public class PlayerControler : ObjectHealth
     void MouseVisualisation(Vector2 playerPos)
     {
         float degreeToAdd = AdvancedMath.GetAngleBetweenPoints(playerPos, virtualMousePosition, Vector2.right + playerPos);
-
-        mouseObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90 + degreeToAdd));
+        if (degreeToAdd != 0)
+        {
+            mouseObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90 + degreeToAdd));
+        }
 
         BoundMousePositionToMainCameraView();
     }
