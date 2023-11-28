@@ -182,10 +182,6 @@ public class LevelGeneratorDataEditorWindow : ExtendedEditorWindow
                     }
                 case LevelGeneratorDataCategory.ADDITIONAL_OBJECTS:
                     {
-                        // TODO: usun¹æ nazwê obiektu i zostawiæ same elementy listy zawsze rozwiniête z mo¿liwoœci¹ dodawania elementów
-
-                        
-
                         l.DoList(new Rect(Vector2.zero, new Vector2(r.width - 10, r.height)));
                         //EditorGUILayout.PropertyField(serializedObject.FindProperty("additionalObjects"));
                         break;
