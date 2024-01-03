@@ -7,19 +7,20 @@ public class LevelGeneratorEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+
         EditorGUILayout.PropertyField(serializedObject.FindProperty("levelMap"));
         if (serializedObject.FindProperty("levelMap").objectReferenceValue == null)
         {
             EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.HelpBox("The level map is the main element on the basis of which the level is generated. Without it, the generator will not work.", MessageType.Error);
+            EditorGUILayout.HelpBox("The level map is the main element on the basis of which the level is generated. Without it, the generator will not work.", MessageType.Error);
             EditorGUILayout.EndHorizontal();
         }
         else
         {
             Texture2D myTexture = AssetPreview.GetAssetPreview(serializedObject.FindProperty("levelMap").objectReferenceValue);
             EditorGUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
-                GUILayout.Label(myTexture);
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(myTexture);
             EditorGUILayout.EndHorizontal();
         }
 
@@ -27,15 +28,15 @@ public class LevelGeneratorEditor : Editor
         if (serializedObject.FindProperty("vertexMap").objectReferenceValue == null)
         {
             EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.HelpBox("Without a vertex map, the generator will not create the points needed to generate the level background.", MessageType.Warning);
+            EditorGUILayout.HelpBox("Without a vertex map, the generator will not create the points needed to generate the level background.", MessageType.Warning);
             EditorGUILayout.EndHorizontal();
         }
         else
         {
             Texture2D myTexture = AssetPreview.GetAssetPreview(serializedObject.FindProperty("vertexMap").objectReferenceValue);
             EditorGUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
-                GUILayout.Label(myTexture);
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(myTexture);
             EditorGUILayout.EndHorizontal();
 
             if (serializedObject.FindProperty("insideMeshMaterial").objectReferenceValue == null || serializedObject.FindProperty("insideSpriteMaterial").objectReferenceValue == null || serializedObject.FindProperty("insideSpriteTexture").objectReferenceValue == null)

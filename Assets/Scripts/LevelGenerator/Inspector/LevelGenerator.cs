@@ -846,9 +846,8 @@ public class LevelGenerator : MonoBehaviour
 
             if (GameObject.Find(item.name) != null)
             {
-
+                DestroyImmediate(GameObject.Find(item.name));
             }
-            DestroyImmediate(GameObject.Find(item.name));
         }
     }
 }
