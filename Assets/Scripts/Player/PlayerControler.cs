@@ -60,6 +60,11 @@ public class PlayerControler : ObjectHealth
 
     private Vector2 lastPosition;
 
+#if UNITY_ANDROID
+    private bool touchStarted = false;
+    private int touchId = -1;
+#endif
+
     private void OnValidate()
     {
         if (playerBodyTransform == null)
@@ -129,11 +134,7 @@ public class PlayerControler : ObjectHealth
 
         VirtualMousePositionCalculations();
 
-#if UNITY_STANDALONE
         if (virtualMousePosition.x >= transform.position.x && !m_FacingRight)
-#elif UNITY_ANDROID
-        if (virtualMousePosition.x > transform.position.x && !m_FacingRight)
-#endif
         {
             Flip();
         }
@@ -240,6 +241,7 @@ public class PlayerControler : ObjectHealth
             playerState = PlayerState.FALLING;
         }
 #elif UNITY_ANDROID
+        /*
         Vector2 joystickValue = new(CnInputManager.GetAxis("Mouse X"), CnInputManager.GetAxis("Mouse Y"));
 
         virtualMousePosition = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y) + joystickValue * 5f;
@@ -254,8 +256,68 @@ public class PlayerControler : ObjectHealth
             virtualMousePosition = mouseObject.transform.position;
             playerState = PlayerState.FALLING;
         }
+        */
 
         // TODO: Using Finger
+        Vector2 mousePos = virtualMousePosition;
+
+        if (Input.touchCount > 0)
+        {
+            if (CnInputManager.GetButton("Wind"))
+            {
+                // 1 lub 0 nie ci¹gle 1 (Sprawdzaæ który klikn¹³)
+                if (Input.touchCount > 1)
+                {
+                    if (!touchStarted)
+                    {
+                        touchStarted = true;
+                        touchId = 1;
+                    }
+
+                    mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(touchId).position);
+                }
+                else
+                {
+                    touchStarted = false;
+                    touchId = -1;
+                }
+            }
+            else
+            {
+                if (!touchStarted)
+                {
+                    touchStarted = true;
+                    touchId = 0;
+                }
+
+                mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(touchId).position);
+            }
+        }
+        else
+        {
+            touchStarted = false;
+            touchId = -1;
+        }
+
+        Vector2 mouseDelta = mousePos - virtualMousePosition;
+
+        if (staticMousePos)
+            virtualMousePosition += positionChange;
+
+        if (!(mouseDelta == Vector2.zero && velocity == Vector2.zero))
+        {
+            virtualMousePosition = mousePos;
+
+            mouseObject.transform.position = virtualMousePosition;
+
+            playerState = PlayerState.MOVING;
+        }
+        else
+        {
+            virtualMousePosition = mouseObject.transform.position;
+
+            playerState = PlayerState.FALLING;
+        }
 
         /*
         if (staticMousePos)
