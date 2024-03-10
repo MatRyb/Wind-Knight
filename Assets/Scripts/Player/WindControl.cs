@@ -73,10 +73,10 @@ public class WindControl : BaseEntityBehaviour
 
 #if UNITY_STANDALONE
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && GameTimer.TimeMultiplier == GameTimer.PLAYING)
         {
 #elif UNITY_ANDROID
-        if (CnInputManager.GetButton("Wind")) 
+        if (CnInputManager.GetButton("Wind") && GameTimer.TimeMultiplier == GameTimer.PLAYING)
         {
 #endif
             UpdateObjectsList();

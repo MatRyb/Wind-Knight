@@ -263,9 +263,8 @@ public class PlayerControler : ObjectHealth
 
         if (Input.touchCount > 0)
         {
-            if (CnInputManager.GetButton("Wind"))
+            if (CnInputManager.GetButton("Wind") || CnInputManager.GetButton("Pause"))
             {
-                // 1 lub 0 nie ci¹gle 1 (Sprawdzaæ który klikn¹³)
                 if (Input.touchCount > 1)
                 {
                     if (!touchStarted)
@@ -274,7 +273,10 @@ public class PlayerControler : ObjectHealth
                         touchId = 1;
                     }
 
-                    mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(touchId).position);
+                    if (Input.GetTouch(touchId).phase != TouchPhase.Ended && Input.GetTouch(touchId).phase != TouchPhase.Canceled)
+                    {
+                        mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(touchId).position);
+                    }
                 }
                 else
                 {
@@ -290,7 +292,10 @@ public class PlayerControler : ObjectHealth
                     touchId = 0;
                 }
 
-                mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(touchId).position);
+                if (Input.GetTouch(0).phase != TouchPhase.Ended && Input.GetTouch(0).phase != TouchPhase.Canceled)
+                {
+                    mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                }
             }
         }
         else

@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using NaughtyAttributes;
+using CnControls;
 
 public class LevelManager : MonoBehaviour
 {
@@ -130,10 +131,17 @@ public class LevelManager : MonoBehaviour
         }
         */
 
+#if UNITY_STANDALONE
         if (Input.GetKeyDown(KeyCode.Escape) && !paused)
         {
             PauseGameJob(true);
         }
+#elif UNITY_ANDROID
+        if (CnInputManager.GetButton("Pause") && !paused)
+        {
+            PauseGameJob(true);
+        }
+#endif
     }
 
     public static void InitRespawn()
