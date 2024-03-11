@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using NaughtyAttributes;
+using CnControls;
 
 public class LevelManager : MonoBehaviour
 {
@@ -91,11 +92,13 @@ public class LevelManager : MonoBehaviour
                 Camera.main.transform.position = new Vector3(instance.startResp.position.x, instance.startResp.position.y, Camera.main.transform.position.z);
                 player.transform.position = new(instance.startResp.position.x, instance.startResp.position.y, player.transform.position.z);
             }
-            player.GetComponentInChildren<PlayerControler>().mouseInit();
+            player.GetComponentInChildren<PlayerControler>().MouseInit();
             player.GetComponentInChildren<TrailRenderer>().enabled = true;
             PauseGame(false);
+#if UNITY_STANDALONE
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+#endif
             waitingForStart = true;
             startText = GUIManager.ShowText("Press   to Start");
         }
@@ -128,17 +131,26 @@ public class LevelManager : MonoBehaviour
         }
         */
 
+#if UNITY_STANDALONE
         if (Input.GetKeyDown(KeyCode.Escape) && !paused)
         {
             PauseGameJob(true);
         }
+#elif UNITY_ANDROID
+        if (CnInputManager.GetButton("Pause") && !paused)
+        {
+            PauseGameJob(true);
+        }
+#endif
     }
 
     public static void InitRespawn()
     {
         GameTimer.StopTime();
+#if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+#endif
         GameObject screen = GUIManager.ShowDeathScreen();
         Button[] buttons = screen.GetComponentsInChildren<Button>();
 
@@ -223,8 +235,10 @@ public class LevelManager : MonoBehaviour
     public static void InitWinGame()
     {
         GameTimer.StopTime();
+#if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+#endif
         GameObject screen = GUIManager.ShowWinScreen();
         Button[] buttons = screen.GetComponentsInChildren<Button>();
 
@@ -273,8 +287,10 @@ public class LevelManager : MonoBehaviour
     {
         GameTimer.StopTime();
         paused = true;
+#if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+#endif
         if (isScreen)
         {
             GameObject screen = GUIManager.ShowPauseScreen();
@@ -311,8 +327,10 @@ public class LevelManager : MonoBehaviour
     {
         GameTimer.StartTime();
         paused = false;
+#if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+#endif
         if (isScreen)
         {
             GUIManager.HidePauseScreen();

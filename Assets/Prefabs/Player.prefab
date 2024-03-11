@@ -515,7 +515,6 @@ GameObject:
   - component: {fileID: 426906028}
   - component: {fileID: 426906029}
   - component: {fileID: 3933951556066273430}
-  - component: {fileID: 8197172659409512210}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -672,7 +671,7 @@ MonoBehaviour:
   source: {fileID: 7528295684267653842}
   damageClip: {fileID: 8300000, guid: 05e12332278a4cf4bba3aea2b0ac1e47, type: 3}
   maxObjectHits: 20
-  virtualMousePosition: {x: 4.45, y: -1.75}
+  virtualMousePosition: {x: 1, y: 0}
   velocity: {x: 0, y: 0}
   minSpeed: 0
   speed: 0
@@ -706,21 +705,6 @@ MonoBehaviour:
   - Enemy
   - WaveParticle
   objectsInRange: []
---- !u!114 &8197172659409512210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6043441914305587015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25578ee7140f5d54487dbd1834fbd647, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 0}
-  target: {fileID: 787269825349021897}
-  staticColliders: []
 --- !u!1 &6297462287964603809
 GameObject:
   m_ObjectHideFlags: 0
