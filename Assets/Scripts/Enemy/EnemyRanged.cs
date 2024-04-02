@@ -46,9 +46,18 @@ public class EnemyRanged : EnemyController
 
         if(distanceToPlayer <= range && GameTimer.TimeMultiplier != GameTimer.STOPPED)
         {
-            if (canShoot && !IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
-            {    
-                Attack();
+            if (!IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
+            {
+                if (canShoot)
+                {
+                    Vector2 direction = (player.position - transform.position).normalized;
+                    float angle = Vector2.Angle(Vector2.right, direction);
+                    Debug.Log("Angle: " + angle);
+                    if (angle <= 70 || angle >= 110)
+                    {
+                        Attack();
+                    }
+                }
             }
         }
     }
