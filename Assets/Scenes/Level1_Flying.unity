@@ -6312,7 +6312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 426906029, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: joystickSensitivity
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 787269825349021895, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: m_Name
@@ -9039,6 +9039,7 @@ GameObject:
   - component: {fileID: 1171373500}
   - component: {fileID: 1171373499}
   - component: {fileID: 1171373498}
+  - component: {fileID: 1171373502}
   m_Layer: 5
   m_Name: PhoneCanvas
   m_TagString: Untagged
@@ -9130,6 +9131,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1171373502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171373497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 784f8d63f846b1846979dc47fd8fe46f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joystick: {fileID: 8526103868832712782}
 --- !u!1 &1174663735
 GameObject:
   m_ObjectHideFlags: 0
@@ -17493,8 +17507,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1248.8578, y: 0}
-  m_SizeDelta: {x: 671.1425, y: 551.6899}
+  m_AnchoredPosition: {x: 1200, y: 50}
+  m_SizeDelta: {x: 670, y: 670}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &8526103868826095716
 MonoBehaviour:

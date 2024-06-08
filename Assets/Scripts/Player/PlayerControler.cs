@@ -62,14 +62,10 @@ public class PlayerControler : ObjectHealth
 
 #if UNITY_ANDROID
     // TOUCH
-    /*
     private bool touchStarted = false;
     private int touchId = -1;
-    */
 
     // JOYSTICK
-    /*
-    */
     public float joystickSensitivity = 10f;
     private Vector2 joystickValueLast = Vector2.zero;
 #endif
@@ -127,11 +123,17 @@ public class PlayerControler : ObjectHealth
     public void MouseInit()
     {
 #if UNITY_ANDROID
-        // TOUCH
-        //virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+        MoveType type = (MoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)MoveType.Joystick);
 
         // JOYSTICK
-        virtualMousePosition = playerBodyTransform.position;
+        if (type == MoveType.Joystick)
+        {
+            virtualMousePosition = playerBodyTransform.position;
+        }
+        // TOUCH
+        else if (type == MoveType.Touch) {
+            virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+        }
 #else
         virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
 #endif
@@ -259,109 +261,111 @@ public class PlayerControler : ObjectHealth
         }
 #elif UNITY_ANDROID
 
+        MoveType type = (MoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)MoveType.Joystick);
+
         // JOYSTICK
-        /*
-        */
-        Vector2 joystickValue = new Vector2(CnInputManager.GetAxis("Joystick X"), CnInputManager.GetAxis("Joystick Y"));
-
-        if (joystickValue.sqrMagnitude > 1)
+        if (type == MoveType.Joystick)
         {
-            joystickValue = joystickValue.normalized;
-        }
+            Vector2 joystickValue = new Vector2(CnInputManager.GetAxis("Joystick X"), CnInputManager.GetAxis("Joystick Y"));
 
-        Vector2 joystickDelta = joystickValue - joystickValueLast;
-        joystickValueLast = joystickValue;
-
-        Debug.Log(joystickValueLast);
-        Debug.Log(joystickValue);
-        Debug.Log(joystickDelta);
-
-        if (staticMousePos)
-            virtualMousePosition += positionChange;
-
-        if (!(joystickDelta == Vector2.zero && velocity == Vector2.zero))
-        {
-            virtualMousePosition += joystickDelta * joystickSensitivity;
-
-            mouseObject.transform.position = virtualMousePosition;
-
-            playerState = PlayerState.MOVING;
-        }
-        else
-        {
-            virtualMousePosition = mouseObject.transform.position;
-
-            playerState = PlayerState.FALLING;
-        }
-
-
-        // TOUCH
-        /*
-        Vector2 mousePos = virtualMousePosition;
-
-        if (Input.touchCount > 0)
-        {
-            if (CnInputManager.GetButton("Wind") || CnInputManager.GetButton("Pause"))
+            if (joystickValue.sqrMagnitude > 1)
             {
-                if (Input.touchCount > 1)
-                {
-                    if (!touchStarted)
-                    {
-                        touchStarted = true;
-                        touchId = 1;
-                    }
+                joystickValue = joystickValue.normalized;
+            }
 
-                    if (Input.GetTouch(touchId).phase != TouchPhase.Ended && Input.GetTouch(touchId).phase != TouchPhase.Canceled)
+            Vector2 joystickDelta = joystickValue - joystickValueLast;
+            joystickValueLast = joystickValue;
+
+            Debug.Log(joystickValueLast);
+            Debug.Log(joystickValue);
+            Debug.Log(joystickDelta);
+
+            if (staticMousePos)
+                virtualMousePosition += positionChange;
+
+            if (!(joystickDelta == Vector2.zero && velocity == Vector2.zero))
+            {
+                virtualMousePosition += joystickDelta * joystickSensitivity;
+
+                mouseObject.transform.position = virtualMousePosition;
+
+                playerState = PlayerState.MOVING;
+            }
+            else
+            {
+                virtualMousePosition = mouseObject.transform.position;
+
+                playerState = PlayerState.FALLING;
+            }
+        }
+        // TOUCH
+        else if (type == MoveType.Touch)
+        {
+            Vector2 mousePos = virtualMousePosition;
+
+            if (Input.touchCount > 0)
+            {
+                if (CnInputManager.GetButton("Wind") || CnInputManager.GetButton("Pause"))
+                {
+                    if (Input.touchCount > 1)
                     {
-                        mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(touchId).position);
+                        if (!touchStarted)
+                        {
+                            touchStarted = true;
+                            touchId = 1;
+                        }
+
+                        if (Input.GetTouch(touchId).phase != TouchPhase.Ended && Input.GetTouch(touchId).phase != TouchPhase.Canceled)
+                        {
+                            mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(touchId).position);
+                        }
+                    }
+                    else
+                    {
+                        touchStarted = false;
+                        touchId = -1;
                     }
                 }
                 else
                 {
-                    touchStarted = false;
-                    touchId = -1;
+                    if (!touchStarted)
+                    {
+                        touchStarted = true;
+                        touchId = 0;
+                    }
+
+                    if (Input.GetTouch(0).phase != TouchPhase.Ended && Input.GetTouch(0).phase != TouchPhase.Canceled)
+                    {
+                        mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                    }
                 }
             }
             else
             {
-                if (!touchStarted)
-                {
-                    touchStarted = true;
-                    touchId = 0;
-                }
+                touchStarted = false;
+                touchId = -1;
+            }
 
-                if (Input.GetTouch(0).phase != TouchPhase.Ended && Input.GetTouch(0).phase != TouchPhase.Canceled)
-                {
-                    mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                }
+            Vector2 mouseDelta = mousePos - virtualMousePosition;
+
+            if (staticMousePos)
+                virtualMousePosition += positionChange;
+
+            if (!(mouseDelta == Vector2.zero && velocity == Vector2.zero))
+            {
+                virtualMousePosition = mousePos;
+
+                mouseObject.transform.position = virtualMousePosition;
+
+                playerState = PlayerState.MOVING;
+            }
+            else
+            {
+                virtualMousePosition = mouseObject.transform.position;
+
+                playerState = PlayerState.FALLING;
             }
         }
-        else
-        {
-            touchStarted = false;
-            touchId = -1;
-        }
-
-        Vector2 mouseDelta = mousePos - virtualMousePosition;
-
-        if (staticMousePos)
-            virtualMousePosition += positionChange;
-
-        if (!(mouseDelta == Vector2.zero && velocity == Vector2.zero))
-        {
-            virtualMousePosition = mousePos;
-
-            mouseObject.transform.position = virtualMousePosition;
-
-            playerState = PlayerState.MOVING;
-        }
-        else
-        {
-            virtualMousePosition = mouseObject.transform.position;
-
-            playerState = PlayerState.FALLING;
-        }
-        */
 #endif
     }
 

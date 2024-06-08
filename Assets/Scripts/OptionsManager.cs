@@ -3,6 +3,11 @@ using UnityEngine.UI;
 using TMPro;
 using System.Text;
 
+public enum MoveType {
+    Touch = 0,
+    Joystick = 1
+}
+
 public class OptionsManager : MonoBehaviour
 {
     public static OptionsManager instance;
@@ -27,6 +32,12 @@ public class OptionsManager : MonoBehaviour
     [SerializeField] private Sprite muteSprite;
     [SerializeField] private Sprite unMuteSprite;
 
+    [Header("Android:")]
+    [SerializeField] private GameObject moveOptions;
+    [SerializeField] private MoveType moveType;
+    [SerializeField] private Toggle touch;
+    [SerializeField] private Toggle joystick;
+
     void Awake()
     {
         instance = this;
@@ -37,11 +48,45 @@ public class OptionsManager : MonoBehaviour
         musicSource.mute = PlayerPrefs.GetInt("MuteMusicVolume", 0) != 0;
         CheckAudioMute(musicSource.mute, muteMusicIcon);
 
-        //sfx
+        // sfx
         sfx.onValueChanged.AddListener(delegate { ChangeVolume(sfx.value, sfxText, changeTextColorSFXValue); PlayerPrefs.SetFloat("SFXVolume", sfx.value); });
         sfx.value = PlayerPrefs.GetFloat("SFXVolume", 40f);
         sfxMute = PlayerPrefs.GetInt("MuteSFXVolume", 0) != 0;
         CheckAudioMute(sfxMute, muteSFXIcon);
+
+        // android movement
+#if UNITY_ANDROID
+        moveOptions.SetActive(true);
+#else
+        moveOptions.SetActive(false);
+#endif
+    }
+
+    void Start()
+    {
+#if UNITY_ANDROID
+        CheckMoveOption();
+#endif
+    }
+
+    public void CheckMoveOption()
+    {
+        MoveType type = (MoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)MoveType.Joystick);
+
+        if (moveType != type)
+        {
+            moveType = type;
+            if (moveType == MoveType.Joystick)
+            {
+                touch.isOn = false;
+                joystick.isOn = true;
+            }
+            else if (moveType == MoveType.Touch)
+            {
+                joystick.isOn = false;
+                touch.isOn = true;
+            }
+        }
     }
 
     public void ChangeVolume(AudioSource audioSource, float volume, TMP_Text tekst, float changeTextColorValue)
@@ -83,6 +128,25 @@ public class OptionsManager : MonoBehaviour
         sfxMute = !sfxMute;
         PlayerPrefs.SetInt("MuteSFXVolume", sfxMute ? 1 : 0);
         CheckAudioMute(sfxMute, muteSFXIcon);
+    }
+
+    public void SetAndroidMovement(MoveType type)
+    {
+        if (moveType != type)
+        {
+            moveType = type;
+            PlayerPrefs.SetInt("AndroidMoveType", (int)type);
+        }
+    }
+
+    public void SetAndroidTouch()
+    {
+        SetAndroidMovement(MoveType.Touch);
+    }
+
+    public void SetAndroidJoystick()
+    {
+        SetAndroidMovement(MoveType.Joystick);
     }
 
     private void CheckAudioMute(bool audioMute, Image icon)
