@@ -46,9 +46,18 @@ public class EnemyRanged : EnemyController
 
         if(distanceToPlayer <= range && GameTimer.TimeMultiplier != GameTimer.STOPPED)
         {
-            if (canShoot && !IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
-            {    
-                Attack();
+            if (!IsObjectBlockedByOtherObject(player.gameObject, viewRayBlockingLayers))
+            {
+                if (canShoot)
+                {
+                    Vector2 direction = (player.position - transform.position).normalized;
+                    float angle = Vector2.Angle(Vector2.right, direction);
+                    Debug.Log("Angle: " + angle);
+                    if (angle <= 70 || angle >= 110)
+                    {
+                        Attack();
+                    }
+                }
             }
         }
     }
@@ -65,7 +74,15 @@ public class EnemyRanged : EnemyController
         Vector2 direction = (player.position - transform.position).normalized;
         GameObject newBullet = Instantiate(bullet, shootPosition.position, Quaternion.identity);
         newBullet.transform.localScale = transform.localScale / scaleFactor;
-        newBullet.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x, direction.y - UnityEngine.Random.Range(-0.2f, 0.15f) * aim) * shootSpeed;
+        EnemyBullet enemyBullet = newBullet.GetComponent<EnemyBullet>();
+
+        float t2 = (player.position.x - shootPosition.position.x) / (direction.x * shootSpeed);
+        Vector2 v0 = ((Vector2)(player.position - shootPosition.position) + t2 * t2 * new Vector2(0f, 4.59f)) / t2;
+        v0.y -= UnityEngine.Random.Range(-0.2f, 0.15f) * aim * shootSpeed;
+
+        enemyBullet.velocity = v0;
+        enemyBullet.GetComponent<Rigidbody2D>().velocity = v0;
+        //enemyBullet.velocity = new Vector2(direction.x, direction.y - UnityEngine.Random.Range(-0.2f, 0.15f) * aim) * shootSpeed;
         AudioSource s = Instantiate(source, transform.position, new Quaternion(0, 0, 0, 0)).GetComponent<AudioSource>();
         s.clip = attackClip;
         s.volume = volume;
