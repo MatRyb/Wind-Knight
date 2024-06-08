@@ -6134,7 +6134,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 66.703, y: -71.91742}
+  m_AnchoredPosition: {x: 66.703125, y: -71.91748}
   m_SizeDelta: {x: 70, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &901597270
@@ -6306,6 +6306,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 426906029, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
+      propertyPath: staticMousePos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 426906029, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
+      propertyPath: joystickSensitivity
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 787269825349021895, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: m_Name
       value: Player
@@ -17443,7 +17451,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000045776367, y: 0}
+  m_AnchoredPosition: {x: -0.000061035156, y: 0}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &8526103868810899048
@@ -17485,8 +17493,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1463.1804, y: 0}
-  m_SizeDelta: {x: 456.8198, y: 399.0219}
+  m_AnchoredPosition: {x: 1357.487, y: 0}
+  m_SizeDelta: {x: 562.5131, y: 501.7792}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &8526103868826095716
 MonoBehaviour:
@@ -17555,7 +17563,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8526103868832712782}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -17590,7 +17598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb64258239543b4db1c80658a0d4f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementRange: 50
+  MovementRange: 200
   HorizontalAxisName: Mouse X
   VerticalAxisName: Mouse Y
   HideOnRelease: 0

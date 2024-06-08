@@ -61,8 +61,17 @@ public class PlayerControler : ObjectHealth
     private Vector2 lastPosition;
 
 #if UNITY_ANDROID
+    // TOUCH
+    /*
+    */
     private bool touchStarted = false;
     private int touchId = -1;
+
+    // JOYSTICK
+    /*
+    public float joystickSensitivity = 10f;
+    private Vector2 joystickValueLast = Vector2.zero;
+    */
 #endif
 
     private void OnValidate()
@@ -117,7 +126,15 @@ public class PlayerControler : ObjectHealth
 
     public void MouseInit()
     {
+#if UNITY_ANDROID
+        // TOUCH
         virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+
+        // JOYSTICK
+        //virtualMousePosition = playerBodyTransform.position;
+#else
+        virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+#endif
 
         if (mouseObject != null)
         {
@@ -241,24 +258,46 @@ public class PlayerControler : ObjectHealth
             playerState = PlayerState.FALLING;
         }
 #elif UNITY_ANDROID
+
+        // JOYSTICK
         /*
-        Vector2 joystickValue = new(CnInputManager.GetAxis("Mouse X"), CnInputManager.GetAxis("Mouse Y"));
+        Vector2 joystickValue = new Vector2(CnInputManager.GetAxis("Mouse X"), CnInputManager.GetAxis("Mouse Y"));
 
-        virtualMousePosition = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y) + joystickValue * 5f;
-
-        if (!(joystickValue == Vector2.zero && velocity == Vector2.zero))
+        if (joystickValue.sqrMagnitude > 1)
         {
+            joystickValue = joystickValue.normalized;
+        }
+
+        Vector2 joystickDelta = joystickValue - joystickValueLast;
+        joystickValueLast = joystickValue;
+
+        Debug.Log(joystickValueLast);
+        Debug.Log(joystickValue);
+        Debug.Log(joystickDelta);
+
+        if (staticMousePos)
+            virtualMousePosition += positionChange;
+
+        if (!(joystickDelta == Vector2.zero && velocity == Vector2.zero))
+        {
+            virtualMousePosition += joystickDelta * joystickSensitivity;
+
             mouseObject.transform.position = virtualMousePosition;
+
             playerState = PlayerState.MOVING;
         }
         else
         {
             virtualMousePosition = mouseObject.transform.position;
+
             playerState = PlayerState.FALLING;
         }
         */
 
-        // TODO: Using Finger
+
+        // TOUCH
+        /*
+        */
         Vector2 mousePos = virtualMousePosition;
 
         if (Input.touchCount > 0)
@@ -323,26 +362,6 @@ public class PlayerControler : ObjectHealth
 
             playerState = PlayerState.FALLING;
         }
-
-        /*
-        if (staticMousePos)
-            virtualMousePosition += positionChange;
-
-        if (!(joystickValue == Vector2.zero && velocity == Vector2.zero))
-        {
-            virtualMousePosition += joystickValue * 0.05f;
-
-            mouseObject.transform.position = virtualMousePosition;
-
-            playerState = PlayerState.MOVING;
-        }
-        else
-        {
-            virtualMousePosition = mouseObject.transform.position;
-
-            playerState = PlayerState.FALLING;
-        }
-        */
 #endif
     }
 
