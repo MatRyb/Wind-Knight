@@ -63,15 +63,15 @@ public class PlayerControler : ObjectHealth
 #if UNITY_ANDROID
     // TOUCH
     /*
-    */
     private bool touchStarted = false;
     private int touchId = -1;
+    */
 
     // JOYSTICK
     /*
+    */
     public float joystickSensitivity = 10f;
     private Vector2 joystickValueLast = Vector2.zero;
-    */
 #endif
 
     private void OnValidate()
@@ -128,10 +128,10 @@ public class PlayerControler : ObjectHealth
     {
 #if UNITY_ANDROID
         // TOUCH
-        virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+        //virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
 
         // JOYSTICK
-        //virtualMousePosition = playerBodyTransform.position;
+        virtualMousePosition = playerBodyTransform.position;
 #else
         virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
 #endif
@@ -261,7 +261,8 @@ public class PlayerControler : ObjectHealth
 
         // JOYSTICK
         /*
-        Vector2 joystickValue = new Vector2(CnInputManager.GetAxis("Mouse X"), CnInputManager.GetAxis("Mouse Y"));
+        */
+        Vector2 joystickValue = new Vector2(CnInputManager.GetAxis("Joystick X"), CnInputManager.GetAxis("Joystick Y"));
 
         if (joystickValue.sqrMagnitude > 1)
         {
@@ -292,12 +293,10 @@ public class PlayerControler : ObjectHealth
 
             playerState = PlayerState.FALLING;
         }
-        */
 
 
         // TOUCH
         /*
-        */
         Vector2 mousePos = virtualMousePosition;
 
         if (Input.touchCount > 0)
@@ -362,6 +361,7 @@ public class PlayerControler : ObjectHealth
 
             playerState = PlayerState.FALLING;
         }
+        */
 #endif
     }
 
