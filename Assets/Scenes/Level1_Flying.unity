@@ -17493,8 +17493,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1357.487, y: 0}
-  m_SizeDelta: {x: 562.5131, y: 501.7792}
+  m_AnchoredPosition: {x: 1248.8578, y: 0}
+  m_SizeDelta: {x: 671.1425, y: 551.6899}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &8526103868826095716
 MonoBehaviour:
@@ -17598,7 +17598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb64258239543b4db1c80658a0d4f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementRange: 200
+  MovementRange: 300
   HorizontalAxisName: Joystick X
   VerticalAxisName: Joystick Y
   HideOnRelease: 0
