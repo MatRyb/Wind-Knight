@@ -6306,14 +6306,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 426906029, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
-      propertyPath: staticMousePos
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 426906029, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
-      propertyPath: joystickSensitivity
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 787269825349021895, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
       propertyPath: m_Name
       value: Player
