@@ -974,6 +974,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 746952629089250866, guid: 5565056054d8663418ef7b179ff69b02, type: 3}
   m_PrefabInstance: {fileID: 75839934}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &78069171 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8334941568176324034, guid: 84e74646fb1c63b4e8afdd18c338399d, type: 3}
+  m_PrefabInstance: {fileID: 125840745}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &83354560
 GameObject:
   m_ObjectHideFlags: 0
@@ -1452,6 +1463,37 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8334941568271554129, guid: 84e74646fb1c63b4e8afdd18c338399d, type: 3}
   m_PrefabInstance: {fileID: 125840745}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &125840747 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8334941568271554128, guid: 84e74646fb1c63b4e8afdd18c338399d, type: 3}
+  m_PrefabInstance: {fileID: 125840745}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &125840748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125840747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c145c0c9dcfcfa14cacb1fafad1d038f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 78069171}
+  windows: 'Click   when plane is on the button to fold paper along shown red line.
+
+    |       
+    |        |        |
+
+    \/       \/       \/       \/'
+  android: 'Click when plane is on the button to fold paper along shown red line.
+
+    |       
+    |        |        |
+
+    \/       \/       \/       \/'
+  windowsImage: {fileID: 445454782}
 --- !u!1 &127528203
 GameObject:
   m_ObjectHideFlags: 0
@@ -4731,7 +4773,7 @@ GameObject:
   - component: {fileID: 445454783}
   - component: {fileID: 445454782}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Windows
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5542,7 +5584,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &554653315
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14009,7 +14051,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1402282520}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9381e2076ebb3842bc8aa867ebd1d1a, type: 3}
   m_Name: 

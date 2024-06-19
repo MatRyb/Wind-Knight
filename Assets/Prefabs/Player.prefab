@@ -692,7 +692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerControler: {fileID: 426906029}
-  windBubbleRange: 5
+  windBubbleRange: 8.5
   windPower: 50
   maxMovePower: 20
   throwForceConstant: 5

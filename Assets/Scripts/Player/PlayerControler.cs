@@ -486,6 +486,7 @@ public class PlayerControler : ObjectHealth
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        /*
         if (collision.gameObject.TryGetComponent(out ObjectScript _))
         {
             if (--objectHits <= 0)
@@ -493,6 +494,7 @@ public class PlayerControler : ObjectHealth
                 OnDead();
             }
         }
+         */
     }
 
     public int GetMana()
