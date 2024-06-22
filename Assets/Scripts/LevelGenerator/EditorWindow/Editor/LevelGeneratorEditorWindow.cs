@@ -304,9 +304,10 @@ public class LevelGeneratorEditorWindow : EditorWindow
             return false;
         }
 
-        List<(int, int)> patternCheck = new();
-
-        patternCheck.Add((x, y));
+        List<(int, int)> patternCheck = new()
+        {
+            (x, y)
+        };
 
         for (int i = 0; i < 9; i++)
         {
@@ -720,7 +721,12 @@ public class LevelGeneratorEditorWindow : EditorWindow
             elementsToMove.Add(hierarchyObjects.Find(x => x.path == "OutsideTexture").referenceObject);
         }
 
-        hierarchyObjects.Find(x => x.path == "Player").referenceObject.transform.position -= diff;
+        HierarchyObject p = hierarchyObjects.Find(x => x.path == "Player");
+
+        if (p != null)
+        { 
+            p.referenceObject.transform.position -= diff;
+        }
 
         foreach (GameObject elem in elementsToMove)
         {
