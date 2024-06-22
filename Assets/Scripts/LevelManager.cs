@@ -36,10 +36,11 @@ public class LevelManager : MonoBehaviour
     private RespawnPoint startResp = null;
     private RespawnPoint resp = null;
 
+    [SerializeField] [Scene] private string menuScene = "Menu";
     [SerializeField] private AudioClip checkpointClip;
     [SerializeField] private bool isNextLevel = false;
-    [SerializeField] [ShowIf("isNextLevel")] private string nextLevelSceneName;
-    public string ThisLevelName = "";
+    [SerializeField] [ShowIf("isNextLevel")] [Scene] private string nextLevelSceneName;
+    [Scene] public string ThisLevelName = "";
 
     void OnLevelWasLoaded(int level)
     {
@@ -166,7 +167,7 @@ public class LevelManager : MonoBehaviour
             }
             else if (buttons[i].name == "MenuBtn")
             {
-                buttons[i].onClick.AddListener(() => SceneManager.LoadScene("Menu"));
+                buttons[i].onClick.AddListener(() => SceneManager.LoadScene(instance.menuScene));
             }
             else if (buttons[i].name == "ExitBtn")
             {
@@ -261,7 +262,7 @@ public class LevelManager : MonoBehaviour
             }
             else if (buttons[i].name == "MenuBtn")
             {
-                buttons[i].onClick.AddListener(() => SceneManager.LoadScene("Menu"));
+                buttons[i].onClick.AddListener(() => SceneManager.LoadScene(instance.menuScene));
             }
             else if (buttons[i].name == "ExitBtn")
             {
@@ -308,7 +309,7 @@ public class LevelManager : MonoBehaviour
                 }
                 else if (buttons[i].name == "MenuBtn")
                 {
-                    buttons[i].onClick.AddListener(() => SceneManager.LoadScene("Menu"));
+                    buttons[i].onClick.AddListener(() => SceneManager.LoadScene(instance.menuScene));
                 }
                 else if (buttons[i].name == "ExitBtn")
                 {

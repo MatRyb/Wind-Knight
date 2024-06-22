@@ -1221,7 +1221,7 @@ MonoBehaviour:
   musicSource: {fileID: 862250700}
   sfxSources: []
   sfxTag: SFX
-  ThisLevelName: Level4_All
+  ThisLevelName: Menu
 --- !u!4 &862250702
 Transform:
   m_ObjectHideFlags: 0
@@ -3009,6 +3009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01186bf60ced4a54f9e5c08dca1a66a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuScene: Menu
   checkpointClip: {fileID: 8300000, guid: fb9be94f94accb8459c00fa55ba7e1a0, type: 3}
   isNextLevel: 0
   nextLevelSceneName: 
