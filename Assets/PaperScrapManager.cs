@@ -8,6 +8,13 @@ using UnityEngine.SceneManagement;
 
 public delegate void PaperScrapManagerEvent();
 
+[System.Serializable]
+public struct ScrapsGotEvent
+{
+    public int neededScraps;
+    public IPuzzleSolvedEvent puzzleSolvedEvent;
+}
+
 public class PaperScrapManager : MonoBehaviour
 {
     [System.Serializable]
@@ -36,6 +43,9 @@ public class PaperScrapManager : MonoBehaviour
     [SerializeField] private AudioClip collectedClip;
     [SerializeField] private TMP_Text text;
     [SerializeField] private IPuzzleSolvedEvent puzzleSolvedEvent;
+
+    [SerializeField] private List<ScrapsGotEvent> scrapsGotEvents;
+
     [Scene] public string ThisLevelName = "";
 
     [SerializeField] private List<Scrap> scraps;
@@ -164,6 +174,11 @@ public class PaperScrapManager : MonoBehaviour
                 text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
             }
 
+            foreach (var item in scrapsGotEvents)
+            {
+                CheckScrapsGotEvent(item);
+            }
+
             if (AreAllCollected())
             {
                 if (puzzleSolvedEvent != null)
@@ -218,6 +233,11 @@ public class PaperScrapManager : MonoBehaviour
                 }
             }
 
+            foreach (var item in scrapsGotEvents)
+            {
+                CheckScrapsGotEvent(item);
+            }
+
             if (AreAllCollected())
             {
                 if (puzzleSolvedEvent != null)
@@ -270,6 +290,11 @@ public class PaperScrapManager : MonoBehaviour
         paper.PlayAudio(collectedClip);
         OnScrapCollected?.Invoke();
 
+        foreach (var item in scrapsGotEvents)
+        {
+            CheckScrapsGotEvent(item);
+        }
+
         if (AreAllCollected())
         {
             if (puzzleSolvedEvent != null)
@@ -303,6 +328,17 @@ public class PaperScrapManager : MonoBehaviour
         else
         {
             return allPaperScraps;
+        }
+    }
+
+    public void CheckScrapsGotEvent(ScrapsGotEvent toCheck)
+    {
+        if (collected >= toCheck.neededScraps)
+        {
+            if (toCheck.puzzleSolvedEvent != null)
+            {
+                toCheck.puzzleSolvedEvent.Solved();
+            }
         }
     }
 

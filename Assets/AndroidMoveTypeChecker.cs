@@ -8,13 +8,13 @@ public class AndroidMoveTypeChecker : MonoBehaviour
 #if UNITY_ANDROID
     void Start()
     {
-        MoveType type = (MoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)MoveType.Joystick);
-        if (type == MoveType.Touch)
+        AndroidMoveType type = (AndroidMoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)AndroidMoveType.Joystick);
+        if (type == AndroidMoveType.Touch)
         {
             joystick.GetComponent<SimpleJoystick>().enabled = false;
             joystick.SetActive(false);
         }
-        else if (type == MoveType.Joystick) 
+        else if (type == AndroidMoveType.Joystick) 
         {
             joystick.GetComponent<SimpleJoystick>().enabled = true;
             joystick.SetActive(true);

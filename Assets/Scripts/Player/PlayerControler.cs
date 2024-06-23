@@ -123,15 +123,15 @@ public class PlayerControler : ObjectHealth
     public void MouseInit()
     {
 #if UNITY_ANDROID
-        MoveType type = (MoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)MoveType.Joystick);
+        AndroidMoveType type = (AndroidMoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)AndroidMoveType.Joystick);
 
         // JOYSTICK
-        if (type == MoveType.Joystick)
+        if (type == AndroidMoveType.Joystick)
         {
             virtualMousePosition = playerBodyTransform.position;
         }
         // TOUCH
-        else if (type == MoveType.Touch) {
+        else if (type == AndroidMoveType.Touch) {
             virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
         }
 #else
@@ -261,10 +261,10 @@ public class PlayerControler : ObjectHealth
         }
 #elif UNITY_ANDROID
 
-        MoveType type = (MoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)MoveType.Joystick);
+        AndroidMoveType type = (AndroidMoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)AndroidMoveType.Joystick);
 
         // JOYSTICK
-        if (type == MoveType.Joystick)
+        if (type == AndroidMoveType.Joystick)
         {
             Vector2 joystickValue = new Vector2(CnInputManager.GetAxis("Joystick X"), CnInputManager.GetAxis("Joystick Y"));
 
@@ -299,7 +299,7 @@ public class PlayerControler : ObjectHealth
             }
         }
         // TOUCH
-        else if (type == MoveType.Touch)
+        else if (type == AndroidMoveType.Touch)
         {
             Vector2 mousePos = virtualMousePosition;
 

@@ -3,9 +3,16 @@ using UnityEngine.UI;
 using TMPro;
 using System.Text;
 
-public enum MoveType {
-    Touch = 0,
-    Joystick = 1
+public enum AndroidMoveType
+{
+    Joystick = 0,
+    Touch = 1,
+}
+
+public enum AndroidArrangement
+{
+    RightHanded = 0,
+    LeftHanded = 1,
 }
 
 public class OptionsManager : MonoBehaviour
@@ -34,9 +41,13 @@ public class OptionsManager : MonoBehaviour
 
     [Header("Android:")]
     [SerializeField] private GameObject moveOptions;
-    [SerializeField] private MoveType moveType;
+    [SerializeField] private AndroidMoveType moveType;
     [SerializeField] private Toggle touch;
     [SerializeField] private Toggle joystick;
+    [SerializeField] private GameObject arrangementOptions;
+    [SerializeField] private AndroidArrangement arrangement;
+    [SerializeField] private Toggle rightHanded;
+    [SerializeField] private Toggle leftHanded;
 
     void Awake()
     {
@@ -57,8 +68,10 @@ public class OptionsManager : MonoBehaviour
         // android movement
 #if UNITY_ANDROID
         moveOptions.SetActive(true);
+        arrangementOptions.SetActive(true);
 #else
         moveOptions.SetActive(false);
+        arrangementOptions.SetActive(false);
 #endif
     }
 
@@ -71,20 +84,40 @@ public class OptionsManager : MonoBehaviour
 
     public void CheckMoveOption()
     {
-        MoveType type = (MoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)MoveType.Joystick);
+        AndroidMoveType type = (AndroidMoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)AndroidMoveType.Joystick);
 
         if (moveType != type)
         {
             moveType = type;
-            if (moveType == MoveType.Joystick)
+            if (moveType == AndroidMoveType.Joystick)
             {
                 touch.isOn = false;
                 joystick.isOn = true;
             }
-            else if (moveType == MoveType.Touch)
+            else if (moveType == AndroidMoveType.Touch)
             {
                 joystick.isOn = false;
                 touch.isOn = true;
+            }
+        }
+    }
+
+    public void CheckArrangementOption()
+    {
+        AndroidArrangement arr = (AndroidArrangement)PlayerPrefs.GetInt("AndroidArrangement", (int)AndroidArrangement.RightHanded);
+
+        if (arrangement != arr)
+        {
+            arrangement = arr;
+            if (arrangement == AndroidArrangement.RightHanded)
+            {
+                rightHanded.isOn = true;
+                leftHanded.isOn = false;
+            }
+            else if (arrangement == AndroidArrangement.LeftHanded)
+            {
+                rightHanded.isOn = false;
+                leftHanded.isOn = true;
             }
         }
     }
@@ -130,7 +163,7 @@ public class OptionsManager : MonoBehaviour
         CheckAudioMute(sfxMute, muteSFXIcon);
     }
 
-    public void SetAndroidMovement(MoveType type)
+    public void SetAndroidMovement(AndroidMoveType type)
     {
         if (moveType != type)
         {
@@ -139,14 +172,33 @@ public class OptionsManager : MonoBehaviour
         }
     }
 
-    public void SetAndroidTouch()
-    {
-        SetAndroidMovement(MoveType.Touch);
-    }
-
     public void SetAndroidJoystick()
     {
-        SetAndroidMovement(MoveType.Joystick);
+        SetAndroidMovement(AndroidMoveType.Joystick);
+    }
+
+    public void SetAndroidTouch()
+    {
+        SetAndroidMovement(AndroidMoveType.Touch);
+    }
+
+    public void SetAndroidArrangement(AndroidArrangement arr)
+    {
+        if (arrangement != arr)
+        {
+            arrangement = arr;
+            PlayerPrefs.SetInt("AndroidArrangement", (int)arr);
+        }
+    }
+
+    public void SetAndroidRightHanded()
+    {
+        SetAndroidArrangement(AndroidArrangement.RightHanded);
+    }
+
+    public void SetAndroidLeftHanded()
+    {
+        SetAndroidArrangement(AndroidArrangement.LeftHanded);
     }
 
     private void CheckAudioMute(bool audioMute, Image icon)
