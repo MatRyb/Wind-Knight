@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using NaughtyAttributes;
+using System.Threading;
 
 public class LevelManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class LevelManager : MonoBehaviour
     {
         public int id = 0;
         public Vector3 position = new(0,0,0);
+
 
         public RespawnPoint(int _id, Vector3 _pos)
         {
@@ -31,6 +33,10 @@ public class LevelManager : MonoBehaviour
     private bool paused = false;
 
     private bool start;
+
+    private float timer = 0;
+    private bool timerStopped = true;
+    public float finalLevelTimer = -1;
 
     private RespawnPoint startResp = null;
     private RespawnPoint resp = null;
@@ -77,6 +83,10 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
+        if (timer > -1 && !timerStopped)
+        {
+            timer += Time.deltaTime;
+        }
         if (instance.start)
         {
             instance.start = false;
@@ -110,10 +120,18 @@ public class LevelManager : MonoBehaviour
             return;
 
         if (waitForRespawn)
+        {
+            timerStopped = true;
             return;
+        }
+
 
         if (waitAfterWin)
+        {
+            if(finalLevelTimer < 0) finalLevelTimer = timer;
+            Debug.Log(finalLevelTimer);
             return;
+        }
 
         /*
         if (Input.GetMouseButtonDown(1))
@@ -133,6 +151,11 @@ public class LevelManager : MonoBehaviour
         {
             PauseGameJob(true);
         }
+    }
+
+    public void SetTimerToStopped()
+    {
+        timerStopped = true;
     }
 
     public static void InitRespawn()
@@ -167,6 +190,7 @@ public class LevelManager : MonoBehaviour
 
     private void RespawnJob()
     {
+        timerStopped = true;
         waitForRespawn = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -178,6 +202,7 @@ public class LevelManager : MonoBehaviour
 
     private void RestartLevelJob(bool isScreen)
     {
+        timer = 0;
         if (isScreen)
         {
             GameObject screen = GUIManager.ShowRestartQuestionScreen();
@@ -199,6 +224,7 @@ public class LevelManager : MonoBehaviour
 
     private void RestartYesJob()
     {
+        timerStopped = true;
         waitForRespawn = false;
         if (instance.resp == null)
         {
@@ -262,6 +288,7 @@ public class LevelManager : MonoBehaviour
     {
         Destroy(startText);
         waitingForStart = false;
+        timerStopped = false;
         ResumeGame(false);
     }
 
@@ -272,6 +299,7 @@ public class LevelManager : MonoBehaviour
 
     private void PauseGameJob(bool isScreen)
     {
+        timerStopped = true;
         GameTimer.StopTime();
         paused = true;
         Cursor.lockState = CursorLockMode.None;
@@ -310,6 +338,7 @@ public class LevelManager : MonoBehaviour
 
     private void ResumeGameJob(bool isScreen)
     {
+        timerStopped = false;
         GameTimer.StartTime();
         paused = false;
         Cursor.lockState = CursorLockMode.Locked;
