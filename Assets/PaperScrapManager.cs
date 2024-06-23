@@ -310,11 +310,11 @@ public class PaperScrapManager : MonoBehaviour
     {
         if (lessThanAll)
         {
-            return collected == minCollectedScraps;
+            return collected >= minCollectedScraps;
         }
         else
         {
-            return collected == allPaperScraps;
+            return collected >= allPaperScraps;
         }
     }
 }
