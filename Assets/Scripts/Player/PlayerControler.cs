@@ -276,9 +276,9 @@ public class PlayerControler : ObjectHealth
             Vector2 joystickDelta = joystickValue - joystickValueLast;
             joystickValueLast = joystickValue;
 
-            Debug.Log(joystickValueLast);
-            Debug.Log(joystickValue);
-            Debug.Log(joystickDelta);
+            //Debug.Log(joystickValueLast);
+            //Debug.Log(joystickValue);
+            //Debug.Log(joystickDelta);
 
             if (staticMousePos)
                 virtualMousePosition += positionChange;
