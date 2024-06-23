@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using NaughtyAttributes;
-using System.Threading;
 
 public class LevelManager : MonoBehaviour
 {
