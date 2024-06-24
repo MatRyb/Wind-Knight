@@ -128,6 +128,81 @@ MonoBehaviour:
       dl: 0
       dm: 0
       dr: 0
+  - color: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 1}
+    type: 0
+    prefab: {fileID: 4854770388098231714, guid: 5d2bc7f5148c5a24992c1b8cb0bc3565, type: 3}
+    zPos: 0
+    name: PaperScrap
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 1}
+    type: 1
+    prefab: {fileID: 3704329963657265376, guid: 266bb20f5617dea41aee7c781e03a9cb, type: 3}
+    zPos: 0
+    name: PaperScrap
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 1, g: 0, b: 0.41568628, a: 1}
+    type: 2
+    prefab: {fileID: 2496210551758240053, guid: 24bc1819488271043814129107eb0086, type: 3}
+    zPos: 0
+    name: Heart
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0, g: 1, b: 1, a: 1}
+    type: 2
+    prefab: {fileID: 424403291205317846, guid: 1e20e06bc68f0c949b5164cd35c6607f, type: 3}
+    zPos: 0
+    name: Mushroom
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 1, g: 0.5019608, b: 0, a: 1}
+    type: 2
+    prefab: {fileID: 8809848743426466199, guid: 84a20ab9935c8b8489fffa347682fa24, type: 3}
+    zPos: 0
+    name: Flower
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
   additionalObjects:
   - {fileID: 852979335064072647, guid: cb3a2ed054c65194788d0e4bc1968d43, type: 3}
   - {fileID: 6978047710609413682, guid: 8849a1907ef41514381f55bad9515906, type: 3}
