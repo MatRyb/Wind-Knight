@@ -645,7 +645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427ea8b2b4ca1c54194ae0851ea3a05a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 60
   health: 0
   deathParticle: {fileID: 840825463644067242, guid: 72c3b48529f8a104ca028811d4684334, type: 3}
   playerBodyTransform: {fileID: 787269825349021897}
@@ -678,7 +678,6 @@ MonoBehaviour:
   maxSpeed: 0
   positionChange: {x: 0, y: 0}
   objectHits: 0
-  joystickSensitivity: 10
 --- !u!114 &3933951556066273430
 MonoBehaviour:
   m_ObjectHideFlags: 0
