@@ -11,7 +11,7 @@ public class MeleeEnemy : EnemyController
     [SerializeField] private PolygonCollider2D colliderNormalSprite;
     [SerializeField] private PolygonCollider2D colliderAttackSprite;
 
-    [SerializeField] private GameObject hpBar;
+    //[SerializeField] private GameObject hpBar;
     [SerializeField] private GameObject attackPrefab;
 
     [SerializeField] private Sprite moveSprite;
@@ -57,10 +57,10 @@ public class MeleeEnemy : EnemyController
         currentSprite.sprite = attackSprite;
         colliderAttackSprite.enabled = true;
         colliderNormalSprite.enabled = false;
-        transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
-        transform.position = new Vector2(transform.position.x, transform.position.y - 1.0f);
-        hpBar.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
-        hpBar.transform.position = new Vector2(transform.position.x, transform.position.y + 4f);
+        //transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
+        //transform.position = new Vector2(transform.position.x, transform.position.y - 1.0f);
+        //hpBar.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
+        //hpBar.transform.position = new Vector2(transform.position.x, transform.position.y + 4f);
 
         StartCoroutine(RevertSpriteToNormal(0.1f));
     }
@@ -71,9 +71,9 @@ public class MeleeEnemy : EnemyController
         currentSprite.sprite = moveSprite;
         colliderAttackSprite.enabled = false;
         colliderNormalSprite.enabled = true;
-        transform.localScale = new Vector3(4f, 4, 4f);
-        transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);
-        hpBar.transform.localScale = new Vector3(1f, 1f, 1f);
+        //transform.localScale = new Vector3(4f, 4, 4f);
+        //transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);
+        //hpBar.transform.localScale = new Vector3(1f, 1f, 1f);
         attacking = false;
     }
 

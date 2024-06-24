@@ -23,7 +23,8 @@ public class PhoneCanvasManager : MonoBehaviour
         }
         computerPowerUp.SetActive(false);
 #elif UNITY_STANDALONE
-        phoneCanvas.SetActive(false);
+        phoneCanvasLeft.SetActive(false);
+        phoneCanvasRight.SetActive(false);
         computerPowerUp.SetActive(false);
 #endif
     }
