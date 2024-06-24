@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,11 +5,12 @@ using UnityEngine.UI;
 public class HealthMonitor : MonoBehaviour
 {
     [SerializeField] private ObjectHealth healthToMonitor;
-    [SerializeField] private int maxNumberOfHearts = 4;
+    [SerializeField] private float oneHeartValue = 10.0f;
     [SerializeField] private Sprite fullHeart;
     [SerializeField] private Sprite halfHeart;
     [SerializeField] private Sprite zeroHeart;
     [SerializeField] private GameObject heartsHolder;
+    [SerializeField, ReadOnly] private int maxNumberOfHearts = 4;
     [SerializeField] private Image[] hearts;
 
     private void Start()
@@ -19,6 +19,8 @@ public class HealthMonitor : MonoBehaviour
         {
             Destroy(heartsHolder.transform.GetChild(i).gameObject);
         }
+
+        maxNumberOfHearts = Mathf.CeilToInt(healthToMonitor.GetMaxHealth() / oneHeartValue);
 
         hearts = new Image[maxNumberOfHearts];
 

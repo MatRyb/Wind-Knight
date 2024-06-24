@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfae1005304789944857a61fbe27dc51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 30
+  maxHealth: 50
   health: 0
   attacking: 0
   isPaperScrap: 0
@@ -240,6 +240,7 @@ MonoBehaviour:
   viewBlockingLayers:
     serializedVersion: 2
     m_Bits: 193
+  flipCollider: 0
   collider: {fileID: 3816376352006152789}
   body: {fileID: 580585819}
 --- !u!1 &849261914799677252
@@ -745,6 +746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthToMonitor: {fileID: 5888977171575284708}
   maxNumberOfHearts: 4
+  oneHeartValue: 10
   fullHeart: {fileID: 21300000, guid: 88bc32af137296f40b9cbc100bedd858, type: 3}
   halfHeart: {fileID: 21300000, guid: 94f2bf7fd738f0746aa73587950bcdc7, type: 3}
   zeroHeart: {fileID: 21300000, guid: 388aefc3b78e2b845b4559d524c5d45d, type: 3}
