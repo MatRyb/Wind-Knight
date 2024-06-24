@@ -6344,6 +6344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   finalLevelTimer: -1
   menuScene: Menu
+  levelData: {fileID: 11400000, guid: 510c9c6bfb21dba42b6395d4fe13cfe5, type: 2}
   checkpointClip: {fileID: 8300000, guid: 207184569f62d054ea977badd4076583, type: 3}
   isNextLevel: 0
   nextLevelSceneName: Menu

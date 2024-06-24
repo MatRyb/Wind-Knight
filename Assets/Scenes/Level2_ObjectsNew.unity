@@ -14012,6 +14012,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   finalLevelTimer: -1
   menuScene: Menu
+  levelData: {fileID: 11400000, guid: 88b8f871f628b2a49bca693b8893ab65, type: 2}
   checkpointClip: {fileID: 8300000, guid: 207184569f62d054ea977badd4076583, type: 3}
   isNextLevel: 1
   nextLevelSceneName: Level3_EnemiesNew
