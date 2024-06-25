@@ -9,6 +9,11 @@ public class ParallaxLayer : MonoBehaviour
 
     void Start()
     {
+        if (cam == null)
+        {
+            cam = GameObject.FindWithTag("MainCamera");
+        }
+
         startPosX = transform.position.x;
         startPosY = transform.position.y;
 
@@ -17,6 +22,16 @@ public class ParallaxLayer : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (cam == null)
+        {
+            cam = GameObject.FindWithTag("MainCamera");
+            if (cam == null)
+            {
+                Debug.LogWarning("No camera found with tag 'MainCamera'");
+                return;
+            }
+        }
+
         float temp = (cam.transform.position.x * (1 - parallaxFactor));
         float dist = (cam.transform.position.x * parallaxFactor);
         float distY = (cam.transform.position.y);
