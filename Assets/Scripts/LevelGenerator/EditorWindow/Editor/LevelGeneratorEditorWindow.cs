@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
+using static UnityEditor.Progress;
 
 public class LevelGeneratorEditorWindow : EditorWindow
 {
@@ -144,8 +145,9 @@ public class LevelGeneratorEditorWindow : EditorWindow
             }
             else
             {
-                GameObject o = Instantiate(_data.outsidePlane, middlePos, _data.outsidePlane.transform.rotation, hierarchyObjects.Find(x => x.path == "Textures").referenceObject.transform);
-                o.transform.position = new Vector3(o.transform.position.x, o.transform.position.y, _data.planeZPos);
+                GameObject o = (GameObject)PrefabUtility.InstantiatePrefab(_data.outsidePlane);
+                o.transform.parent = hierarchyObjects.Find(x => x.path == "Textures").referenceObject.transform;
+                o.transform.position = new Vector3(middlePos.x, middlePos.y, _data.planeZPos);
                 o.name = "OutsideTexture";
                 hierarchyObjects.Add(new("OutsideTexture", GameObject.Find("OutsideTexture")));
             }
@@ -246,7 +248,9 @@ public class LevelGeneratorEditorWindow : EditorWindow
                     default:
                         {
                             Vector2 position = new(x, y);
-                            Instantiate(colorMapping.prefab, position, Quaternion.identity);
+                            GameObject o = (GameObject)PrefabUtility.InstantiatePrefab(colorMapping.prefab);
+                            o.transform.position = position;
+                            o.transform.rotation = Quaternion.identity;
                             break;
                         }
                 }
@@ -334,7 +338,9 @@ public class LevelGeneratorEditorWindow : EditorWindow
         if (mapping.player)
         {
             Vector3 position = new(beg_x + 1, beg_y + 1, mapping.zPos);
-            GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity);
+            GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(mapping.prefab);
+            obj.transform.position = position;
+            obj.transform.rotation = Quaternion.identity;
             obj.name = "Player";
             if (hierarchyObjects.Find(x => x.path == "Player") == null)
             {
@@ -352,7 +358,10 @@ public class LevelGeneratorEditorWindow : EditorWindow
             }
 
             Vector3 position = new(beg_x + 1, beg_y + 1, mapping.zPos);
-            GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform);
+            GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(mapping.prefab);
+            obj.transform.position = position;
+            obj.transform.rotation = Quaternion.identity;
+            obj.transform.parent = hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform;
             obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == mapping.name + "s").referenceObject.transform.childCount - 1);
         }
 
@@ -387,7 +396,10 @@ public class LevelGeneratorEditorWindow : EditorWindow
         }
 
         Vector3 position = new(x, ((end_pos.Item2 - y - 1f) / 2f) + y, mapping.zPos);
-        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
+        GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(mapping.prefab);
+        obj.transform.position = position;
+        obj.transform.rotation = Quaternion.identity;
+        obj.transform.parent = hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform;
         obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x, obj.transform.localScale.y * (end_pos.Item2 - y), obj.transform.localScale.z);
 
@@ -417,7 +429,10 @@ public class LevelGeneratorEditorWindow : EditorWindow
         }
 
         Vector3 position = new(((end_pos.Item1 - x - 1f) / 2f) + x, y, mapping.zPos);
-        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Grounds").referenceObject.transform);
+        GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(mapping.prefab);
+        obj.transform.position = position;
+        obj.transform.rotation = Quaternion.identity;
+        obj.transform.parent = hierarchyObjects.Find(x => x.path == "Grounds").referenceObject.transform;
         obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Grounds").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x * (end_pos.Item1 - x), obj.transform.localScale.y, obj.transform.localScale.z);
 
@@ -476,7 +491,10 @@ public class LevelGeneratorEditorWindow : EditorWindow
         }
 
         Vector3 position = new(wall_start.Item1, ((wall_end.Item2 - wall_start.Item2 - 1f) / 2f) + wall_start.Item2, wall.zPos);
-        GameObject obj = Instantiate(wall.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
+        GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(wall.prefab);
+        obj.transform.position = position;
+        obj.transform.rotation = Quaternion.identity;
+        obj.transform.parent = hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform;
         obj.name = wall.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x, obj.transform.localScale.y * (wall_end.Item2 - wall_start.Item2), obj.transform.localScale.z);
 
@@ -576,7 +594,10 @@ public class LevelGeneratorEditorWindow : EditorWindow
             hierarchyObjects.Add(new("Walls", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Walls").gameObject));
         }
 
-        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
+        GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(mapping.prefab);
+        obj.transform.position = position;
+        obj.transform.rotation = Quaternion.identity;
+        obj.transform.parent = hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform;
         obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x * scale_factor, obj.transform.localScale.y, obj.transform.localScale.z);
         obj.transform.Rotate(0f, 0f, 45f);
@@ -677,7 +698,10 @@ public class LevelGeneratorEditorWindow : EditorWindow
             hierarchyObjects.Add(new("Walls", hierarchyObjects.Find(x => x.path == "Room").referenceObject.transform.Find("Walls").gameObject));
         }
 
-        GameObject obj = Instantiate(mapping.prefab, position, Quaternion.identity, hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform);
+        GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(mapping.prefab);
+        obj.transform.position = position;
+        obj.transform.rotation = Quaternion.identity;
+        obj.transform.parent = hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform;
         obj.name = mapping.prefab.name + " " + (hierarchyObjects.Find(x => x.path == "Walls").referenceObject.transform.childCount - 1);
         obj.transform.localScale = new Vector3(obj.transform.localScale.x * scale_factor, obj.transform.localScale.y, obj.transform.localScale.z);
         obj.transform.Rotate(0f, 0f, -45f);
@@ -819,7 +843,7 @@ public class LevelGeneratorEditorWindow : EditorWindow
             if (item == null)
                 continue;
 
-            GameObject g = Instantiate(item);
+            GameObject g = (GameObject)PrefabUtility.InstantiatePrefab(item);
             g.name = item.name;
         }
     }
