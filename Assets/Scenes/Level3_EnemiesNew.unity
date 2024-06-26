@@ -318,6 +318,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5888977171575284708, guid: c5dc2def10327e54ab25abdd1846021a, type: 3}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888977171575284708, guid: c5dc2def10327e54ab25abdd1846021a, type: 3}
       propertyPath: paperScrap
       value: 
       objectReference: {fileID: 5771464816270400374, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
@@ -1167,6 +1171,10 @@ PrefabInstance:
     - target: {fileID: 1809509434658045391, guid: c5dc2def10327e54ab25abdd1846021a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888977171575284708, guid: c5dc2def10327e54ab25abdd1846021a, type: 3}
+      propertyPath: maxHealth
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5888977171575284708, guid: c5dc2def10327e54ab25abdd1846021a, type: 3}
       propertyPath: paperScrap
@@ -6062,6 +6070,10 @@ PrefabInstance:
       value: MeleeEnemy_2U
       objectReference: {fileID: 0}
     - target: {fileID: 5209816240133236623, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
+      propertyPath: maxHealth
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209816240133236623, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
       propertyPath: paperScrap
       value: 
       objectReference: {fileID: 5771464816270400374, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
@@ -6208,6 +6220,10 @@ PrefabInstance:
     - target: {fileID: 7418502861401661548, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777130442347837359, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
+      propertyPath: walkSpead
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7777130442347837359, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
       propertyPath: frontGroundCheckerPosition
@@ -6934,6 +6950,10 @@ PrefabInstance:
       value: MeleeEnemy_1
       objectReference: {fileID: 0}
     - target: {fileID: 5209816240133236623, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
+      propertyPath: maxHealth
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209816240133236623, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
       propertyPath: paperScrap
       value: 
       objectReference: {fileID: 5771464816270400374, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
@@ -7080,6 +7100,10 @@ PrefabInstance:
     - target: {fileID: 7418502861401661548, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777130442347837359, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
+      propertyPath: walkSpead
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5bc8919b4410e94e9f0cdff9dc00c0b, type: 3}
