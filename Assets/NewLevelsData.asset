@@ -85,7 +85,7 @@ MonoBehaviour:
       dr: 0
   - color: {r: 0, g: 0, b: 1, a: 1}
     type: 0
-    prefab: {fileID: 3053495975456952606, guid: 7c06ba0333c377b4191fb695608c0dab, type: 3}
+    prefab: {fileID: 3053495975456952606, guid: 993c46219195a9d49a0fc77f7eb5c6e2, type: 3}
     zPos: 0
     name: WinTrigger
     pattern:
@@ -100,7 +100,7 @@ MonoBehaviour:
       dr: 0
   - color: {r: 0, g: 0, b: 1, a: 1}
     type: 1
-    prefab: {fileID: 3053495975456952606, guid: 1f16321c649a2b2428d9ac8ff687b001, type: 3}
+    prefab: {fileID: 3053495975456952606, guid: 7fea2793f94dafd4180b5d8c12eb6cfe, type: 3}
     zPos: 0
     name: WinTrigger
     pattern:
