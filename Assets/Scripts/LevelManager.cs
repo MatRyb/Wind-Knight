@@ -349,6 +349,18 @@ public class LevelManager : MonoBehaviour
             {
                 texts[i].text = "Time: " + instance.finalLevelTimer.ToString("0.00") + " s";
             }
+            else if (texts[i].name == "Star1Text")
+            {
+                texts[i].text = instance.levelData.Star1Time.ToString("0") + "s";
+            }
+            else if (texts[i].name == "Star2Text")
+            {
+                texts[i].text = instance.levelData.Star2Time.ToString("0") + "s";
+            }
+            else if (texts[i].name == "Star3Text")
+            {
+                texts[i].text = instance.levelData.Star3Time.ToString("0") + "s";
+            }
         }
 
         instance.waitAfterWin = true;

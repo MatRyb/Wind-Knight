@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Level2Data
   m_EditorClassIdentifier: 
   Name: Level2
-  Star3Time: 1
-  Star2Time: 2
-  Star1Time: 3
+  Star3Time: 150
+  Star2Time: 220
+  Star1Time: 300
+  ActiveStar: {r: 0.99, g: 1, b: 0.47, a: 1}
+  DeactiveStar: {r: 0.4, g: 0.4, b: 0.4, a: 1}
