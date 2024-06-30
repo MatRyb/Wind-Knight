@@ -1,6 +1,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using CnControls;
 
 public enum PlayerState { FALLING, MOVING }
 
@@ -56,7 +57,18 @@ public class PlayerControler : ObjectHealth
     [DisableIf("true")] [SerializeField] private Vector2 positionChange = Vector2.zero;
     [Foldout("info")]
     [DisableIf("true")] [SerializeField] private int objectHits = 0;
+
     private Vector2 lastPosition;
+
+#if UNITY_ANDROID
+    // TOUCH
+    private bool touchStarted = false;
+    private int touchId = -1;
+
+    // JOYSTICK
+    public float joystickSensitivity = 10f;
+    private Vector2 joystickValueLast = Vector2.zero;
+#endif
 
     private void OnValidate()
     {
@@ -94,7 +106,7 @@ public class PlayerControler : ObjectHealth
     {
         velocity = Vector2.zero;
 
-        mouseInit();
+        MouseInit();
 
         if (playerRigidbody != null)
         {
@@ -108,9 +120,23 @@ public class PlayerControler : ObjectHealth
         objectHits = maxObjectHits;
     }
 
-    public void mouseInit()
+    public void MouseInit()
     {
+#if UNITY_ANDROID
+        AndroidMoveType type = (AndroidMoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)AndroidMoveType.Joystick);
+
+        // JOYSTICK
+        if (type == AndroidMoveType.Joystick)
+        {
+            virtualMousePosition = playerBodyTransform.position;
+        }
+        // TOUCH
+        else if (type == AndroidMoveType.Touch) {
+            virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+        }
+#else
         virtualMousePosition = playerBodyTransform.position + Vector3.right * minForceRadius;
+#endif
 
         if (mouseObject != null)
         {
@@ -140,17 +166,20 @@ public class PlayerControler : ObjectHealth
 
         float x = Mathf.Abs(virtualMousePosition.x - transform.position.x);
 
-        if (Mathf.Atan2(y, x) * 180 / Mathf.PI >= minRotation && Mathf.Atan2(y, x) * 180 / Mathf.PI <= maxRotation)
+        if (x != 0 && y != 0)
         {
-            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? Mathf.Atan2(y, x) * 180 / Mathf.PI : - Mathf.Atan2(y, x) * 180 / Mathf.PI);
-        }
-        else if (Mathf.Atan2(y, x) * 180 / Mathf.PI < minRotation)
-        {
-            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? minRotation : maxRotation);
-        }
-        else if (Mathf.Atan2(y, x) * 180 / Mathf.PI > maxRotation)
-        {
-            body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? maxRotation : minRotation);
+            if (Mathf.Atan2(y, x) * 180 / Mathf.PI >= minRotation && Mathf.Atan2(y, x) * 180 / Mathf.PI <= maxRotation)
+            {
+                body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? Mathf.Atan2(y, x) * 180 / Mathf.PI : -Mathf.Atan2(y, x) * 180 / Mathf.PI);
+            }
+            else if (Mathf.Atan2(y, x) * 180 / Mathf.PI < minRotation)
+            {
+                body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? minRotation : maxRotation);
+            }
+            else if (Mathf.Atan2(y, x) * 180 / Mathf.PI > maxRotation)
+            {
+                body.transform.localRotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, m_FacingRight ? maxRotation : minRotation);
+            }
         }
 
         MouseVisualisation(playerBodyTransform.position);
@@ -165,8 +194,9 @@ public class PlayerControler : ObjectHealth
 
     public override void TakeDamage(float value)
     {
-        LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, damageColor, 0.15f).setOnComplete(() => {
-            LeanTween.value(body.gameObject, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, normalColor, 0.15f);
+        LeanTween.value(body, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, damageColor, 0.15f).setOnComplete(() =>
+        {
+            LeanTween.value(body, SetSpriteColor, body.GetComponent<SpriteRenderer>().color, normalColor, 0.15f);
         });
         source.clip = damageClip;
         source.Play();
@@ -209,7 +239,7 @@ public class PlayerControler : ObjectHealth
     {
         if (GameTimer.TimeMultiplier == GameTimer.STOPPED)
             return;
-
+#if UNITY_STANDALONE
         Vector2 mouseDelta = new(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
         if (staticMousePos)
@@ -218,6 +248,7 @@ public class PlayerControler : ObjectHealth
         if (!(mouseDelta == Vector2.zero && velocity == Vector2.zero))
         {
             virtualMousePosition += mouseDelta * mouseSensitivity;
+
             mouseObject.transform.position = virtualMousePosition;
 
             playerState = PlayerState.MOVING;
@@ -228,6 +259,114 @@ public class PlayerControler : ObjectHealth
 
             playerState = PlayerState.FALLING;
         }
+#elif UNITY_ANDROID
+
+        AndroidMoveType type = (AndroidMoveType)PlayerPrefs.GetInt("AndroidMoveType", (int)AndroidMoveType.Joystick);
+
+        // JOYSTICK
+        if (type == AndroidMoveType.Joystick)
+        {
+            Vector2 joystickValue = new Vector2(CnInputManager.GetAxis("Joystick X"), CnInputManager.GetAxis("Joystick Y"));
+
+            if (joystickValue.sqrMagnitude > 1)
+            {
+                joystickValue = joystickValue.normalized;
+            }
+
+            Vector2 joystickDelta = joystickValue - joystickValueLast;
+            joystickValueLast = joystickValue;
+
+            //Debug.Log(joystickValueLast);
+            //Debug.Log(joystickValue);
+            //Debug.Log(joystickDelta);
+
+            if (staticMousePos)
+                virtualMousePosition += positionChange;
+
+            if (!(joystickDelta == Vector2.zero && velocity == Vector2.zero))
+            {
+                virtualMousePosition += joystickDelta * joystickSensitivity;
+
+                mouseObject.transform.position = virtualMousePosition;
+
+                playerState = PlayerState.MOVING;
+            }
+            else
+            {
+                virtualMousePosition = mouseObject.transform.position;
+
+                playerState = PlayerState.FALLING;
+            }
+        }
+        // TOUCH
+        else if (type == AndroidMoveType.Touch)
+        {
+            Vector2 mousePos = virtualMousePosition;
+
+            if (Input.touchCount > 0)
+            {
+                if (CnInputManager.GetButton("Wind") || CnInputManager.GetButton("Pause"))
+                {
+                    if (Input.touchCount > 1)
+                    {
+                        if (!touchStarted)
+                        {
+                            touchStarted = true;
+                            touchId = 1;
+                        }
+
+                        if (Input.GetTouch(touchId).phase != TouchPhase.Ended && Input.GetTouch(touchId).phase != TouchPhase.Canceled)
+                        {
+                            mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(touchId).position);
+                        }
+                    }
+                    else
+                    {
+                        touchStarted = false;
+                        touchId = -1;
+                    }
+                }
+                else
+                {
+                    if (!touchStarted)
+                    {
+                        touchStarted = true;
+                        touchId = 0;
+                    }
+
+                    if (Input.GetTouch(0).phase != TouchPhase.Ended && Input.GetTouch(0).phase != TouchPhase.Canceled)
+                    {
+                        mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                    }
+                }
+            }
+            else
+            {
+                touchStarted = false;
+                touchId = -1;
+            }
+
+            Vector2 mouseDelta = mousePos - virtualMousePosition;
+
+            if (staticMousePos)
+                virtualMousePosition += positionChange;
+
+            if (!(mouseDelta == Vector2.zero && velocity == Vector2.zero))
+            {
+                virtualMousePosition = mousePos;
+
+                mouseObject.transform.position = virtualMousePosition;
+
+                playerState = PlayerState.MOVING;
+            }
+            else
+            {
+                virtualMousePosition = mouseObject.transform.position;
+
+                playerState = PlayerState.FALLING;
+            }
+        }
+#endif
     }
 
     void BoundMousePositionToMainCameraView()
@@ -301,8 +440,10 @@ public class PlayerControler : ObjectHealth
     void MouseVisualisation(Vector2 playerPos)
     {
         float degreeToAdd = AdvancedMath.GetAngleBetweenPoints(playerPos, virtualMousePosition, Vector2.right + playerPos);
-
-        mouseObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90 + degreeToAdd));
+        if (degreeToAdd != 0)
+        {
+            mouseObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90 + degreeToAdd));
+        }
 
         BoundMousePositionToMainCameraView();
     }
@@ -345,6 +486,7 @@ public class PlayerControler : ObjectHealth
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        /*
         if (collision.gameObject.TryGetComponent(out ObjectScript _))
         {
             if (--objectHits <= 0)
@@ -352,6 +494,7 @@ public class PlayerControler : ObjectHealth
                 OnDead();
             }
         }
+         */
     }
 
     public int GetMana()

@@ -68,7 +68,7 @@ MonoBehaviour:
       dl: 0
       dm: 0
       dr: 0
-  - color: {r: 0.99607843, g: 1, b: 0.5058824, a: 1}
+  - color: {r: 1, g: 1, b: 0, a: 1}
     type: 2
     prefab: {fileID: 4713143785253776626, guid: c03fc07920eba884aa35b2f1be78dded, type: 3}
     zPos: 0

@@ -1,0 +1,246 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efec16f1569dfa1419e5b42f0cc9614b, type: 3}
+  m_Name: NewLevelsData
+  m_EditorClassIdentifier: 
+  meshMaterial: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  spriteTexture: {fileID: 0}
+  roomsZPos: 0
+  outsidePlane: {fileID: 0}
+  planeZPos: 0
+  cameraBackground: {r: 0, g: 0.78713435, b: 0.8773585, a: 1}
+  cameraSize: 14
+  cameraSmoothFactor: 10
+  playerMapping:
+    color: {r: 1, g: 1, b: 1, a: 1}
+    type: 2
+    prefab: {fileID: 787269825349021895, guid: 1a622ad77abbf824a896dd2c1d623282, type: 3}
+    zPos: -2
+    name: Player
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 1
+      mm: 1
+      mr: 1
+      dl: 0
+      dm: 0
+      dr: 0
+  colorMappings:
+  - color: {r: 0, g: 0, b: 0, a: 1}
+    type: 0
+    prefab: {fileID: 746952629089250870, guid: 7c05b4c94acc6134d8b83cebb93f13f3, type: 3}
+    zPos: 0
+    name: 
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 0
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0, g: 0, b: 0, a: 1}
+    type: 1
+    prefab: {fileID: 746952629089250870, guid: 2fb070a6d2534944485a75bc74c84d11, type: 3}
+    zPos: 0
+    name: 
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 0
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 1, g: 1, b: 0, a: 1}
+    type: 2
+    prefab: {fileID: 4713143785253776626, guid: c133f3682051c6341b43ff1d810c55d9, type: 3}
+    zPos: 0
+    name: WinTrigger
+    pattern:
+      ul: 0
+      um: 1
+      ur: 0
+      ml: 1
+      mm: 1
+      mr: 1
+      dl: 0
+      dm: 1
+      dr: 0
+  - color: {r: 0, g: 0, b: 1, a: 1}
+    type: 0
+    prefab: {fileID: 3053495975456952606, guid: 993c46219195a9d49a0fc77f7eb5c6e2, type: 3}
+    zPos: 0
+    name: WinTrigger
+    pattern:
+      ul: 0
+      um: 1
+      ur: 0
+      ml: 1
+      mm: 1
+      mr: 1
+      dl: 0
+      dm: 1
+      dr: 0
+  - color: {r: 0, g: 0, b: 1, a: 1}
+    type: 1
+    prefab: {fileID: 3053495975456952606, guid: 7fea2793f94dafd4180b5d8c12eb6cfe, type: 3}
+    zPos: 0
+    name: WinTrigger
+    pattern:
+      ul: 0
+      um: 1
+      ur: 0
+      ml: 1
+      mm: 1
+      mr: 1
+      dl: 0
+      dm: 1
+      dr: 0
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    type: 2
+    prefab: {fileID: 5771464816270400374, guid: 136c8c4f51d40714ebf79cf32faab395, type: 3}
+    zPos: 0
+    name: PaperScrap
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 1}
+    type: 0
+    prefab: {fileID: 4854770388098231714, guid: 5d2bc7f5148c5a24992c1b8cb0bc3565, type: 3}
+    zPos: 0
+    name: PaperScrap
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 1}
+    type: 1
+    prefab: {fileID: 3704329963657265376, guid: 266bb20f5617dea41aee7c781e03a9cb, type: 3}
+    zPos: 0
+    name: PaperScrap
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 1, g: 0, b: 0.41568628, a: 1}
+    type: 2
+    prefab: {fileID: 2496210551758240053, guid: 24bc1819488271043814129107eb0086, type: 3}
+    zPos: 0
+    name: Heart
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0, g: 1, b: 1, a: 1}
+    type: 2
+    prefab: {fileID: 424403291205317846, guid: 1e20e06bc68f0c949b5164cd35c6607f, type: 3}
+    zPos: 0
+    name: Mushroom
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 1, g: 0.5019608, b: 0, a: 1}
+    type: 2
+    prefab: {fileID: 8809848743426466199, guid: 84a20ab9935c8b8489fffa347682fa24, type: 3}
+    zPos: 0
+    name: Flower
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0, g: 1, b: 0, a: 1}
+    type: 1
+    prefab: {fileID: 2751858212510257318, guid: c9a97d9253b9fa145b76de0a0ad1a091, type: 3}
+    zPos: 0
+    name: Flower
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  - color: {r: 0, g: 1, b: 0, a: 1}
+    type: 0
+    prefab: {fileID: 2751858212510257318, guid: 823e000a81a886e4388130feea4073a9, type: 3}
+    zPos: 0
+    name: Flower
+    pattern:
+      ul: 0
+      um: 0
+      ur: 0
+      ml: 0
+      mm: 1
+      mr: 0
+      dl: 0
+      dm: 0
+      dr: 0
+  additionalObjects:
+  - {fileID: 852979335064072647, guid: cb3a2ed054c65194788d0e4bc1968d43, type: 3}
+  - {fileID: 6978047710609413682, guid: 8849a1907ef41514381f55bad9515906, type: 3}
+  - {fileID: 7779564555262378389, guid: 6be5894d9a28ff64d90d036bc783963f, type: 3}
+  - {fileID: 8248183746402169877, guid: ae8a1b965e44c9e48b322707b7c64dc8, type: 3}
+  - {fileID: 8514187414669519642, guid: eb2d54cced296c746928ab9aafeee938, type: 3}
+  - {fileID: 4790198419187357995, guid: f69929209c0f3ad489ebdc8e4cff592c, type: 3}
+  - {fileID: 2231484406504936289, guid: df41a883be710aa498bdb0e6def2e85e, type: 3}
+  - {fileID: 5605473641204852331, guid: 78e9a4eb1c08af04d9933e34d84fd88e, type: 3}
+  - {fileID: 4664100525893191778, guid: 7f6610f224cf2dd4988a7fea095cee86, type: 3}
+  - {fileID: 7451277413946090310, guid: 8387313de5a2a344b9ea9c43c1070f09, type: 3}

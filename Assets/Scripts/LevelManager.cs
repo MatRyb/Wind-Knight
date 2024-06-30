@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using NaughtyAttributes;
+using CnControls;
+using TMPro;
 
 public class LevelManager : MonoBehaviour
 {
@@ -41,6 +43,7 @@ public class LevelManager : MonoBehaviour
     private RespawnPoint resp = null;
 
     [SerializeField] [Scene] private string menuScene = "Menu";
+    [SerializeField] private LevelData levelData;
     [SerializeField] private AudioClip checkpointClip;
     [SerializeField] private bool isNextLevel = false;
     [SerializeField] [ShowIf("isNextLevel")] [Scene] private string nextLevelSceneName;
@@ -101,11 +104,13 @@ public class LevelManager : MonoBehaviour
                 Camera.main.transform.position = new Vector3(instance.startResp.position.x, instance.startResp.position.y, Camera.main.transform.position.z);
                 player.transform.position = new(instance.startResp.position.x, instance.startResp.position.y, player.transform.position.z);
             }
-            player.GetComponentInChildren<PlayerControler>().mouseInit();
+            player.GetComponentInChildren<PlayerControler>().MouseInit();
             player.GetComponentInChildren<TrailRenderer>().enabled = true;
             PauseGame(false);
+#if UNITY_STANDALONE
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+#endif
             waitingForStart = true;
             startText = GUIManager.ShowText("Press   to Start");
         }
@@ -125,12 +130,12 @@ public class LevelManager : MonoBehaviour
         }
 
 
-        if (waitAfterWin)
+        /*if (waitAfterWin)
         {
             if(finalLevelTimer < 0) finalLevelTimer = timer;
             Debug.Log(finalLevelTimer);
             return;
-        }
+        }*/
 
         /*
         if (Input.GetMouseButtonDown(1))
@@ -146,10 +151,17 @@ public class LevelManager : MonoBehaviour
         }
         */
 
+#if UNITY_STANDALONE
         if (Input.GetKeyDown(KeyCode.Escape) && !paused)
         {
             PauseGameJob(true);
         }
+#elif UNITY_ANDROID
+        if (CnInputManager.GetButton("Pause") && !paused)
+        {
+            PauseGameJob(true);
+        }
+#endif
     }
 
     public void SetTimerToStopped()
@@ -160,8 +172,10 @@ public class LevelManager : MonoBehaviour
     public static void InitRespawn()
     {
         GameTimer.StopTime();
+#if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+#endif
         GameObject screen = GUIManager.ShowDeathScreen();
         Button[] buttons = screen.GetComponentsInChildren<Button>();
 
@@ -249,8 +263,15 @@ public class LevelManager : MonoBehaviour
     public static void InitWinGame()
     {
         GameTimer.StopTime();
+        // SAVE TIME
+        if (instance.finalLevelTimer < 0) instance.finalLevelTimer = instance.timer;
+        Debug.Log(instance.finalLevelTimer);
+        PlayerPrefs.SetFloat(instance.levelData.Name + "Time", instance.finalLevelTimer);
+
+#if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+#endif
         GameObject screen = GUIManager.ShowWinScreen();
         Button[] buttons = screen.GetComponentsInChildren<Button>();
 
@@ -280,6 +301,68 @@ public class LevelManager : MonoBehaviour
                 buttons[i].onClick.AddListener(() => Application.Quit());
             }
         }
+
+        Image[] images = screen.GetComponentsInChildren<Image>();
+        uint starsNum = instance.levelData.GetStars(instance.finalLevelTimer);
+
+        for (int i = 0; i < images.Length; ++i)
+        {
+            if (images[i].name == "Star1")
+            {
+                if (starsNum >= 1)
+                {
+                    images[i].color = instance.levelData.ActiveStar;
+                }
+                else
+                {
+                    images[i].color = instance.levelData.DeactiveStar;
+                }
+            }
+            else if (images[i].name == "Star2")
+            {
+                if (starsNum >= 2)
+                {
+                    images[i].color = instance.levelData.ActiveStar;
+                }
+                else
+                {
+                    images[i].color = instance.levelData.DeactiveStar;
+                }
+            }
+            else if (images[i].name == "Star3")
+            {
+                if (starsNum == 3)
+                {
+                    images[i].color = instance.levelData.ActiveStar;
+                }
+                else
+                {
+                    images[i].color = instance.levelData.DeactiveStar;
+                }
+            }
+        }
+
+        TextMeshProUGUI[] texts = screen.GetComponentsInChildren<TextMeshProUGUI>();
+        for (int i = 0; i < texts.Length; ++i)
+        {
+            if (texts[i].name == "TimeText")
+            {
+                texts[i].text = "Time: " + instance.finalLevelTimer.ToString("0.00") + " s";
+            }
+            else if (texts[i].name == "Star1Text")
+            {
+                texts[i].text = instance.levelData.Star1Time.ToString("0") + "s";
+            }
+            else if (texts[i].name == "Star2Text")
+            {
+                texts[i].text = instance.levelData.Star2Time.ToString("0") + "s";
+            }
+            else if (texts[i].name == "Star3Text")
+            {
+                texts[i].text = instance.levelData.Star3Time.ToString("0") + "s";
+            }
+        }
+
         instance.waitAfterWin = true;
     }
 
@@ -301,8 +384,10 @@ public class LevelManager : MonoBehaviour
         timerStopped = true;
         GameTimer.StopTime();
         paused = true;
+#if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+#endif
         if (isScreen)
         {
             GameObject screen = GUIManager.ShowPauseScreen();
@@ -340,8 +425,10 @@ public class LevelManager : MonoBehaviour
         timerStopped = false;
         GameTimer.StartTime();
         paused = false;
+#if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+#endif
         if (isScreen)
         {
             GUIManager.HidePauseScreen();

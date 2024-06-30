@@ -45,6 +45,11 @@ public class ObjectHealth : BaseEntityBehaviour, IDamageTaker
     public void AddHealth(float value)
     {
         health += value;
+        if (health <= 0f)
+        {
+            health = 0f;
+            OnDead();
+        }
     }
 
     static Vector2 ComputeTotalImpulse(Collision2D collision)

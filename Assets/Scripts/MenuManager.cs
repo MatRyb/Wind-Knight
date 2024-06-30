@@ -15,6 +15,9 @@ public class MenuManager : MonoBehaviour
     public GameObject OptionsScreen;
     public GameObject CreditsScreen;
 
+    [Header("Android:")]
+    public GameObject mobileText;
+
     private void Awake()
     {
         instance = this;
@@ -27,6 +30,12 @@ public class MenuManager : MonoBehaviour
         LevelSelectScreen.SetActive(false);
         OptionsScreen.SetActive(false);
         CreditsScreen.SetActive(false);
+
+#if UNITY_ANDROID
+        mobileText.SetActive(true);
+#else
+        mobileText.SetActive(false);
+#endif
     }
 
     public void OpenLevel(string level)

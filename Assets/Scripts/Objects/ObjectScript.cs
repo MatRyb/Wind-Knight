@@ -27,6 +27,10 @@ public class ObjectScript : ObjectHealth
     [SerializeField] private Color destroyColor2;
     [SerializeField] private ParticleSystem destroyParticle;
 
+    [Header("Respawnalbe:")]
+    [SerializeField] private bool isRespawnable;
+    [SerializeField, ShowIf("isRespawnable")] private Vector2 respawnPos;
+
     [Foldout("Info")]
     [DisableIf("true")] [SerializeField] private Vector2 velocity;
     [Foldout("Info")]
@@ -132,7 +136,15 @@ public class ObjectScript : ObjectHealth
         s.Play();
         Destroy(s.gameObject, 2f);
         Destroy(particle.gameObject, 3f);
-        Destroy(gameObject);
+        if (!isRespawnable)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            transform.SetPositionAndRotation(respawnPos, Quaternion.identity);
+            StartHealth();
+        }
     }
 
     public void OnDestroy()

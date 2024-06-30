@@ -109,7 +109,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 787269825349021895}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: -0.06, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -645,7 +645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427ea8b2b4ca1c54194ae0851ea3a05a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 60
   health: 0
   deathParticle: {fileID: 840825463644067242, guid: 72c3b48529f8a104ca028811d4684334, type: 3}
   playerBodyTransform: {fileID: 787269825349021897}
@@ -671,7 +671,7 @@ MonoBehaviour:
   source: {fileID: 7528295684267653842}
   damageClip: {fileID: 8300000, guid: 05e12332278a4cf4bba3aea2b0ac1e47, type: 3}
   maxObjectHits: 20
-  virtualMousePosition: {x: 4.45, y: -1.75}
+  virtualMousePosition: {x: 1, y: 0}
   velocity: {x: 0, y: 0}
   minSpeed: 0
   speed: 0
@@ -691,7 +691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerControler: {fileID: 426906029}
-  windBubbleRange: 5
+  windBubbleRange: 8.5
   windPower: 50
   maxMovePower: 20
   throwForceConstant: 5

@@ -8,6 +8,14 @@ using UnityEngine.SceneManagement;
 
 public delegate void PaperScrapManagerEvent();
 
+[System.Serializable]
+public class ScrapsGotEvent
+{
+    public int neededScraps;
+    public string objectName;
+    public IPuzzleSolvedEvent puzzleSolvedEvent;
+}
+
 public class PaperScrapManager : MonoBehaviour
 {
     [System.Serializable]
@@ -36,6 +44,10 @@ public class PaperScrapManager : MonoBehaviour
     [SerializeField] private AudioClip collectedClip;
     [SerializeField] private TMP_Text text;
     [SerializeField] private IPuzzleSolvedEvent puzzleSolvedEvent;
+    private string puzzleSolvedEventObjectName;
+
+    [SerializeField] private List<ScrapsGotEvent> scrapsGotEvents;
+
     [Scene] public string ThisLevelName = "";
 
     [SerializeField] private List<Scrap> scraps;
@@ -52,6 +64,22 @@ public class PaperScrapManager : MonoBehaviour
         else
         {
             instance.start = true;
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (puzzleSolvedEvent != null)
+        {
+            puzzleSolvedEventObjectName = puzzleSolvedEvent.gameObject.name;
+        }
+
+        for (int i = 0; i < scrapsGotEvents.Count; ++i)
+        {
+            if (scrapsGotEvents[i].puzzleSolvedEvent != null)
+            {
+                scrapsGotEvents[i].objectName = scrapsGotEvents[i].puzzleSolvedEvent.gameObject.name;
+            }
         }
     }
 
@@ -110,6 +138,11 @@ public class PaperScrapManager : MonoBehaviour
             text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
         }
 
+        foreach (var item in scrapsGotEvents)
+        {
+            CheckScrapsGotEvent(item);
+        }
+
         if (AreAllCollected())
         {
             if (puzzleSolvedEvent != null)
@@ -152,8 +185,14 @@ public class PaperScrapManager : MonoBehaviour
 
             allPaperScraps += pss.Length;
 
-            puzzleSolvedEvent = FindObjectOfType<IPuzzleSolvedEvent>();
+            //puzzleSolvedEvent = FindObjectOfType<IPuzzleSolvedEvent>();
+            puzzleSolvedEvent = GameObject.Find(puzzleSolvedEventObjectName).GetComponent<IPuzzleSolvedEvent>();
             text = GameObject.FindGameObjectWithTag("PaperScarpCounterText").GetComponent<TMP_Text>();
+
+            for (int i = 0; i < scrapsGotEvents.Count; ++i)
+            {
+                scrapsGotEvents[i].puzzleSolvedEvent = GameObject.Find(scrapsGotEvents[i].objectName).GetComponent<IPuzzleSolvedEvent>();
+            }
 
             if (lessThanAll)
             {
@@ -162,6 +201,11 @@ public class PaperScrapManager : MonoBehaviour
             else
             {
                 text.text = new StringBuilder("").Append(collected).Append('/').Append(allPaperScraps).ToString();
+            }
+
+            foreach (var item in scrapsGotEvents)
+            {
+                CheckScrapsGotEvent(item);
             }
 
             if (AreAllCollected())
@@ -175,8 +219,14 @@ public class PaperScrapManager : MonoBehaviour
         else if (instance.start)
         {
             instance.start = false;
-            puzzleSolvedEvent = FindObjectOfType<IPuzzleSolvedEvent>();
+            //puzzleSolvedEvent = FindObjectOfType<IPuzzleSolvedEvent>();
+            puzzleSolvedEvent = GameObject.Find(puzzleSolvedEventObjectName).GetComponent<IPuzzleSolvedEvent>();
             text = GameObject.FindGameObjectWithTag("PaperScarpCounterText").GetComponent<TMP_Text>();
+
+            for (int i = 0; i < scrapsGotEvents.Count; ++i)
+            {
+                scrapsGotEvents[i].puzzleSolvedEvent = GameObject.Find(scrapsGotEvents[i].objectName).GetComponent<IPuzzleSolvedEvent>();
+            }
 
             if (lessThanAll)
             {
@@ -216,6 +266,11 @@ public class PaperScrapManager : MonoBehaviour
                 {
                     SetProperId(new Scrap(0, false, pss[i].gameObject.transform.position), pss[i].SetId);
                 }
+            }
+
+            foreach (var item in scrapsGotEvents)
+            {
+                CheckScrapsGotEvent(item);
             }
 
             if (AreAllCollected())
@@ -270,6 +325,11 @@ public class PaperScrapManager : MonoBehaviour
         paper.PlayAudio(collectedClip);
         OnScrapCollected?.Invoke();
 
+        foreach (var item in scrapsGotEvents)
+        {
+            CheckScrapsGotEvent(item);
+        }
+
         if (AreAllCollected())
         {
             if (puzzleSolvedEvent != null)
@@ -306,15 +366,26 @@ public class PaperScrapManager : MonoBehaviour
         }
     }
 
+    public void CheckScrapsGotEvent(ScrapsGotEvent toCheck)
+    {
+        if (collected >= toCheck.neededScraps)
+        {
+            if (toCheck.puzzleSolvedEvent != null)
+            {
+                toCheck.puzzleSolvedEvent.Solved();
+            }
+        }
+    }
+
     public bool AreAllCollected()
     {
         if (lessThanAll)
         {
-            return collected == minCollectedScraps;
+            return collected >= minCollectedScraps;
         }
         else
         {
-            return collected == allPaperScraps;
+            return collected >= allPaperScraps;
         }
     }
 }

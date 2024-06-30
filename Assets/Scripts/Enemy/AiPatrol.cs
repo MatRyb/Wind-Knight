@@ -20,6 +20,7 @@ public class AiPatrol : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask viewBlockingLayers;
 
+    [SerializeField] public bool flipCollider = false;
     [SerializeField] public new Collider2D collider;
 
     [SerializeField] private GameObject body;
@@ -85,7 +86,15 @@ public class AiPatrol : MonoBehaviour
 
         if (mustPatrol)
         {
-            mustFlip = (!Physics2D.OverlapCircle(frontGroundCheckerPosition.position, 0.15f, groundLayer) && Physics2D.OverlapCircle(backGroundCheckerPosition.position, 0.15f, groundLayer));
+            ContactFilter2D contactFilter2D = new();
+            contactFilter2D.SetLayerMask(groundLayer);
+
+            Collider2D[] colliders = new Collider2D[10];
+
+            int front = Physics2D.OverlapCircle(frontGroundCheckerPosition.position, 0.15f, contactFilter2D, colliders);
+            int back = Physics2D.OverlapCircle(backGroundCheckerPosition.position, 0.15f, contactFilter2D, colliders);
+
+            mustFlip = (front == 0 && back != 0);
         }
 
         rb.velocity *= GameTimer.TimeMultiplier;
@@ -125,6 +134,12 @@ public class AiPatrol : MonoBehaviour
         body.transform.localScale = new Vector2(body.transform.localScale.x * -1, body.transform.localScale.y);
         walkSpead *= -1;
         mustPatrol = true;
+
+        if (flipCollider)
+        {
+            collider.offset = new Vector2(-collider.offset.x, collider.offset.y);
+        }
+
         StartCoroutine(Flipping(0.5f));
     }
     private IEnumerator Flipping(float waitTime)
