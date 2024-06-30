@@ -27,8 +27,11 @@ public class TileSpriteGeneratorValidation : MonoBehaviour
                 spriteSize = sprite.size;
             }
 
-            transform.localScale = new Vector3(startLoc.x / transform.parent.localScale.x, startLoc.y / transform.parent.localScale.y, transform.localScale.z);
-            sprite.size = new Vector2(spriteSize.x * transform.parent.localScale.x, spriteSize.y * transform.parent.localScale.y);
+            if (transform.parent.localScale.y != 0 && transform.parent.localScale.x != 0)
+            {
+                transform.localScale = new Vector3(startLoc.x / transform.parent.localScale.x, startLoc.y / transform.parent.localScale.y, transform.localScale.z);
+                sprite.size = new Vector2(spriteSize.x * transform.parent.localScale.x, spriteSize.y * transform.parent.localScale.y);
+            }
         }
     }
 }

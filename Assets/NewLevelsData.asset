@@ -130,7 +130,7 @@ MonoBehaviour:
       dr: 0
   - color: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 1}
     type: 0
-    prefab: {fileID: 4854770388098231714, guid: 5d2bc7f5148c5a24992c1b8cb0bc3565, type: 3}
+    prefab: {fileID: 8643569064488963587, guid: 9d15c175e96e2814b942687ab5b2db3a, type: 3}
     zPos: 0
     name: PaperScrap
     pattern:
@@ -145,7 +145,7 @@ MonoBehaviour:
       dr: 0
   - color: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 1}
     type: 1
-    prefab: {fileID: 3704329963657265376, guid: 266bb20f5617dea41aee7c781e03a9cb, type: 3}
+    prefab: {fileID: 8643569064488963587, guid: cbfa075309bfa174bb0c1a3513500473, type: 3}
     zPos: 0
     name: PaperScrap
     pattern:

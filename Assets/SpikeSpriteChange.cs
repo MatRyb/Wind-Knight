@@ -12,13 +12,16 @@ public class SpikeSpriteChange : MonoBehaviour
     {
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (transform.parent.localScale.x > 1)
+        if (spriteRenderer != null)
         {
-            spriteRenderer.sprite = ground;
-        }
-        else if (transform.parent.localScale.y > 1)
-        {
-            spriteRenderer.sprite = wall;
+            if (transform.parent.localScale.x > 1)
+            {
+                spriteRenderer.sprite = ground;
+            }
+            else if (transform.parent.localScale.y > 1)
+            {
+                spriteRenderer.sprite = wall;
+            }
         }
     }
 }
